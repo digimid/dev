@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload/Imports">
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd0" namespace="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd1" namespace="http://microsoft.com/wsdl/types/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IAuthenticateDownloadService_AuthenticateDownload_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateDownload" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticateDownloadService_AuthenticateDownload_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateDownloadResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IAuthenticateDownloadService">
+    <wsdl:operation name="AuthenticateDownload">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload/IAuthenticateDownloadService/AuthenticateDownload" message="tns:IAuthenticateDownloadService_AuthenticateDownload_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload/IAuthenticateDownloadService/AuthenticateDownloadResponse" message="tns:IAuthenticateDownloadService_AuthenticateDownload_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

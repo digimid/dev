@@ -1,0 +1,464 @@
+﻿@model bearhug.ProfileServiceReference.UserProfile
+@{
+    ViewBag.Title = "Bearhug Member Profile";
+}
+
+<h4 class="subheader">Bearhug Member Profile</h4>
+<div class="scroll-container">
+    <div class="row scroll-container-header-anchor"></div>
+    <div class="row scroll-container-header">
+        <dl class="sub-nav">
+            <dd class="active"><a href="#general">General</a></dd>
+            <dd><a href="#background">Background</a></dd>
+            <dd><a href="#specializations">Specializations</a></dd>
+            <dd><a href="#financial">Financial</a></dd>
+            <dd><a href="#referring">Referring</a></dd>
+        </dl>
+    </div>
+    <div class="scroll-container-scroller">
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="general" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>General</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-4 columns">
+                            @if (Model.FirstName != "" && Model.LastName != "")
+                            {
+                                <label><b>Name</b><span>@Model.FirstName @Model.LastName</span></label>
+                            }
+                            <label><b>Organization</b> @Model.Organization</label>
+                            <label><b>Address</b></label>
+                            <address>
+                                @if (Model.Address1 != "" || Model.Address1 != null)
+                                {
+                                    @Model.Address1<br />
+                                }
+                                @if (@Model.Address2 != "")
+                                {
+                                    @Model.Address2<br />
+                                }
+                                @if (Model.City != "" && Model.City != null)
+                                {@Model.City<span>,</span>} @Model.State @Model.ZipCode
+                            </address>
+                            <label>
+                                <b>Phone</b> @if (Model.Phone == "")
+                                             {<i>Not set</i>}
+                                             else
+                                             {@Model.Phone}</label>
+                            <label><b>Email</b> @Model.UID</label>
+                            @if (Model.WebsiteUrl != "" && Model.WebsiteUrl != null)
+                            {
+                                <label><b>Website</b> <a href="@Model.WebsiteUrl" target="_blank">@Model.WebsiteName</a></label>
+                            }
+                        </div>
+                        <div class="small-4 columns">
+                            @if (Model.ProfilePic == null)
+                            {
+                                <img class="img-profile" src="~/Images/default-user.png" alt="Upload your photo" width="150"
+                                    height="150" style="border: 1px solid" />
+                            }
+                            else
+                            {
+                                <img class="img-profile" width="150" height="300" style="border: 1px solid" src="@Url.Action("getProfileImage", "Profile", new { profileid = Model.UID })" alt="Your profile picture" />
+                            }
+                        </div>
+                        <div class="small-4 columns">
+                            @if (Model.SocialLinks.FaceBookUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.FaceBookUrl" target="_blank">
+                                    <img src="~/Images/facebook.png" alt="Facebook" width="22" />
+                                    Facebook</a>
+                                <br />            
+                            }
+                            @if (Model.SocialLinks.GooglePlusUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.GooglePlusUrl" target="_blank">
+                                    <img src="~/Images/googleplus.png" alt="Google +" width="22" />
+                                    Google+</a>
+                                <br />            
+                            }
+                            @if (Model.SocialLinks.LinkedInUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.LinkedInUrl" target="_blank">
+                                    <img src="~/Images/linkedin.png" alt="Linkedin" width="22" />
+                                    LinkedIn</a>
+                                <br />            
+                            }
+                            @if (Model.SocialLinks.TwitterUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.TwitterUrl" target="_blank">
+                                    <img src="~/Images/twitter.png" alt="Twitter" width="22" />
+                                    Twitter</a>
+                                <br />            
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="background" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Background</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Background.Educations.Count > 0)
+                            {
+                                <label class="subheader"><b>Education</b></label>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            @if (Model.Background.Licenses.Count > 0)
+                            {
+                                <label class="subheader"><b>Licenses</b></label>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Background.Educations.Count > 0)
+                            {
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><i>Degree</i></th>
+                                            <th><i>School</i></th>
+                                            <th><i>Year</i></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Background.Educations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Degree
+                                                </td>
+                                                <td>
+                                                    @item.School
+                                                </td>
+                                                <td>
+                                                    @item.Year
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            @if (Model.Background.Licenses.Count > 0)
+                            {
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><i>Name</i></th>
+                                            <th><i>State</i></th>
+                                            <th><i>Number</i></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Background.Licenses)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    @item.State
+                                                </td>
+                                                <td>
+                                                    @item.Number
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Background.Certifications.Count > 0)
+                            {
+                                <label class="subheader"><b>Certifications</b></label>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Background.Certifications.Count > 0)
+                            {
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><i>Name</i></th>
+                                            <th><i>Authority</i></th>
+                                            <th><i>Number</i></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Background.Certifications)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    @item.Authority
+                                                </td>
+                                                <td>
+                                                    @item.Number
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="specializations" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Specializations</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Specializations.PrimarySpecializations.Count > 0)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Primary Specializations</b></dt>
+                                    <dd>
+                                        @String.Join(",", Model.Specializations.PrimarySpecializations).Replace(",", ", ")
+                                    </dd>
+                                </dl>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            @if (Model.Specializations.Populations.Count > 0)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Populations Served</b></dt>
+                                    <dd>
+                                        @String.Join(",", Model.Specializations.Populations).Replace(",", ", ")
+                                    </dd>
+                                </dl>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Specializations.Treatments.Count > 0)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Treatment Structure</b></dt>
+                                    <dd>
+                                        @String.Join(",", Model.Specializations.Treatments).Replace(",", ", ")
+                                    </dd>
+                                </dl>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            @if (Model.Specializations.Modalities.Count > 0)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Treatment Modalities</b></dt>
+                                    <dd>
+                                        @String.Join(",", Model.Specializations.Modalities).Replace(",", ", ")
+                                    </dd>
+                                </dl>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Specializations.Therapies.Count > 0)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Specific Therapies Practiced</b></dt>
+                                    <dd>
+                                        @String.Join(",", Model.Specializations.Therapies).Replace(",", ", ")
+                                    </dd>
+                                </dl>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            @if (Model.Specializations.Details != null)
+                            {
+                                if (Model.Specializations.Details.Length > 0)
+                                {
+                                <dl>
+                                    <dt class="subheader"><b>Additional Details</b></dt>
+                                    <dd>
+
+                                        @Model.Specializations.Details
+                                    </dd>
+                                </dl>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="financial" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Financial</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Financial.Rate != null && Model.Financial.RateDetails != null && Model.Financial.ProviderDetails != null)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Financial Details</b></dt>
+                                    <dd><b><i>Rate (Out-of-Pocket):</i></b> $@Model.Financial.Rate.ToString().00</dd>
+                                    <dd><b><i>Rate Details:</i></b> @Model.Financial.RateDetails</dd>
+                                    <dd><b><i>Insurance Details:</i></b> @Model.Financial.ProviderDetails</dd>
+                                </dl>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            <label class="subheader"></label>
+                            @if (Model.Financial.Providers.Count > 0)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Insurances Accepted</b></dt>
+                                    <dd>@String.Join(",", Model.Financial.Providers).Replace(",", ", ")</dd>
+                                </dl>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="referring" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Referring</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Referring.HowTo != null)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>How to Refer (Who to call, documents needed, etc.)</b></dt>
+                                    <dd>@Model.Referring.HowTo</dd>
+                                </dl>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            @if (Model.Referring.TypicalProfile == null)
+                            {
+                                <dl>
+                                    <dt class="subheader"><b>Example Patient Profile</b></dt>
+                                    <dd>@Model.Referring.TypicalProfile</dd>
+                                </dl>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                        </div>
+                        <div class="small-6 columns">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-community').addClass('active');
+
+        var $bodyWrapper = $('.body-wrapper'),
+            $listSectionHeader = $('.scroll-container-header'),
+            $listSectionHeaderAnchor = $('.scroll-container-header-anchor');
+
+        $bodyWrapper.scroll(function () {
+            var window_top = $bodyWrapper.scrollTop();
+            var div_top = $listSectionHeaderAnchor.offset().top;
+            var header_width = $listSectionHeader.width();
+            if (window_top > div_top) {
+                // Make the div sticky.
+                $listSectionHeader.addClass('sticky');
+                $listSectionHeader.width(header_width);
+                $listSectionHeaderAnchor.height($listSectionHeader.height());
+            }
+            else {
+                // Unstick the div.
+                $listSectionHeader.removeClass('sticky');
+                $listSectionHeaderAnchor.height(0);
+            }
+            checkSections();
+        });
+
+        function checkSections() {
+            var sections = $('.scroll-container-scroller').find('.scroll-section');
+            if ($bodyWrapper.scrollTop() + $bodyWrapper.innerHeight() >= $bodyWrapper[0].scrollHeight) {
+                console.log($(sections[sections.length - 1]).attr('id'));
+                $('.sub-nav dd').removeClass('active');
+                $('.sub-nav a[href="#' + $(sections[sections.length - 1]).attr('id') + '"').parent().addClass('active');
+            }
+            else {
+                for (i = 0; i < sections.length; i++) {
+                    if (isScrolledIntoView(sections[i])) {
+                        console.log($(sections[i]).attr('id'));
+                        $('.sub-nav dd').removeClass('active');
+                        $('.sub-nav a[href="#' + $(sections[i]).attr('id') + '"').parent().addClass('active');
+                        break;
+                    }
+                }
+            }
+        }
+
+        function isScrolledIntoView(elem) {
+            var docViewTop = $('.scroll-container-header').scrollTop();
+            var docViewBottom = docViewTop + $('.scroll-container-header').height();
+            console.log($bodyWrapper.scrollTop() + $bodyWrapper.innerHeight() + ':' + $bodyWrapper[0].scrollHeight);
+
+            var elem = $(elem);
+            var elemoffset = $(elem).offset();
+            var top = elemoffset.top;
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + $(elem).height() - 60;
+            //console.log($(elem).attr('id') + ' - ' + elemBottom + ":" + docViewBottom);
+
+            return (elemBottom >= docViewBottom);
+        }
+    });
+</script>

@@ -1,0 +1,17 @@
+﻿@model List<bearhug.ContactsServiceReference.Member>
+
+<div id="contacts-div">
+    <select multiple="multiple" name="messaging_contacts" id="messaging_contacts" tabindex="-1">
+        @foreach (bearhug.ContactsServiceReference.Member member in ViewData.Model)
+        {
+            if (member.Initial == "MessagingTeam")
+            {
+            <option class="messaging-team" value="@member.ContactID">@member.LastName</option>
+            }
+            else
+            {
+            <option value="@member.ContactID">@member.FirstName&nbsp;@member.LastName</option>
+            }
+        }
+    </select>
+</div>

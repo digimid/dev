@@ -1,0 +1,114 @@
+﻿@model bearhug.Models.CCD
+@{
+    ViewBag.Title = "Create Patient Record";
+}
+
+<h4 class="subheader">Create Patient Record</h4>
+@using (Html.BeginForm("CreateRecord", "Patients", new { @patientid = Model.Patient.PatientId }, FormMethod.Post, new { @id = "create-patient-record-form", @enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="small-12 columns">
+            @bearhug.Helpers.HtmlHelperXmlExtensions.RenderXmlMemory(Model.CCD_XML_File, Model.StylesheetFilename, Model.Parameters)
+        </div>        
+    </div>    
+    <div class="row">
+        <div class="small-10 columns">
+            <input id="patient_id" name="patient_id" type="hidden" value="@Model.Patient.Id" />
+            <label id="errormessage" class="notification"></label>
+            <button type="submit" class="button tiny radius right save-button">Save</button>
+        </div>        
+    </div>  
+}
+
+<script src="~/Scripts/jquery/jquery.maskedinput.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-patients').addClass('active');
+
+        $('#id-generator').click(function () {
+            $('#recordid').val(createUID());
+        });
+
+        $("#patient_phone").mask("(999) 999-9999");
+        $('#patient_dob').datepicker();
+
+        function createUID() {
+            var time = Math.round(new Date().getTime() / 1000.0);
+            return "BH" + toHex(time) + $('#patient_first_name').val().substr(0, 1) + $('#patient_last_name').val().substr(0, 1);
+        }
+
+        function toHex(i) {
+            runningTotal = ''
+            quotient = hexQuotient(i);
+            remainder = eval(i + '-(' + quotient + '* 16)')
+            runningTotal = charToHex(remainder) + runningTotal;
+            while (quotient >= 16) {
+                savedQuotient = hexQuotient(quotient);
+                remainder = eval(quotient + '-(' + savedQuotient + '* 16)');
+                runningTotal = charToHex(remainder) + runningTotal;
+                quotient = savedQuotient;
+            }
+            return charToHex(quotient) + runningTotal;
+        }
+
+        function hexQuotient(i) {
+            return Math.floor(eval(i + '/ 16'));
+        }
+
+        function charToHex(i) {
+            var hexChar = '0';
+            switch (i) {
+                case 0:
+                    hexChar = '0';
+                    break;
+                case 1:
+                    hexChar = '1';
+                    break;
+                case 2:
+                    hexChar = '2';
+                    break;
+                case 3:
+                    hexChar = '3';
+                    break;
+                case 4:
+                    hexChar = '4';
+                    break;
+                case 5:
+                    hexChar = '5';
+                    break;
+                case 6:
+                    hexChar = '6';
+                    break;
+                case 7:
+                    hexChar = '7';
+                    break;
+                case 8:
+                    hexChar = '8';
+                    break;
+                case 9:
+                    hexChar = '9';
+                    break;
+                case 10:
+                    hexChar = 'A';
+                    break;
+                case 11:
+                    hexChar = 'B';
+                    break;
+                case 12:
+                    hexChar = 'C';
+                    break;
+                case 13:
+                    hexChar = 'D';
+                    break;
+                case 14:
+                    hexChar = 'E';
+                    break;
+                case 15:
+                    hexChar = 'F';
+                    break;
+            }
+            return hexChar;
+        }
+    });
+</script>

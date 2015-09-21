@@ -1,0 +1,298 @@
+﻿@model bearhug.Models.Invitation
+@{
+    ViewBag.Title = "Invite";
+}
+<link href="~/Content/select2/select2.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="small-6 columns">
+        <h4 class="subheader">Invite</h4>
+    </div>
+    <div class="small-6 columns">
+        @Html.ActionLink("Cancel", "Index", new { @tid = Model.Transaction.TransactionId }, new { @class = "button tiny radius right" })
+    </div>
+</div>
+<div class="row">
+    <div class="small-6 columns">
+        <dl class="sub-nav">
+            <dd id="dd-general" class="active"><a href="#">General</a></dd>
+            <dd id="dd-contacts"><a href="#">Contacts</a></dd>
+            <dd id="dd-summary"><a href="#">Summary</a></dd>
+        </dl>
+    </div>
+</div>
+@using (Html.BeginForm("Invite", "Interactions", FormMethod.Post, new { @class = "form-horizontal", @id = "create_transaction_form" }))
+{
+    <fieldset>
+        <legend>Invite</legend>
+        <div class="row interaction-invite-general">
+            <div class="small-4 columns">
+                <label class="right inline" for="transaction_patient">Patient</label>
+            </div>
+            <div class="small-4 columns end">
+                <input type="text" id="transaction_patient" name="transaction_patient" class="radius" value="@Model.Transaction.Patient.FirstName @Model.Transaction.Patient.LastName" readonly="" />
+            </div>
+        </div>
+        <div class="row interaction-invite-general">
+            <div class="small-4 columns">
+                <label class="right inline" for="transaction_subject">Subject</label>
+            </div>
+            <div class="small-4 columns end">
+                <input type="text" id="transaction_subject" name="transaction_subject" class="radius" value="@Model.Transaction.Subject" readonly="" />
+            </div>
+        </div>
+        <div class="row interaction-invite-general">
+            <div class="small-4 columns">
+                <label class="right inline" for="transaction_comment">Add Comment</label>
+            </div>
+            <div class="small-4 columns end">
+                <textarea id="transaction_comment" name="transaction_comment" class="radius" rows="10" required="required"></textarea>
+            </div>
+        </div>
+        <div class="row interaction-invite-general">
+            <div class="small-12 columns">
+                <button id="btn1next" type="button" class="button tiny radius secondary right">Next</button>
+            </div>
+        </div>
+        <div class="row interaction-invite-contacts">
+            <div class="small-2 columns">
+                <label class="right" for="transaction_contacts">Add Contacts</label>
+            </div>
+            <div class="small-3 columns">
+                <select id="transaction_contacts" name="transaction_contacts" required="required" style="width: 100%;">
+                    @foreach (bearhug.ContactsServiceReference.Member member in Model.ContactList.Members)
+                    {
+                        if (!Model.Transaction.Members.Any(m => m.UserId == member.ContactID))
+                        {
+                            string name;
+                            if (member.FirstName.Length > 0 || member.LastName.Length > 0)
+                            {
+                                name = member.FirstName + " " + member.LastName;
+                            }
+                            else
+                            {
+                                name = member.ContactID;
+                            }
+                        <option data-source="member" value="@member.ContactID">@name</option>
+                        }
+                    }
+                    @foreach (bearhug.ContactsServiceReference.NonMember nonmember in Model.ContactList.NonMembers)
+                    {
+                        if (!Model.Transaction.NonMembers.Any(n => n.UserId == nonmember.ContactID))
+                        {
+                            string name;
+                            if (nonmember.FirstName.Length > 0 || nonmember.LastName.Length > 0)
+                            {
+                                name = nonmember.FirstName + " " + nonmember.LastName;
+                            }
+                            else
+                            {
+                                name = nonmember.ContactID;
+                            }
+                        <option data-source="nonmember" value="nonmember_@nonmember.ContactID">@name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="small-1 columns end">
+                <button id="btn_add_contact" class="button tiny radius" type="button">Add</button>
+            </div>
+        </div>
+        <div class="row interaction-invite-contacts">
+            <div class="small-12 columns end">
+                <div class="tbl-invite-users-header-container">
+                    <table class="tbl-invite-users-header">
+                        <thead>
+                            <tr>
+                                <th class="tbl-invite-users-contact">Contact</th>
+                                <th class="tbl-invite-users-choice">Power User</th>
+                                <th class="tbl-invite-users-choice">User</th>
+                                <th class="tbl-invite-users-action">&nbsp;</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tbl-invite-users-body-container">
+                    <table class="tbl-invite-users-body">
+                        <tbody>
+                            @foreach (bearhug.InteractionsServiceReference.TransactionMember member in Model.Transaction.Members)
+                            {
+                                <tr>
+                                    <td class="tbl-invite-users-contact">@(member.Name.Trim().Length == 0 ? member.UserId : member.Name) (previously added)</td>
+                                    <td class="tbl-invite-users-choice">@(member.Role == bearhug.InteractionsServiceReference.Role.poweruser ? "x" : "")</td>
+                                    <td class="tbl-invite-users-choice">@(member.Role == bearhug.InteractionsServiceReference.Role.user ? "x" : "")</td>
+                                    <td class="tbl-invite-users-action"></td>
+                                </tr>
+                            }
+                            @foreach (bearhug.InteractionsServiceReference.TransactionNonMember nonmember in Model.Transaction.NonMembers)
+                            {
+                                <tr>
+                                    <td class="tbl-invite-users-contact">@(nonmember.Name.Trim().Length == 0 ? nonmember.Email : nonmember.Name) (previously added)</td>
+                                    <td class="tbl-invite-users-choice"></td>
+                                    <td class="tbl-invite-users-choice">x</td>
+                                    <td class="tbl-invite-users-action"></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row interaction-invite-contacts">
+            <div class="small-12 columns">
+                <button id="btn2prev" type="button" class="button tiny radius secondary">Previous</button>
+                <button id="btn2next" type="button" class="button tiny radius secondary right">Next</button>
+            </div>
+        </div>
+        <div class="row interaction-invite-summary">
+            <div class="small-12 columns">
+                <label id="lblPatient"></label>
+                <label id="lblSubject"></label>
+                <label id="lblComment"></label>
+            </div>
+        </div>
+        <div class="row interaction-invite-summary users-summary-container">
+            <div class="small-12 columns">
+                <table class="tbl-invite-users-summary">
+                    <thead>
+                        <tr>
+                            <th>Added Contact</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row interaction-invite-summary">
+            <div class="small-12 columns">
+                <button id="btn3prev" type="button" class="button tiny radius secondary">Previous</button>
+                <button type="submit" class="button tiny radius right">Submit</button>
+                <select id="hdn_power_users" name="hdn_power_users" multiple="multiple" class="hidden-variables"></select>
+                <select id="hdn_users" name="hdn_users" multiple="multiple" class="hidden-variables"></select>                
+                <input id="hdn_transaction_id" name="hdn_transaction_id" type="hidden" value="@Model.Transaction.TransactionId" />
+            </div>
+        </div>
+    </fieldset>
+}
+
+<script src="~/Scripts/select2/select2.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-interactions').addClass('active');
+
+        $('#transaction_contacts').select2();
+
+        if ($('.tbl-invite-users-body tbody tr').length > 0) {
+            $('.tbl-invite-users-header, .tbl-invite-users-body, .tbl-invite-users-summary').show();
+        }
+
+        $('#btn1next').click(function (e) {
+            if ($('#transaction_comment').val().length > 0) {
+                $('.sub-nav dd').removeClass('active');
+                $('#dd-contacts').addClass('active');
+                $('.interaction-invite-general').fadeOut(function () {
+                    $('.interaction-invite-contacts').fadeIn();
+                });
+            }
+        });
+
+        $('#btn2prev').click(function (e) {
+            $('.interaction-invite-contacts').fadeOut(function () {
+                $('.interaction-invite-general').fadeIn();
+            });
+        });
+
+        $('#btn2next').click(function (e) {
+            if ($('.tbl-invite-users-body .new-contact').length > 0) {
+                $('.sub-nav dd').removeClass('active');
+                $('#dd-summary').addClass('active');
+                $('.interaction-invite-contacts').fadeOut(function () {
+                    $('.interaction-invite-summary').fadeIn();
+                });
+                generateSummary();
+            }
+        });
+
+        $('#btn3prev').click(function (e) {
+            $('.interaction-invite-summary').fadeOut(function () {
+                $('.interaction-invite-contacts').fadeIn();
+            });
+        });
+
+        $('#btn_add_contact').click(function () {
+            var contact = $('#transaction_contacts').find(':selected');
+            var id = Math.floor(Math.random() * 1000000001);
+            var poweruser = $(contact).data('source') == 'member' ? '<input type="radio" name="' + $(contact).val() + '" id="opt1_' + $(contact).val() + '" value="poweruser">' : 'N/A';
+            $('.tbl-invite-users-body tbody').append(
+                $('<tr id="' + id + '" class="new-contact"></tr>').append(
+                    $('<td class="tbl-invite-users-contact">' + $(contact).text() + '</td>'),
+                    $('<td class="tbl-invite-users-choice">' + poweruser + '</td>'),
+                    $('<td class="tbl-invite-users-choice"><input type="radio" name="' + $(contact).val() + '" id="opt2_' + $(contact).val() + '" value="user" checked="checked"></td>'),
+                    $('<td class="tbl-invite-users-action"></td>').append(
+                        $('<a href="#" class="remove-contact" data-val="' + $(contact).val() + '" data-text="' + $(contact).text() + '" data-idx="' + id + '" data-source="' + $(contact).data('source') + '">Remove</a>')
+                            .click(function (e) {
+                                e.preventDefault();
+                                $('#transaction_contacts')
+                                    .append($('<option></option>')
+                                    .data('source', $(this).data('source'))
+                                    .attr('value', $(this).data('val'))
+                                    .text($(this).data('text')));
+                                var idx = $(this).data('idx');
+                                $('#' + $(this).data('idx')).remove();
+                                $('#transaction_contacts').append($('#transaction_contacts').find('option').sort(sorter));
+                                if ($('#transaction_contacts option').length > 0) {
+                                    $('#btn_add_contact').removeAttr('disabled');
+                                }
+                                if ($('.tbl-invite-users-body tbody tr').length == 0) {
+                                    $('.tbl-invite-users-header, .tbl-invite-users-body, .tbl-invite-users-summary').hide();
+                                }
+                            })
+                    )
+                )
+            );
+            $('#transaction_contacts').find(":selected").remove();
+            $('#transaction_contacts').append($('#transaction_contacts').find('option').sort(sorter));
+            $('#transaction_contacts').select2();
+            if ($('#transaction_contacts option').length == 0) {
+                $('#btn_add_contact').attr('disabled', 'disabled');
+            }
+        });
+
+        function sorter(a, b) {
+            return (a.innerHTML > b.innerHTML) ? 1 : -1;
+        };
+
+        function generateSummary() {
+            $('.tbl-invite-users-summary tbody tr').remove();
+            $('#lblPatient').text('Patient: ' + $('#transaction_patient').find(":selected").text());
+            $('#lblSubject').text('Subject: ' + $('#transaction_subject').val());
+            $('#lblComment').text('Comment: ' + $('#transaction_comment').val());
+            $('.tbl-invite-users-body').find('.new-contact').each(function (i, row) {
+                var name = $($(row).children('td').get(0)).text();
+                var rdoName = $($(row).children('td').get(2)).find('input').attr('name');
+                var role = $('input:radio[name="' + rdoName + '"]:checked').val();
+                if (role == 'poweruser') {
+                    $('#hdn_power_users')
+                        .append($('<option selected="selected"></option>')
+                        .attr('value', rdoName)
+                        .text(rdoName));
+                }
+                else if (role == 'user') {
+                    $('#hdn_users')
+                        .append($('<option selected="selected"></option>')
+                        .attr('value', rdoName)
+                        .text(rdoName));
+                }
+                var displayRole = role == 'poweruser' ? 'Power User' : 'User'
+                $('.tbl-invite-users-summary tbody').append(
+                    '<tr>' +
+                        '<td>' + name + '</td>' +
+                        '<td>' + displayRole + '</td>' +
+                    '</tr>'
+                );
+            });
+        }
+    });
+</script>

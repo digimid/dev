@@ -1,0 +1,80 @@
+﻿@model bearhug.Models.OrganizationConstruct
+@{
+    ViewBag.Title = "Patients";
+}
+
+<h4 class="subheader">Patients</h4>
+<ul class="tabs">
+    <li class="tab-title">@Html.ActionLink("Reminders", "Index", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Communication", "Communication", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Contacts", "Contacts", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Teams", "Teams", "Home")</li>
+    @if (User.Identity.Name == Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Reports", "Reports", "Home")</li>
+    }
+    @if (User.Identity.Name != Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Emergency Access", "EmergencyAccess", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title active"><a id="patients-tab" href="#patients">Patients (Admin Access)</a></li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Audits (Admin Access)", "AdminAudits", "Home")</li>
+    }
+    @if (User.Identity.Name == "jesseglascock@gmail.com")
+    {
+        <li class="tab-title">@Html.ActionLink("Admin", "Admin", "Home")</li>
+    }
+</ul>
+
+<div class="tabs-content">
+
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <div class="content active" id="patients">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th colspan="2">Patient Status and Interaction History</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (bearhug.ContactsServiceReference.OrganizationPatient patient in Model.OrganizationContacts.Patients)
+                    {
+                        <tr>
+                            <td>@patient.FirstName @patient.LastName</td>
+                            <td>@if (patient.Status.RecordStatus == bearhug.ContactsServiceReference.RecordStatus.HasRecord)
+                                {
+                                    if (patient.Status.RecordId != "")
+                                    {                                    
+                                @Html.ActionLink("View Record", "AdminViewPatientRecord", new { @patient_id = patient.Id, @recordid = patient.RecordId, @orgid = Model.Organization.Id }, new { @class = "btn btn-link btn-record" })
+                                }
+                                else
+                                {
+                                <span>No Record</span>
+                                }
+                            }
+                                else
+                                {
+                                <span>No Record</span> 
+                            }
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("Reports", "Home", new { @select_report_type = "patient", @dp_date_from = DateTime.MinValue.ToShortDateString(), @dp_date_to = DateTime.MaxValue.ToShortDateString(), @select_patients = patient.Id }, FormMethod.Post, new { @class = "tableForm" }))
+                                {
+                                    <button type="submit" class="button tiny radius">View Interactions</button>
+                            }
+                            </td>
+                        </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>

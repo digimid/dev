@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6dfe83c8-f99d-4824-a862-9825c4b4c445" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>true</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://na1.assuresign.net/Services/DocumentNOW/v2/DocumentNOW.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="documentnow.wsdl" MetadataType="Wsdl" ID="3cd0f3e0-34e6-4ac7-9ded-91c4727b43b2" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl3" />
+    <MetadataFile FileName="documentnow1.wsdl" MetadataType="Wsdl" ID="8c793046-e531-4e7a-aeb5-6e73647cbde7" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl2" />
+    <MetadataFile FileName="documentnow2.wsdl" MetadataType="Wsdl" ID="41138b13-d513-4573-82e7-786047741a7b" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl1" />
+    <MetadataFile FileName="documentnow3.wsdl" MetadataType="Wsdl" ID="f9b42b15-83de-4517-81c0-738ea28716ed" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="documentnow4.wsdl" MetadataType="Wsdl" ID="16d22108-1b43-4c6d-9f32-4cb8ae808207" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl7" />
+    <MetadataFile FileName="documentnow5.wsdl" MetadataType="Wsdl" ID="3cf31258-35df-4df8-9854-74277a0b1b13" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl6" />
+    <MetadataFile FileName="documentnow.xsd" MetadataType="Schema" ID="f8ced204-2571-474e-8726-f5040a3ce1f4" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd10" />
+    <MetadataFile FileName="documentnow6.wsdl" MetadataType="Wsdl" ID="e6ac122b-5766-4428-a2c8-5a1f3e585212" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl4" />
+    <MetadataFile FileName="documentnow1.xsd" MetadataType="Schema" ID="589eaf72-ff2f-46a1-a890-16973fc22ea4" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd16" />
+    <MetadataFile FileName="documentnow7.wsdl" MetadataType="Wsdl" ID="1d075b26-1173-4298-aa67-5909d988e0c8" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl9" />
+    <MetadataFile FileName="documentnow8.wsdl" MetadataType="Wsdl" ID="a4ed926e-65de-411a-9a99-f9a451c3b9f9" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl8" />
+    <MetadataFile FileName="documentnow9.wsdl" MetadataType="Wsdl" ID="d7454d11-38f5-454e-b1cc-5b4c06e682c0" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl11" />
+    <MetadataFile FileName="documentnow2.xsd" MetadataType="Schema" ID="b18b2925-f6a4-4f45-baa0-15a62f73da16" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd21" />
+    <MetadataFile FileName="documentnow3.xsd" MetadataType="Schema" ID="53b1677b-42af-4d69-af58-1c580eaf2ac9" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd22" />
+    <MetadataFile FileName="documentnow4.xsd" MetadataType="Schema" ID="3558dd15-3c00-4762-958a-0015c4e1b5c2" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd20" />
+    <MetadataFile FileName="documentnow5.xsd" MetadataType="Schema" ID="33bd563c-308b-487e-8af3-272b723ef200" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd8" />
+    <MetadataFile FileName="documentnow10.wsdl" MetadataType="Wsdl" ID="c24ddd5c-2032-42b4-85d1-3e1eeb841976" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl17" />
+    <MetadataFile FileName="documentnow6.xsd" MetadataType="Schema" ID="c6660fc3-a393-4005-b9e7-5f28686f6372" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd9" />
+    <MetadataFile FileName="documentnow7.xsd" MetadataType="Schema" ID="fa483439-fabf-4353-8beb-325ba5e4beba" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd11" />
+    <MetadataFile FileName="DocumentNowWcfService.wsdl" MetadataType="Wsdl" ID="637f2d08-2939-4d0f-b80c-68a3d5c130ee" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl" />
+    <MetadataFile FileName="documentnow8.xsd" MetadataType="Schema" ID="efff3dbb-d4eb-46dd-9c9d-c8221077e874" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd14" />
+    <MetadataFile FileName="documentnow11.wsdl" MetadataType="Wsdl" ID="f1b6ddaf-f709-4c05-bae8-60e59cb8f1fb" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl19" />
+    <MetadataFile FileName="documentnow9.xsd" MetadataType="Schema" ID="3b9d41ed-ab2b-4411-b1a0-d272ab13c771" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd2" />
+    <MetadataFile FileName="documentnow12.wsdl" MetadataType="Wsdl" ID="327fea15-6428-4199-9bc0-08591aff616c" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl14" />
+    <MetadataFile FileName="documentnow13.wsdl" MetadataType="Wsdl" ID="e6a38a28-73e1-4838-90a4-3285d34f5deb" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl16" />
+    <MetadataFile FileName="documentnow10.xsd" MetadataType="Schema" ID="a7488a30-3c15-46c3-9b6a-53883448898c" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd13" />
+    <MetadataFile FileName="documentnow11.xsd" MetadataType="Schema" ID="f30ae2fe-6d49-4fad-96da-c6ee58ff82e6" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd15" />
+    <MetadataFile FileName="documentnow.disco" MetadataType="Disco" ID="fe24d9f9-f550-4cd4-8b4b-ef307684ce21" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?disco" />
+    <MetadataFile FileName="documentnow12.xsd" MetadataType="Schema" ID="4d92e40d-cfad-4d06-b760-f6b001153abf" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd19" />
+    <MetadataFile FileName="documentnow14.wsdl" MetadataType="Wsdl" ID="42cb68f4-577c-4aaa-99f9-48de1904b3f5" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl22" />
+    <MetadataFile FileName="documentnow15.wsdl" MetadataType="Wsdl" ID="1732e383-8d06-4150-8156-a43594aa1125" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl12" />
+    <MetadataFile FileName="documentnow13.xsd" MetadataType="Schema" ID="bc06a5ae-58a3-48d7-bf05-8fbd0f22164c" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd18" />
+    <MetadataFile FileName="documentnow14.xsd" MetadataType="Schema" ID="649f71ca-1a79-4fed-9916-9a0bc8ade038" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd23" />
+    <MetadataFile FileName="documentnow16.wsdl" MetadataType="Wsdl" ID="2ce08eaf-63b1-4509-812e-fb8a3e24b90f" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl5" />
+    <MetadataFile FileName="documentnow17.wsdl" MetadataType="Wsdl" ID="1ae1eeb7-a4dd-4ddb-884c-437a5601d96e" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl13" />
+    <MetadataFile FileName="documentnow18.wsdl" MetadataType="Wsdl" ID="f7a53d60-6982-4e24-80b5-4a34e1897067" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl21" />
+    <MetadataFile FileName="documentnow15.xsd" MetadataType="Schema" ID="aee67d5a-0d8e-461a-a635-8310da78d60e" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd7" />
+    <MetadataFile FileName="documentnow19.wsdl" MetadataType="Wsdl" ID="111d71ab-5610-4081-82c3-37c4b61b4f51" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl15" />
+    <MetadataFile FileName="documentnow16.xsd" MetadataType="Schema" ID="40c878ef-a505-4e72-b34e-971ba95aef45" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd4" />
+    <MetadataFile FileName="documentnow17.xsd" MetadataType="Schema" ID="34142ac7-9682-4847-86ea-5dfcb00c89b8" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd5" />
+    <MetadataFile FileName="documentnow20.wsdl" MetadataType="Wsdl" ID="3066672e-1576-46fa-92e8-e3bc3e67cf5c" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl20" />
+    <MetadataFile FileName="documentnow21.wsdl" MetadataType="Wsdl" ID="498c9482-cbe6-4928-8052-3066c3aaf709" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl10" />
+    <MetadataFile FileName="documentnow18.xsd" MetadataType="Schema" ID="b78f9761-de12-4cae-bdd6-f047ce1e079d" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd3" />
+    <MetadataFile FileName="documentnow19.xsd" MetadataType="Schema" ID="506012e2-801a-494a-99d8-d50a4c446def" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd12" />
+    <MetadataFile FileName="documentnow20.xsd" MetadataType="Schema" ID="70415a9f-7b70-4358-ab02-df12da30e76d" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd0" />
+    <MetadataFile FileName="documentnow21.xsd" MetadataType="Schema" ID="9a0ca457-ccbd-490b-ab7d-40a123d76df8" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd17" />
+    <MetadataFile FileName="documentnow22.xsd" MetadataType="Schema" ID="62e0acde-af2b-40e5-aa55-19983ad78840" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd1" />
+    <MetadataFile FileName="documentnow22.wsdl" MetadataType="Wsdl" ID="523e2853-e02c-45a5-8497-5492b087d3c6" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl18" />
+    <MetadataFile FileName="documentnow23.xsd" MetadataType="Schema" ID="f690b6f3-3b85-4f55-821e-8ac66293c6a0" SourceId="1" SourceUrl="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd6" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

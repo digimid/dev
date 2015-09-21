@@ -1,0 +1,429 @@
+﻿@model bearhug.Models.DocumentBlocksModel
+@{
+    ViewBag.Title = "Signature Blocks";
+}
+
+<h5 class="subheader">Signature Blocks</h5>
+@if (Model != null)
+{
+    if (Model.DocId != null)
+    {
+        if (Model.DocId != "")
+        {
+    <div class="row" data-equalizer="">
+        <div class="small-2 columns panel" data-equalizer-watch="">
+            <button data-dropdown="sig-block-actions" aria-controls="sig-block-actions" aria-expanded="false" class="button tiny radius expand dropdown">Actions</button><br>
+            <ul id="sig-block-actions" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                <li><a href="#" class="add-text">Add Text Block</a></li>
+                <li><a href="#" class="add-sig">Add Signature Block</a></li>
+                <li><a href="#" class="clear-blocks">Clear</a></li>
+            </ul>
+            <div class="block-list">
+            </div>
+            <br />
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "button tiny radius alert expand" })
+            <br />
+            <br />
+            @using (Html.BeginForm("SaveDocumentBlocks", "Documents"))
+            {
+                <button type="submit" class="button tiny radius success expand">Save and Quit</button>
+                <input id="hdn_docid" name="hdn_docid" type="hidden" value="@Model.DocId" />    
+                <input id="hdn_boxes" name="hdn_boxes" type="hidden" />                    
+            }
+        </div>
+        <div class="small-10 columns panel" data-equalizer-watch="">
+            <div class="doc-sig-canvas-container text-center">
+                <canvas id="doc-sig-canvas"></canvas>
+            </div>
+            <div class="row">
+                <div class="small-12 columns text-center doc-sig-nav-controls">
+                    <button class="button tiny radius prev" disabled="disabled"><i class="fi-arrow-left icon-size-14"></i></button>
+                    <button class="button tiny radius next"><i class="fi-arrow-right icon-size-14"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+            for (int i = 0; i < Model.ImageByteStrings.Count; i++)
+            {
+    <input id="hdn_imgData_@i" class="imgData" type="hidden" value="@Model.ImageByteStrings[i]" />
+            }
+    <input id="hdn_current_boxes" type="hidden" value="@Model.CurrentBoxesString" />
+        }
+    }
+}
+else
+{    
+    @Html.ActionLink("Back to Documents", "Index")
+}
+@Html.ValidationSummary(true)
+<script type="text/javascript">
+    $(function () {
+
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-documents').addClass('active');
+
+        var canvas = document.getElementById("doc-sig-canvas");
+        var ctx = canvas.getContext("2d");
+        var image = new Image();
+        var currIdx = 0;
+        var rectArray = [];
+        var rect = {};
+        var blockData = {};
+        var startX;
+        var startY;
+        var isDrawing = false;
+        var boxType, pageWidth, pageHeight;
+
+        image.onload = function () {
+            $("#doc-sig-canvas").attr('width', image.width);
+            $("#doc-sig-canvas").attr('height', image.height);
+            $("#doc-sig-canvas").css('width', image.width);
+            $("#doc-sig-canvas").css('height', image.height);
+            $(".container").css('width', image.width + 20);
+            pageWidth = image.width;
+            pageHeight = image.height;
+            ctx.drawImage(image, 0, 0);
+            reDraw(currIdx);
+            updateRectVariable();
+        };
+
+
+        if ($('.imgData').length > 1) {
+            var i = $('.imgData');
+            $('.doc-sig-nav-controls').show();
+        }
+
+        $(window).load(function () {
+            image.src = $('#hdn_imgData_0').val();
+            if ($('#hdn_current_boxes').val().length > 0) {
+                drawCurrent();
+            }
+        });
+
+        function drawCurrent() {
+            var currRects = JSON.parse($('#hdn_current_boxes').val());
+            for (i = 0; i < currRects.length; i++) {
+                for (j = 0; j < currRects[i].FormBlocks.length; j++) {
+                    currRects[i].FormBlocks[j].Id = new Date().getTime() + j;
+                }
+                blockData[Number(currRects[i].PageIndex)] = currRects[i].FormBlocks;
+            }
+        }
+
+        $('.next').click(function () {
+            currIdx++;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            image.src = $('#hdn_imgData_' + currIdx).val();
+            if ($('#hdn_imgData_' + String(currIdx + 1)).length == 0) {
+                $('.next').attr("disabled", "disabled");
+            }
+            else {
+                $('.next').removeAttr("disabled");
+            }
+            if ($('#hdn_imgData_' + String(currIdx - 1)).length == 0) {
+                $('.prev').attr("disabled", "disabled");
+            }
+            else {
+                $('.prev').removeAttr("disabled");
+            }
+        });
+
+        $('.prev').click(function () {
+            currIdx--;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            image.src = $('#hdn_imgData_' + currIdx).val();
+            if ($('#hdn_imgData_' + String(currIdx + 1)).length == 0) {
+                $('.next').attr("disabled", "disabled");
+            }
+            else {
+                $('.next').removeAttr("disabled");
+            }
+            if ($('#hdn_imgData_' + String(currIdx - 1)).length == 0) {
+                $('.prev').attr("disabled", "disabled");
+            }
+            else {
+                $('.prev').removeAttr("disabled");
+            }
+        });
+
+        $('.add-text').click(function () {
+            Foundation.libs.dropdown.close($(this).parents().eq(1));
+            boxType = 'Text';
+            $("#doc-sig-canvas").on('mousedown', function (e) {
+                handleMouseDown(e);
+            }).on('mousemove', function (e) {
+                handleMouseMove(e);
+            }).on('mouseup', function (e) {
+                handleMouseUp(e);
+            });
+        });
+
+        $('.add-sig').click(function () {
+            Foundation.libs.dropdown.close($(this).parents().eq(1));
+            boxType = 'Signature';
+            $("#doc-sig-canvas").on('mousedown', function (e) {
+                handleMouseDown(e);
+            }).on('mousemove', function (e) {
+                handleMouseMove(e);
+            }).on('mouseup', function (e) {
+                handleMouseUp(e);
+            });
+        });
+
+        $('.clear-blocks').click(function () {
+            Foundation.libs.dropdown.close($(this).parents().eq(1));
+            clear();
+        });
+
+        function handleMouseDown(e) {
+            var pos = getMousePos(canvas, e);
+            posx = pos.x;
+            posy = pos.y;
+
+            canvas.style.cursor = "crosshair";
+            isDrawing = true;
+
+            startX = posx;
+            startY = posy;
+
+            rect.StartX = startX;
+            rect.StartY = startY;
+        }
+
+        function handleMouseMove(e) {
+            if (isDrawing) {
+                var pos = getMousePos(canvas, e);
+                posx = pos.x;
+                posy = pos.y;
+
+                var mouseX = posx;
+                var mouseY = posy;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image, 0, 0);
+                ctx.beginPath();
+                if (boxType === 'Text') {
+                    ctx.strokeStyle = 'blue';
+                }
+                else if (boxType === 'Signature') {
+                    ctx.strokeStyle = 'red';
+                }
+                ctx.lineWidth = 1;
+                ctx.rect(startX, startY, mouseX - startX, mouseY - startY);
+                ctx.stroke();
+
+                rect.Width = mouseX - startX;
+                rect.Height = mouseY - startY;
+                drawRectArray();
+            }
+        }
+
+        function handleMouseUp(e) {
+            if (isDrawing) {
+                var pos = getMousePos(canvas, e);
+                posx = pos.x;
+                posy = pos.y;
+
+                var mouseX = posx;
+                var mouseY = posy;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image, 0, 0);
+                ctx.beginPath();
+                if (boxType === 'Text') {
+                    ctx.strokeStyle = 'blue';
+                }
+                else if (boxType === 'Signature') {
+                    ctx.strokeStyle = 'red';
+                }
+                ctx.lineWidth = 1;
+                ctx.rect(startX, startY, mouseX - startX, mouseY - startY);
+                ctx.stroke();
+
+                rect.Width = mouseX - startX;
+                rect.Height = mouseY - startY;
+                drawRectArray();
+            }
+            isDrawing = false;
+            canvas.style.cursor = "default";
+            if ((rect.Height > 0 || rect.Height != undefined) &&
+                (rect.Width > 0 || rect.Width != undefined) &&
+                (rect.StartX > 0 || rect.StartX != undefined) &&
+                (rect.StartY > 0 || rect.StartY != undefined)) {
+                rect.Type = boxType;
+                rect.PageWidth = pageWidth;
+                rect.PageHeight = pageHeight;
+                rect.Id = new Date().getTime();
+                rectArray.push(rect);
+                rect = {};
+                updateRectVariable();
+            }
+            $('.controls .btn').removeClass('active');
+            $("#doc-sig-canvas").off();
+        }
+
+        function getMousePos(c, evt) {
+            var rectTemp = c.getBoundingClientRect();
+            //console.log(String(evt.clientX - rectTemp.left) + ":" + String(evt.clientY - rectTemp.top));
+            return {
+                x: evt.clientX - rectTemp.left,
+                y: evt.clientY - rectTemp.top
+            };
+        }
+
+        function drawRectArray() {
+            for (var i = 0; i < rectArray.length; i++) {
+                ctx.beginPath();
+                if (rectArray[i].Type === 'Text') {
+                    ctx.strokeStyle = 'blue';
+                }
+                else if (rectArray[i].Type === 'Signature') {
+                    ctx.strokeStyle = 'red';
+                }
+                ctx.lineWidth = 1;
+                ctx.rect(rectArray[i].StartX, rectArray[i].StartY, rectArray[i].Width, rectArray[i].Height);
+                ctx.stroke();
+            }
+        }
+
+        function updateBlockData() {
+            if (!blockData[currIdx]) {
+                blockData[currIdx] = rectArray;
+            }
+        }
+
+        function updateRectVariable() {
+            updateBlockData();
+            correctBlockData();
+            updateList();
+            var publishBlockData = [];
+            for (key in blockData) {
+                if (blockData[key] != undefined) {
+                    if (blockData[key].length > 0) {
+                        publishBlockData.push({
+                            PageIndex: key,
+                            FormBlocks: blockData[key]
+                        });
+                    }
+                }
+            }
+            var str = JSON.stringify(publishBlockData);
+            if (publishBlockData.length > 0) {
+                $('#hdn_boxes').val(JSON.stringify(publishBlockData));
+            }
+            else {
+                $('#hdn_boxes').val('');
+            }
+        }
+
+        function correctBlockData() {
+            for (key in blockData) {
+                if (blockData[key] != undefined) {
+                    if (blockData[key].length > 0) {
+                        var blockArray = blockData[key];
+                        for (i = 0; i < blockArray.length; i++) {
+                            if (blockArray[i].Width < 0) {
+                                blockArray[i].Width = blockArray[i].Width * -1;
+                                blockArray[i].StartX = blockArray[i].StartX - blockArray[i].Width;
+                            }
+                            if (blockArray[i].Height < 0) {
+                                blockArray[i].Height = blockArray[i].Height * -1;
+                                blockArray[i].StartY = blockArray[i].StartY - blockArray[i].Height;
+                            }
+                            if (blockArray[i].StartX == 0) {
+                                blockArray[i].StartX += 1;
+                            }
+                            if (blockArray[i].StartY == 0) {
+                                blockArray[i].StartY += 1;
+                            }
+                            if (blockArray[i].StartX + blockArray[i].Width == pageWidth) {
+                                blockArray[i].Width -= 1;
+                            }
+                            if (blockArray[i].StartY + blockArray[i].Height == pageHeight) {
+                                blockArray[i].Height -= 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function updateList() {
+            $('.block-list .block-list-well').remove();
+            var curRect = blockData[currIdx];
+            if (curRect != undefined) {
+                for (var i = 0; i < curRect.length; i++) {
+                    var classDef = curRect[i].Type == 'Signature' ? 'doc-sig-sig' : 'doc-sig-txt';
+                    $('.block-list').append(
+                        '<div class="block-list-well ' + classDef + '" data-id=' + curRect[i].Id + '>' +
+                            '<button class="close">&times;</button>' +
+                            '<label>' + curRect[i].Type + ' Block</label>' +
+                        '</div>'
+                    );
+                }
+            }
+            $('.block-list .block-list-well .close').click(function () {
+                var id = $(this).parent().data('id');
+                $(this).parent().remove();
+                var curRect = blockData[currIdx];
+                var idx;
+                for (var i = 0; i < curRect.length; i++) {
+                    if (curRect[i].Id == id) {
+                        idx = i;
+                    }
+                }
+                curRect.splice(idx, 1);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image, 0, 0);
+                drawRectArray();
+                updateRectVariable();
+            });
+            $('.block-list .block-list-well').hover(
+                function () {
+                    var id = $(this).data('id');
+                    $(this).addClass('block-list-well-hover');
+                    var curRect = blockData[currIdx];
+                    for (var i = 0; i < curRect.length; i++) {
+                        if (curRect[i].Id == id) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = 'yellow';
+                            ctx.lineWidth = 3;
+                            ctx.rect(curRect[i].StartX, curRect[i].StartY, curRect[i].Width, curRect[i].Height);
+                            ctx.stroke();
+                        }
+                    }
+                },
+                function () {
+                    var id = $(this).data('id');
+                    $(this).removeClass('block-list-well-hover');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(image, 0, 0);
+                    drawRectArray();
+                }
+            );
+        }
+
+        function reDraw(index) {
+            rectArray = [];
+            rect = {};
+            updateList();
+            $('#hdn_boxes').val('');
+            for (var key in blockData) {
+                if (key == index) {
+                    rectArray = blockData[key];
+                    drawRectArray();
+                }
+            }
+        }
+
+        function clear() {
+            rectArray = [];
+            rect = {};
+            delete blockData[currIdx];
+            $('#hdn_boxes').val('');
+            $('.block-list .block-list-well').remove();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0);
+        }
+    });
+</script>

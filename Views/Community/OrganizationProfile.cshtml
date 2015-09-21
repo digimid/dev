@@ -1,0 +1,99 @@
+﻿@model bearhug.ContactsServiceReference.OrganizationSearchResult
+@{
+    ViewBag.Title = "Bearhug Organization Profile";
+}
+
+<h4 class="subheader">@Model.Name Profile</h4>
+<div class="row">
+    <div class="small-3 columns">
+        <label>@Model.Name</label>
+        @if (Model.Address1.Length > 0)
+        {
+            <label>@Model.Address1</label>
+        }
+        @if (Model.Address2.Length > 0)
+        {
+            <label>@Model.Address2</label>
+        }
+        @if (Model.City.Length > 0 || Model.State.Length > 0 || Model.ZipCode.Length > 0)
+        {
+            <label>@Model.City, @Model.State @Model.ZipCode</label>
+        }
+        @if (Model.Phone.Length > 0)
+        {
+            <label>Phone: @Model.Phone</label>
+        }
+        @if (Model.Fax.Length > 0)
+        {
+            <label>Fax: @Model.Fax</label>
+        }
+        @if (Model.WebsiteUrl.Length > 0)
+        {
+            <a href="@Model.WebsiteUrl" target="_blank">@Model.WebsiteName</a>
+        }
+    </div>
+    <div class="small-6 columns end">
+        @if (Model.SocialLinks.FaceBookUrl.Length > 0)
+        {
+            <a href="@Model.SocialLinks.FaceBookUrl" target="_blank">
+                <img src="~/Images/facebook.png" alt="Facebook" width="22" />
+                View us on Facebook                
+            </a>
+            <br />
+        }
+        @if (Model.SocialLinks.GooglePlusUrl.Length > 0)
+        {
+            <a href="@Model.SocialLinks.GooglePlusUrl" target="_blank">
+                <img src="~/Images/googleplus.png" alt="Google +" width="22" />
+                View us on Google +
+            </a>
+            <br />
+        }
+        @if (Model.SocialLinks.LinkedInUrl.Length > 0)
+        {
+            <a href="@Model.SocialLinks.LinkedInUrl" target="_blank">
+                <img src="~/Images/linkedin.png" alt="LinkedIn" width="22" />
+                View us on LinkedIn
+            </a>
+            <br />
+        }
+        @if (Model.SocialLinks.TwitterUrl.Length > 0)
+        {
+            <a href="@Model.SocialLinks.TwitterUrl" target="_blank">
+                <img src="~/Images/twitter.png" alt="Twitter" width="22" />
+                View us on Twitter
+            </a>
+            <br />
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="small-12 columns">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="small-6 columns">
+        <label><i><strong>About us</strong></i></label>
+        <label>@Model.About</label>
+    </div>
+    <div class="small-6 columns">
+        <label><i><strong>Our professionals <span class="subheader">(click to view details)</span></strong></i></label>
+        @foreach (bearhug.ContactsServiceReference.OrganizationMember member in Model.Members)
+        {
+            string name = member.UID;
+            if (member.FirstName.Length > 0 || member.LastName.Length > 0)
+            {
+                name = member.FirstName + " " + member.LastName;
+            }            
+            <a href="@Url.Action("MemberProfile", new { mid = member.UID })">@name</a><br />
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-community').addClass('active');
+    });
+</script>

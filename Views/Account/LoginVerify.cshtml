@@ -1,0 +1,60 @@
+﻿@model bearhug.Models.TwoFactorLoginModel
+@{
+    ViewBag.Title = "Verify Credentials";
+}
+
+<h4>Verify Credentials - Enter your keycode</h4>
+
+@if (Request.QueryString["u"] != null)
+{
+    <p>Hello <b>@System.Text.Encoding.Default.GetString(new System.Text.Base32Encoder().Decode(Request.QueryString["u"]))</b></p>
+}
+else if (ViewBag.username != null)
+{
+    <p>Hello <b>@System.Text.Encoding.Default.GetString(new System.Text.Base32Encoder().Decode(ViewBag.username))</b></p>
+}
+
+<div class="row">
+    <div class="small-4 columns">
+        @using (Html.BeginForm("LoginVerify", "Account", FormMethod.Post))
+        {        
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>Enter your Key Code</legend>
+                <div class="row">
+                    <div class="small-12 columns">
+                        <ul class="no-bullet">
+                            <li>
+                                @Html.LabelFor(m => m.TwoFactorCode)
+                                @Html.TextBoxFor(m => m.TwoFactorCode, new { @class = "radius" })
+                                @Html.ValidationMessageFor(m => m.TwoFactorCode)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-12 columns">
+                        <input type="submit" value="Proceed" class="button tiny radius right" />
+                    </div>
+                </div>
+            </fieldset>           
+        }
+    </div>
+    <div class="small-8 columns">
+        <div class="login-side"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="small-4 columns">
+        @Html.ActionLink("Forgot your key code?", "KeyCodeRetrieval", new { @model = Model }, new { @type = "button", @class = "btn btn-link" })
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#login-form form').attr('autocomplete', 'off');
+    });
+
+</script>

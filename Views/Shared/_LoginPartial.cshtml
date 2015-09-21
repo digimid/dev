@@ -1,0 +1,42 @@
+﻿@*<style>    
+
+    .navbar .nav {
+        position: relative;
+        left: 0;
+        display: block;
+        margin: 0 10px 0 0;
+    }
+
+    .add-style {
+        float: none;
+        padding: 10px 15px 10px;
+        /*text-shadow: 0 1px 0 #ffffff;*/
+        display: block;
+    }
+</style>*@
+
+<ul>
+    @if (Request.IsAuthenticated)
+    {
+        <li class="has-dropdown">
+            <a href="#">Hello, @User.Identity.Name</a>
+            <ul class="dropdown">
+                <li>@Html.ActionLink("Account", "Index", "Home")</li>
+                <li>
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @id = "logout-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <a class="logout-link" href="javascript:document.getElementById('logout-form').submit()">Log off</a>
+                    }
+                </li>
+            </ul>
+        </li>        
+    }
+    else
+    {
+        if (User.IsInRole("Members"))
+        {
+        <li id="li-login">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        }
+    }
+</ul>

@@ -1,0 +1,114 @@
+﻿@model bearhug.Models.InteractionConstruct
+@{
+    ViewBag.Title = "Interactions";
+}
+<div class="row">
+    <div class="small-6 columns">
+        <h4 class="subheader">Interactions</h4>
+    </div>
+    <div class="small-6 columns">
+        @if (Roles.IsUserInRole("Members"))
+        {                                
+            @Html.ActionLink("Create", "New", null, new { @class = "button tiny radius right" })
+        }
+    </div>
+</div>
+@if (Model.Transactions.Count == 0)
+{
+    if (Roles.IsUserInRole("Members"))
+    {
+    <label>No interactions.  Click the Create button to get started.</label>
+    }
+    else
+    {
+    <label>No interactions at this time.</label>
+    }
+}
+else
+{
+    <table class="messaging-table" data-provides="rowlink">
+        <thead>
+            <tr>
+                <th class="open"></th>
+                <th class="img-new"></th>
+                <th class="img-attachment"></th>
+                <th class="from">From</th>
+                <th class="subject">Subject</th>
+                <th class="text">Message</th>
+                <th class="msgs"></th>
+                <th class="datetime">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Transactions.Count; i++)
+            {
+                if (Model.Transactions[i].Comments.Count > 0)
+                {
+                <tr>
+                    <td class="open">
+                        <a href="@Url.Action("Interaction", "Interactions", new { tid = @Model.Transactions[i].TransactionId })"></a>
+                    </td>
+                    @{bool hasUpdate = false; bool hasAttachment = false;
+                    }
+                    @foreach (bearhug.InteractionsServiceReference.TransactionComment cmt in Model.Transactions[i].Comments)
+                    {
+                        if (cmt.Status == bearhug.InteractionsServiceReference.TransactionCommentStatus.unread)
+                        {
+                            hasUpdate = true;
+                        }
+                        if (cmt.Documents.Count > 0)
+                        {
+                            hasAttachment = true;
+                        }
+                    }
+                    <td class="img-new">
+                        @if (hasUpdate)
+                        {
+                            <span class="alert radius label">!</span>
+                        }
+                    </td>
+                    <td class="img-attachment">
+                        @if (hasAttachment)
+                        {
+                            <img src="~/Images/paperclip.png" alt="Attachment" height="20" width="20" />
+                        }
+                    </td>
+                    <td class="from">
+                        @Model.Transactions[i].Comments[Model.Transactions[i].Comments.Count - 1].From
+                    </td>
+                    <td class="subject">
+                        @Model.Transactions[i].Subject
+                    </td>
+                    <td class="text">
+                        @Model.Transactions[i].Comments[Model.Transactions[i].Comments.Count - 1].Comment
+                    </td>
+                    <td class="msgs">
+                        @{
+                        string numTrns = "";
+                        if (ViewData.Model.Transactions[i].Comments.Count == 2)
+                        {
+                            numTrns = "and 1 other";
+                        }
+                        else if (ViewData.Model.Transactions[i].Comments.Count > 2)
+                        {
+                            numTrns = "and " + (ViewData.Model.Transactions[i].Comments.Count - 1).ToString() + " others";
+                        }
+                        }@numTrns
+                    </td>
+                    <td class="datetime">
+                        @Model.Transactions[i].Comments[ViewData.Model.Transactions[i].Comments.Count - 1].DateTimeStamp.ToShortDateString()
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+<script type="text/javascript">
+    $(function () {
+
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-interactions').addClass('active');
+
+    });
+</script>

@@ -1,0 +1,830 @@
+﻿/*------------------------------------------------------*/
+/* Main Content */
+/*------------------------------------------------------*/
+html {
+    background-color: #e2e2e2;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: url("../Images/background.JPG") repeat;
+    color: #333;
+    font-size: .85em;
+    /*font-family: Cambria, Georgia, "New Century Schoolbook", "Century Schoolbook L", "Times New Roman", serif;*/
+    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.body-content {
+    margin: 0 auto;
+    width: 100%;
+    position: fixed;
+    top: 45px;
+    bottom: 60px;
+    right: 0;
+    left: 0;
+}
+
+.body-wrapper {
+    margin: 45px 30px 0px 30px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: solid 1px #efefef;
+    position: fixed;
+    top: 0;
+    bottom: 60px;
+    right: 0;
+    left: 0;
+    overflow-y: auto;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+
+footer {
+    background-color: #db6b10;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 -5px 5px rgba(68,68,68,0.6);
+    z-index: 99;
+}
+
+.footer-wrapper {
+    margin: 0px 30px 0px 30px;
+    padding: 10px;
+}
+
+    .footer-wrapper row {
+        margin: 0 auto;
+        padding-top: 10px;
+    }
+
+    .footer-wrapper small {
+        color: #000000;
+    }
+
+.validation-summary-errors {
+    color: red;
+}
+
+.min-tabs-content {
+    min-height: 400px;
+}
+
+/*------------------------------------------------------*/
+/* Login */
+/*------------------------------------------------------*/
+
+.login-side {
+    background: url("../Images/Bearhug_ID_WEB2.png") no-repeat;
+    /*background-position: center;*/
+    background-position-x: 50%;
+    background-position-y: 75%;
+    width: 100%;
+    height: 200px;
+}
+
+#logout-form {
+    font-family:, Georgia, "New Century Schoolbook", "Century Schoolbook L", "Times New Roman", serif;
+    font-size: 0.8125rem;
+    font-weight: normal;
+    margin: 0;
+}
+
+    #logout-form:hover {
+        background-color: #EE954C;
+    }
+
+.logout-link {
+    background-color: #db6b10 !important;
+    background: #db6b10 !important;
+    display: block;
+}
+
+    .logout-link:hover {
+        background-color: #EE954C !important;
+        background: #EE954C !important;
+    }
+
+.row_sms {
+    display: none;
+}
+
+    .row_sms input {
+        float: left;
+    }
+
+        .row_sms input#sms_area_code {
+            width: 45px;
+        }
+
+        .row_sms input#sms_first {
+            width: 45px;
+        }
+
+        .row_sms input#sms_last {
+            width: 50px;
+        }
+
+.user-name {
+    float: none;
+    padding: 10px 15px 10px;
+    /*text-shadow: 0 1px 0 #ffffff;*/
+    display: block;
+}
+
+/*------------------------------------------------------*/
+/* Admin */
+/*------------------------------------------------------*/
+
+.alert-box {
+    margin-bottom: 0;
+}
+
+/*------------------------------------------------------*/
+/* Dashboard */
+/*------------------------------------------------------*/
+
+.team-admin {
+    color: red;
+}
+
+#delete-reminder-form #lbl-confirm-delete {
+    display: none;
+}
+
+#update-reminder-form .button, #delete-reminder-form .button, #edit-reminder-form .button {
+    margin-bottom: 0;
+}
+
+.patient-report-params {
+    display: none;
+}
+
+/*------------------------------------------------------*/
+/* Profile */
+/*------------------------------------------------------*/
+
+.profile-row {
+    background-color: #fafafa;
+    border-radius: 5px;
+    padding: 5px 0;
+}
+
+.scroll-container-header {
+    z-index: 100;
+}
+
+    .scroll-container-header .sub-nav {
+        background-color: #f2f2f2 !important;
+        padding: 10px;
+        margin: 0;
+    }
+
+.sticky {
+    position: fixed;
+    top: 45px;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.profile-button {
+    margin: 0;
+    font-size: 16px !important;
+    padding: 3px 30px 3px 13px !important;
+}
+
+    .profile-button:after {
+        right: 10px !important;
+    }
+
+/*------------------------------------------------------*/
+/* Contacts */
+/*------------------------------------------------------*/
+
+.team-buttons li a {
+    padding: 7px 5px !important;
+}
+
+.edit-teams {
+    display: none;
+}
+
+.tabs-content.contact-management {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sub-nav.contact-management-nav {
+    margin: 0;
+}
+
+.tabs-content.vertical {
+    min-height: 450px;
+}
+
+/*------------------------------------------------------*/
+/* Messaging, Transactions */
+/*------------------------------------------------------*/
+
+.messaging-team {
+    font-weight: bold;
+}
+
+.delete-msgs {
+    padding: 2px 10px 0px 10px !important;
+    font-size: 21px !important;
+}
+
+.messaging-table {
+    table-layout: fixed;
+}
+
+    .messaging-table tbody tr:hover td {
+        background-color: #f39814;
+        color: #ffffff !important;
+        cursor: pointer;
+    }
+
+    .messaging-table thead tr th, .messaging-table tbody tr td {
+        line-height: 30px;
+        padding: 0;
+    }
+
+    .messaging-table tr td.open, .messaging-table tr th.open {
+        width: 0px;
+    }
+
+    .messaging-table tr td.chk, .messaging-table tr th.chk {
+        width: 10px;
+    }
+
+        .messaging-table tr td.chk input, .messaging-table tr th.chk input {
+            margin: 0 auto 2px 10px;
+        }
+
+    .messaging-table tr td.img-new, .messaging-table tr th.img-new {
+        width: 10px;
+    }
+
+    .messaging-table tr td.img-attachment, .messaging-table tr th.img-attachment {
+        width: 10px;
+    }
+
+    .messaging-table tr td.from, .messaging-table tr th.from {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .messaging-table tr td.subject, .messaging-table tr th.subject {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .messaging-table tr td.text, .messaging-table tr th.text {
+        width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .messaging-table tr td.msgs, .messaging-table tr th.msgs {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #aaaaaa;
+    }
+
+    .messaging-table tr td.datetime, .messaging-table tr th.datetime {
+        width: 50px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+.checked-background {
+    background-color: #F39814 !important;
+    color: white;
+}
+
+.new-message-container {
+    height: 400px;
+    overflow-y: auto;
+}
+
+#new_message_body, #reply_message_body, #reply_transaction_body {
+    height: 200px;
+    resize: none;
+}
+
+#forwarded-files-message {
+    display: none;
+}
+
+.list-container {
+    border: 1px solid #dfdfdf;
+    box-shadow: 0 2px 3px rgba(177, 177, 177, 1);
+}
+
+    .list-container .list-section {
+        border-top: 1px solid #dfdfdf;
+    }
+
+.list-section-subject-header {
+    min-height: 45px;
+    padding-top: 8px;
+    z-index: 100;
+}
+
+.sticky {
+    position: fixed;
+    top: 45px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.list-section .snippet {
+    min-height: 45px;
+    padding-top: 12px;
+}
+
+list-section > hr {
+    margin-top: 0 !important;
+}
+
+.list-section .snippet:hover {
+    background-color: #EFB660;
+    cursor: pointer;
+}
+
+.full {
+    display: none;
+    padding-top: 12px;
+    border-left: 3px solid #db6b10;
+    border-right: 3px solid #db6b10;
+}
+
+.subtext {
+    color: #aaaaaa;
+}
+
+.msg-body {
+    margin-bottom: 20px !important;
+}
+
+.download-label {
+    border: 1px solid #dfdfdf;
+    padding: 10px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+    .download-label:hover {
+        background-color: rgba(16, 27, 218, 0.5);
+        color: #ffffff;
+        /*font-size: 0;*/
+    }
+
+        /*.download-label:hover:before {
+            font-size: 0.875rem;
+            color: #ffffff;
+            text-align: center;
+            content: 'Download';
+        }*/
+
+.list-actions {
+    margin-bottom: 20px !important;
+}
+
+.reply-message-container, .add-files-message-container {
+    display: none;
+    border-left: 3px solid #101BDA;
+    border-right: 3px solid #101BDA;
+}
+
+#newdocuments, #currentdocuments {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#interaction_fileupload_message {
+    color: red;
+}
+
+#contacts-div {
+    display: none;
+}
+
+.list-confirm-delete {
+    display: none;
+}
+
+.interaction-invite-contacts, .interaction-invite-summary {
+    display: none;
+}
+
+.tbl-invite-users-header, .tbl-invite-users-body, .tbl-invite-users-summary {
+    table-layout: fixed;
+    display: none;
+}
+
+.tbl-invite-users-header {
+    margin-bottom: 0;
+}
+
+.tbl-invite-users-contact {
+    width: 400px;
+}
+
+.tbl-invite-users-choice {
+    width: 100px;
+}
+
+.tbl-invite-users-action {
+    width: 100px;
+}
+
+.tbl-invite-users-body-container {
+    height: 240px;
+    overflow-y: auto;
+}
+
+.tbl-invite-users-body input[type="radio"] {
+    margin: 0;
+}
+
+.users-summary-container {
+    height: 240px;
+    overflow-y: auto;
+}
+
+.hidden-variables {
+    display: none;
+}
+
+.new-interaction-patients {
+    display: none;
+}
+
+.interaction-invite-general-sizer {
+    height: 230px;
+}
+
+/*------------------------------------------------------*/
+/* Patients */
+/*------------------------------------------------------*/
+.patient-table {
+    border: solid 1px #dddddd;
+}
+
+.member-header-tag {
+    margin: 5px 0;
+}
+
+.modal-form-footer {
+    float: right;
+    width: auto;
+}
+
+#create-patient-record-form, #edit-patient-record-form hr {
+    margin: 15px 0 15px 0;
+}
+
+#create-patient-record-form .id-maker {
+    font-size: 19px !important;
+}
+
+.patient-record-view label.inline {
+    margin: 0;
+
+}
+
+/*------------------------------------------------------*/
+/* Admin Patients */
+/*------------------------------------------------------*/
+
+.div-ammendment-approve {
+    display: none;
+    height: 26px;
+    margin-bottom: 0px;
+}
+
+.div-ammendment-deny {
+    display: none;
+    height: 26px;
+    margin-bottom: 0px;
+}
+
+.amendment-action {
+    width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.amendment-approved {
+    background-color: rgba(92,184,92,0.3) !important;
+}
+
+.amendment-denied {
+    background-color: rgba(217,83,79,0.5) !important;
+}
+
+.amendment-pending {
+    background-color: rgba(240,173,78,0.3) !important;
+}
+
+/*------------------------------------------------------*/
+/* Documents */
+/*------------------------------------------------------*/
+
+#upload-new-document-form fieldset {
+    margin-bottom: 0;
+    padding: 10px 10px 0 20px;
+}
+
+.btn-submit-file, .btn-remove-file {
+    display: none;
+}
+
+.lbl-doc-delete {
+    display: none;
+}
+
+.documents-table {
+    table-layout: fixed;
+}
+
+    .documents-table thead tr th, .messaging-table tbody tr td {
+        line-height: 30px;
+        padding: 0;
+    }
+
+    .documents-table tr th.docs-name, .documents-table tr td.docs-name  {
+        width: 20%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .documents-table tr th.docs-view, .documents-table tr td.docs-view {
+        width: 10%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .documents-table tr th.docs-blocks, .documents-table tr td.docs-blocks {
+        width: 40%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .documents-table tr td.docs-blocks .input_file_name {
+            margin-bottom: 0px;
+        }
+
+    .documents-table tr th.docs-delete, .documents-table tr td.docs-delete {
+        width: 30%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }    
+
+.save-doc-to-profile {
+    display: none;
+}
+
+#faxes {
+    padding-top: 20px;   
+}
+
+.block-list {
+    overflow-y: auto;
+    margin-top: 10px;
+    height: 330px;
+}
+
+.doc-sig-canvas-container {
+    height: 480px;
+    width: 850px;
+    position: relative;
+    border: 1px solid #d3d3d3;
+    overflow: auto;
+    padding-top: 10px;
+    border-radius: 3px;
+    margin: 0 auto;
+}
+
+#doc-sig-canvas {
+    height: 480px;
+    width: 800px;
+    box-shadow: 0 0 3px 3px #888888;
+}
+
+.nav-controls button {
+    padding: 3px 15px !important;
+    margin-top: 5px;
+}
+
+.doc-sig-nav-controls {
+    display: none;
+}
+
+.doc-sig-txt {
+    background-color: #C7C7EE;
+}
+
+.doc-sig-sig {
+    background-color: #F1CDCD;
+}
+
+.block-list-well {
+    padding: 9px;
+    border-radius: 3px;
+    min-height: 20px;
+    border: 1px solid #e3e3e3;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+    margin-bottom: 3px;
+}
+
+.block-list-well-hover {
+    background-color: #edee5a;
+}
+
+.block-list-well .close {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 1px 0 #fff;
+    color: rgb(68,68,68);
+}
+
+/*------------------------------------------------------*/
+/* Community */
+/*------------------------------------------------------*/
+
+.member-search-results li {
+    border: 1px solid #dfdfdf;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+}
+
+/*------------------------------------------------------*/
+/* Misc */
+/*------------------------------------------------------*/
+
+.help-button {
+    padding: 3px 7px 2px 7px !important;
+    margin-bottom: 0;
+    border-radius: 50px !important;
+}
+
+    .help-button i {
+        font-size: 20px;
+    }
+
+.text-warning {
+    color: red;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    z-index: 1200;
+}
+
+    .fileUpload:hover * {
+        cursor: pointer;
+    }
+
+    .fileUpload input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        opacity: 0;
+        z-index: 0;
+        height: 0;
+    }
+
+.fixed-table {
+    table-layout: fixed;
+}
+
+table .button {
+    margin-bottom: 0;
+}
+
+.priority-low, .priority-medium, .priority-high {
+    padding: 10px;
+}
+
+    .priority-low .button, .priority-medium .button, .priority-high .button {
+        margin-bottom: 0;
+    }
+
+.priority-low {
+    background: rgba(143,167,240,0.3);
+}
+
+.priority-medium {
+    background: rgba(232,240,143,0.3);
+}
+
+.priority-high {
+    background: rgba(240,156,143,0.3);
+}
+
+.icon-button {
+    padding: 5px 10px 5px 10px !important;
+}
+
+.icon-size-6 {
+    font-size: 6px;
+}
+
+.icon-size-8 {
+    font-size: 8px;
+}
+
+.icon-size-9 {
+    font-size: 9px;
+}
+
+.icon-size-10 {
+    font-size: 10px;
+}
+
+.icon-size-12 {
+    font-size: 12px;
+}
+
+.icon-size-14 {
+    font-size: 14px;
+}
+
+.icon-size-14 {
+    font-size: 14px;
+}
+
+.icon-size-16 {
+    font-size: 16px;
+}
+
+.icon-size-18 {
+    font-size: 18px;
+}
+
+.icon-size-21 {
+    font-size: 21px;
+}
+
+.icon-size-24 {
+    font-size: 24px;
+}
+
+.icon-size-36 {
+    font-size: 36px;
+}
+
+.icon-size-48 {
+    font-size: 48px;
+}
+
+.icon-size-60 {
+    font-size: 60px;
+}
+
+.icon-size-72 {
+    font-size: 72px;
+}

@@ -1,0 +1,751 @@
+﻿@model bearhug.Models.ContactsModel
+@{
+    ViewBag.Title = "Contact Management";
+}
+
+<h4 class="subheader">Contact List</h4>
+<ul class="tabs">
+    <li class="tab-title active"><a href="#contactlist">Contact List</a></li>
+    <li class="tab-title">@Html.ActionLink("Organize Contacts", "Organize", "Contacts")</li>
+    <li class="tab-title">@Html.ActionLink("Add Contact", "Add", "Contacts")</li>
+    <li class="tab-title">@Html.ActionLink("Upload Contact List", "Upload", "Contacts")</li>
+</ul>
+<div class="tabs-content min-tabs-content">
+    <div class="content active" id="contactlist">
+
+        <ul class="tabs vertical" data-tab="">
+            <li class="tab-title active">
+                <a href="#personal" data-toggle="tab">Personal</a>
+            </li>
+            <li class="tab-title">
+                <a href="#organization" data-toggle="tab">Organizational</a>
+            </li>
+            @foreach (bearhug.ContactsServiceReference.Group grp in Model.ContactsGeneric.Organization.Groups)
+            {
+                if (grp.Members.Exists(g => g.UID == User.Identity.Name))
+                {
+                <li class="tab-title">
+                    <a href="#@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" data-toggle="tab">@grp.Name</a>
+                </li>
+                }
+            }
+        </ul>
+        <div class="tabs-content vertical">
+
+            <div class="content active" id="personal">
+                <h5>All Personal Contacts</h5>
+                <div class="row">
+                    <div class="small-3 columns">
+                        @if (Model.ContactsGeneric.ContactGroupTags.Count > 0)
+                        {
+                            <a href="#" data-dropdown="drop-personal" class="button tiny radius expand dropdown">All</a><br>
+                            <ul id="drop-personal" data-dropdown-content="" class="f-dropdown">
+                                <li><a data-parent="personal" data-tag="all" data-title="All Personal Contacts" tabindex="-1" href="#personal_all">All</a></li>
+                                @foreach (string tag in Model.ContactsGeneric.ContactGroupTags)
+                                {
+                                    <li><a data-parent="personal" data-tag="@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")" data-title="@tag Contacts" tabindex="-1" href="#personal_@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")">@tag</a></li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    <div class="small-9 columns end">
+                        <div class="row collapse">
+                            <div class="small-8 columns">
+                                <input type="text" class="contacts-search" placeholder="Search by name" autocomplete="off">
+                            </div>
+                            <div class="small-2 columns end">
+                                <button class="button tiny radius postfix contacts-search-clear" type="button">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-12 columns end">
+                        <dl class="sub-nav">
+                            <dd><a href="#" class="btn-expand-all">Expand All</a></dd>
+                            <dd><a href="#" class="btn-collapse-all">Collapse All</a></dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="contact-rows">
+
+                    <ul class="small-block-grid-1 medium-block-grid-4">
+                        @for (int i = 0; i < Model.ContactsGeneric.PersonalContacts.Count; i++)
+                        {
+                            string name;
+                            if (Model.ContactsGeneric.PersonalContacts[i].LastName.Length > 0 || Model.ContactsGeneric.PersonalContacts[i].FirstName.Length > 0)
+                            {
+                                name = Model.ContactsGeneric.PersonalContacts[i].LastName + ", " + Model.ContactsGeneric.PersonalContacts[i].FirstName;
+                            }
+                            else
+                            {
+                                name = Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                            }
+                            List<string> taggedstrings = new List<string>();
+                            foreach (string taggedstring in Model.ContactsGeneric.PersonalContacts[i].Tags)
+                            {
+                                taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                            }
+                            <li data-tags="@String.Join(",", taggedstrings.ToArray())" data-name="@name">
+                                <dl class="accordion" data-accordion="">
+                                    <dd class="accordion-navigation">
+                                        <a href="#collapse-@i"><span class="title">@name</span>
+                                            @if (Model.ContactsGeneric.PersonalContacts[i].Type == bearhug.ContactsServiceReference.Source.member)
+                                            {
+                                                <img src="~/favicon.ico" alt="Bearhug member" class="member-header-tag right" />                                                    
+                                            }
+                                        </a>
+                                        <div id="collapse-@i" class="content">
+                                            @Model.ContactsGeneric.PersonalContacts[i].Title, @Model.ContactsGeneric.PersonalContacts[i].Organization
+                                            <br />
+                                            @Model.ContactsGeneric.PersonalContacts[i].Email
+                                            <br />
+                                            @Model.ContactsGeneric.PersonalContacts[i].Phone
+                                            <br />
+                                            @Model.ContactsGeneric.PersonalContacts[i].Address1
+                                            @if (Model.ContactsGeneric.PersonalContacts[i].Address2 != "")
+                                            {
+                                                @Model.ContactsGeneric.PersonalContacts[i].Address2
+                                            }
+                                            <br />
+                                            @Model.ContactsGeneric.PersonalContacts[i].City, @Model.ContactsGeneric.PersonalContacts[i].State @Model.ContactsGeneric.PersonalContacts[i].Zip
+                                            <br />
+                                            <button data-tooltip="" data-cid="@Model.ContactsGeneric.PersonalContacts[i].ContactID" data-type="@Model.ContactsGeneric.PersonalContacts[i].Type.ToString()" data-typesrc="personal" type="button" class="button tiny radius copymove-contact has-tip" title="Copy...Move"><i class="fi-page-copy"></i></button>
+                                            @if (Model.ContactsGeneric.PersonalContacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                            {
+                                                <a data-tooltip="" href="@Url.Action("Update", "Contacts", new { UID = Model.ContactsGeneric.PersonalContacts[i].ContactID })" target="_self" class="button tiny radius new-message update-nonmember has-tip" title="Update"><i class="fi-widget"></i></a>
+                                            }
+                                            <button data-tooltip="" data-cid="@Model.ContactsGeneric.PersonalContacts[i].ContactID" data-type="@Model.ContactsGeneric.PersonalContacts[i].Type.ToString()" type="button" class="button tiny radius delete-contact has-tip" title="Delete"><i class="fi-trash"></i></button>
+                                            @if (Model.ContactsGeneric.PersonalContacts[i].Type == bearhug.ContactsServiceReference.Source.member)
+                                            {                                                
+                                                <span class="member-tag right">
+                                                    <img src="~/favicon.ico" alt="Bearhug member" />
+                                                    Bearhug Member</span>                                                            
+                                            }
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="content" id="organization">
+                <h5>All Organization Contacts</h5>
+                <div class="row">
+                    <div class="small-3 columns">
+                        @if (Model.ContactsGeneric.Organization.ContactGroupTags.Count > 0)
+                        {
+                            <a href="#" data-dropdown="drop-organization" class="button tiny radius expand dropdown">All</a><br>
+                            <ul id="drop-organization" data-dropdown-content="" class="f-dropdown dropdown-contacts">
+                                <li><a data-parent="organization" data-tag="all" data-title="All Organization Contacts" tabindex="-1" href="#organization_all">All</a></li>
+                                @foreach (string tag in Model.ContactsGeneric.Organization.ContactGroupTags)
+                                {
+                                    <li><a data-parent="organization" data-tag="@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")" data-title="@tag Contacts" tabindex="-1" href="#organization_@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")">@tag</a></li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    <div class="small-7 columns end">
+                        <div class="row collapse">
+                            <div class="small-10 columns">
+                                <input type="text" class="contacts-search" placeholder="Search by name" autocomplete="off">
+                            </div>
+                            <div class="small-2 columns">
+                                <button class="button tiny radius postfix" type="button">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-12 columns end">
+                        <dl class="sub-nav">
+                            <dd><a href="#" class="btn-expand-all">Expand All</a></dd>
+                            <dd><a href="#" class="btn-collapse-all">Collapse All</a></dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="contact-rows">
+                    <ul class="small-block-grid-1 medium-block-grid-4">
+                        @for (int i = 0; i < Model.ContactsGeneric.Organization.Contacts.Count; i++)
+                        {
+                            string name;
+                            if (Model.ContactsGeneric.Organization.Contacts[i].LastName.Length > 0 || Model.ContactsGeneric.Organization.Contacts[i].FirstName.Length > 0)
+                            {
+                                name = Model.ContactsGeneric.Organization.Contacts[i].LastName + ", " + Model.ContactsGeneric.Organization.Contacts[i].FirstName;
+                            }
+                            else
+                            {
+                                name = Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                            }
+                            List<string> taggedstrings = new List<string>();
+                            foreach (string taggedstring in Model.ContactsGeneric.Organization.Contacts[i].Tags)
+                            {
+                                taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                            }
+                            <li data-tags="@String.Join(",", taggedstrings.ToArray())" data-name="@name">
+                                <dl class="accordion" data-accordion="">
+                                    <dd class="accordion-navigation">
+                                        <a href="#collapse-org-@i-@Model.ContactsGeneric.Organization.Id"><span class="title">@name</span>
+                                            @if (Model.ContactsGeneric.Organization.Contacts[i].Type == bearhug.ContactsServiceReference.Source.member)
+                                            {
+                                                <img src="~/favicon.ico" alt="Bearhug member" class="member-header-tag right" />                                                    
+                                            }
+                                        </a>
+                                        <div id="collapse-org-@i-@Model.ContactsGeneric.Organization.Id" class="content">
+                                            @Model.ContactsGeneric.Organization.Contacts[i].Title, @Model.ContactsGeneric.Organization.Contacts[i].Organization
+                                            <br />
+                                            @Model.ContactsGeneric.Organization.Contacts[i].Email
+                                            <br />
+                                            @Model.ContactsGeneric.Organization.Contacts[i].Phone
+                                            <br />
+                                            @Model.ContactsGeneric.Organization.Contacts[i].Address1
+                                            @if (Model.ContactsGeneric.Organization.Contacts[i].Address2 != "")
+                                            {
+                                                @Model.ContactsGeneric.Organization.Contacts[i].Address2
+                                            }
+                                            <br />
+                                            @Model.ContactsGeneric.Organization.Contacts[i].City, @Model.ContactsGeneric.Organization.Contacts[i].State @Model.ContactsGeneric.Organization.Contacts[i].Zip
+                                            <br />                                            
+                                            @if (Model.ContactsGeneric.Organization.Admin == User.Identity.Name)
+                                            {
+                                                <button data-tooltip="" data-cid="@Model.ContactsGeneric.Organization.Contacts[i].ContactID" data-type="@Model.ContactsGeneric.Organization.Contacts[i].Type.ToString()" data-typesrc="organization" data-orgid="@Model.ContactsGeneric.Organization.Id" type="button" class="button tiny radius copymove-contact has-tip" title="Copy...Move"><i class="fi-page-copy"></i></button>
+                                                if (Model.ContactsGeneric.Organization.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                {
+                                                <a data-tooltip="" href="@Url.Action("Update", "Contacts", new { UID = Model.ContactsGeneric.Organization.Contacts[i].ContactID, orgid = Model.ContactsGeneric.Organization.Id })" target="_self" class="button tiny radius new-message update-nonmember has-tip" title="Update"><i class="fi-widget"></i></a>
+                                                }
+                                                <button data-tooltip="" data-cid="@Model.ContactsGeneric.Organization.Contacts[i].ContactID" data-type="@Model.ContactsGeneric.Organization.Contacts[i].Type.ToString()" data-orgid="@Model.ContactsGeneric.Organization.Id" type="button" class="button tiny radius delete-orgcontact has-tip" title="Delete"><i class="fi-trash"></i></button>
+                                            }
+                                            @if (Model.ContactsGeneric.Organization.Contacts[i].Type == bearhug.ContactsServiceReference.Source.member)
+                                            {
+                                                <span class="member-tag right">
+                                                    <img src="~/favicon.ico" alt="Bearhug member" />
+                                                    Bearhug Member</span>
+                                            }
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+
+            @foreach (bearhug.ContactsServiceReference.Group grp in Model.ContactsGeneric.Organization.Groups)
+            {
+                if (grp.Members.Exists(g => g.UID == User.Identity.Name))
+                {
+                <div class="content" id="@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")">
+                    <h5>All @grp.Name Contacts</h5>
+                    <div class="row">
+                        <div class="small-3 columns">
+                            @if (grp.ContactGroupTags.Count > 0)
+                            {
+                                <a href="#" data-dropdown="drop-@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" class="button tiny radius expand dropdown">All</a><br />
+                                <ul id="drop-@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" data-dropdown-content="" class="f-dropdown dropdown-contacts">
+                                    <li><a data-parent="@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" data-tag="all" data-title="All @grp.Name Contacts" tabindex="-1" href="#group_all">All @grp.Name Contacts</a></li>
+                                    @foreach (string tag in grp.ContactGroupTags)
+                                    {
+                                        <li><a data-parent="@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" data-tag="@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")" data-title="@tag Contacts" tabindex="-1" href="#group_@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")">@tag</a></li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                        <div class="small-7 columns end">
+                            <div class="row collapse">
+                                <div class="small-10 columns">
+                                    <input type="text" class="contacts-search" placeholder="Search by name" autocomplete="off">
+                                </div>
+                                <div class="small-2 columns">
+                                    <button class="button tiny radius postfix" type="button">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-12 columns end">
+                            <dl class="sub-nav">
+                                <dd><a href="#" class="btn-expand-all">Expand All</a></dd>
+                                <dd><a href="#" class="btn-collapse-all">Collapse All</a></dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="contact-rows">
+                        <ul class="small-block-grid-1 medium-block-grid-4">
+                            @for (int i = 0; i < grp.Contacts.Count; i++)
+                            {
+                                string name;
+                                if (grp.Contacts[i].LastName.Length > 0 || grp.Contacts[i].FirstName.Length > 0)
+                                {
+                                    name = grp.Contacts[i].LastName + ", " + grp.Contacts[i].FirstName;
+                                }
+                                else
+                                {
+                                    name = grp.Contacts[i].ContactID;
+                                }
+                                List<string> taggedstrings = new List<string>();
+                                foreach (string taggedstring in grp.Contacts[i].Tags)
+                                {
+                                    taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                                }
+                                <li data-tags="@String.Join(",", taggedstrings.ToArray())" data-name="@name">
+                                    <dl class="accordion" data-accordion="">
+                                        <dd class="accordion-navigation">
+                                            <a href="#collapse-@i-@grp.Id"><span class="title">@name</span>
+                                                @if (grp.Contacts[i].Type == bearhug.ContactsServiceReference.Source.member)
+                                                {
+                                                    <img src="~/favicon.ico" alt="Bearhug member" class="member-header-tag right" />                                                    
+                                                }
+                                            </a>
+                                            <div id="collapse-@i-@grp.Id" class="content">
+                                                @grp.Contacts[i].Title, @grp.Contacts[i].Organization
+                                                <br />
+                                                @grp.Contacts[i].Email
+                                                <br />
+                                                @grp.Contacts[i].Phone
+                                                <br />
+                                                @grp.Contacts[i].Address1
+                                                @if (grp.Contacts[i].Address2 != "")
+                                                {
+                                                    @grp.Contacts[i].Address2
+                                                }
+                                                <br />
+                                                @grp.Contacts[i].City, @grp.Contacts[i].State @grp.Contacts[i].Zip
+                                                <br />                                                
+                                                @if (grp.Admin == User.Identity.Name || Model.ContactsGeneric.Organization.Admin == User.Identity.Name)
+                                                {
+                                                    <button data-tooltip="" data-cid="@grp.Contacts[i].ContactID" data-type="@grp.Contacts[i].Type.ToString()" data-typesrc="group" data-orgid="@Model.ContactsGeneric.Organization.Id" data-grpid="@grp.Id" type="button" class="button tiny radius copymove-contact has-tip" title="Copy...Move"><i class="fi-page-copy"></i></button>
+                                                    if (grp.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                    {
+                                                    <a data-tooltip="" href="@Url.Action("Update", "Contacts", new { UID = grp.Contacts[i].ContactID, orgid = Model.ContactsGeneric.Organization.Id, grpid = grp.Id })" target="_self" class="button tiny radius new-message update-nonmember has-tip" title="Update"><i class="fi-widget"></i></a>
+                                                    }
+                                                    <button data-tooltip="" data-cid="@grp.Contacts[i].ContactID" data-type="@grp.Contacts[i].Type.ToString()" data-orgid="@Model.ContactsGeneric.Organization.Id" data-grpid="@grp.Id" type="button" class="button tiny radius delete-grpcontact has-tip" title="Delete"><i class="fi-trash"></i></button>
+                                                }
+                                                @if (grp.Contacts[i].Type == bearhug.ContactsServiceReference.Source.member)
+                                                {
+                                                    <span class="member-tag right">
+                                                        <img src="~/favicon.ico" alt="Bearhug member" />
+                                                        Bearhug Member</span>
+                                                }
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+                }
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<div id="modal-delete-member-contact" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Contact</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteMember", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Are you sure you want to delete this contact?</p>
+                <input id="hdn_mbr_id" name="hdn_mbr_id" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button id="btn-cancel-modal-delete-member-contact" class="button tiny radius secondary" type="button">No</button>
+                <button class="button tiny radius right alert" type="submit">Yes</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="modal-delete-nonmember-contact" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Contact</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteNonMember", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Are you sure you want to delete this contact?</p>
+                <input id="hdn_nonmbr_id" name="hdn_nonmbr_id" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btn-cancel-modal-delete-nonmember-contact" class="button tiny radius secondary" type="button">No</button>
+            <button class="button tiny radius right alert" type="submit">Yes</button>
+        </div>
+    }
+</div>
+
+<div id="modal-delete-org-member-contact" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Contact</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteOrganizationMember", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Are you sure you want to delete this contact?</p>
+                <input id="hdn_org_mbr_id" name="hdn_org_mbr_id" type="hidden" />
+                <input id="hdn_org_id_m" name="hdn_org_id_m" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btn-cancel-modal-delete-org-member-contact" class="button tiny radius secondary" aria-hidden="true" type="button">No</button>
+            <button class="button tiny radius right alert" type="submit">Yes</button>
+        </div>
+    }
+</div>
+
+<div id="modal-delete-org-nonmember-contact" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Contact</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteOrganizationNonMember", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Are you sure you want to delete this contact?</p>
+                <input id="hdn_org_nonmbr_id" name="hdn_org_nonmbr_id" type="hidden" />
+                <input id="hdn_org_id_n" name="hdn_org_id_n" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btn-cancel-modal-delete-org-nonmember-contact" class="button tiny radius secondary" aria-hidden="true" type="button">No</button>
+            <button class="button tiny radius right alert" type="submit">Yes</button>
+        </div>
+    }
+</div>
+
+<div id="modal-delete-grp-member-contact" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Contact</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteGroupMember", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Are you sure you want to delete this contact?</p>
+                <input id="hdn_grp_mbr_id" name="hdn_grp_mbr_id" type="hidden" />
+                <input id="hdn_grp_org_id_m" name="hdn_grp_org_id_m" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+                <input id="hdn_grp_id_m" name="hdn_grp_id_m" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btn-cancel-modal-delete-grp-member-contact" class="button tiny radius secondary" aria-hidden="true" type="button">No</button>
+            <button class="button tiny radius right alert" type="submit">Yes</button>
+        </div>
+    }
+</div>
+
+<div id="modal-delete-grp-nonmember-contact" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Contact</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteGroupNonMember", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Are you sure you want to delete this contact?</p>
+                <input id="hdn_grp_nonmbr_id" name="hdn_grp_nonmbr_id" type="hidden" />
+                <input id="hdn_grp_org_id_n" name="hdn_grp_org_id_n" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+                <input id="hdn_grp_id_n" name="hdn_grp_id_n" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btn-cancel-modal-delete-grp-nonmember-contact" class="button tiny radius secondary" aria-hidden="true" type="button">No</button>
+            <button class="button tiny radius right alert" type="submit">Yes</button>
+        </div>
+    }
+</div>
+
+<div id="modal-copymove-contact" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Copy/Move Contact</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("CopyMoveContact", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="hdn_copymove_cid" name="hdn_copymove_cid" type="hidden" />
+                <input id="hdn_copymove_cid_type" name="hdn_copymove_cid_type" type="hidden" />
+                <input id="hdn_copymove_cid_typesrc" name="hdn_copymove_cid_typesrc" type="hidden" />
+                <input id="hdn_copymove_orgid" name="hdn_copymove_orgid" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+                <input id="hdn_copymove_org" name="hdn_copymove_org" type="hidden" value="none" />
+                <input id="hdn_copymove_grp" name="hdn_copymove_grp" type="hidden" value="none" />
+                <input type="radio" name="optionsCopyMoveType" value="copy" id="optionsCopyMoveTypeCopy" checked="checked" /><label for="optionsCopyMoveTypeCopy">Copy</label>
+                <input type="radio" name="optionsCopyMoveType" value="move" id="optionsCopyMoveTypeMove" /><label for="optionsCopyMoveTypeMove">Move</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label id="copymove_contact_name" class="control-label"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>to:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <select id="select_copymove_contact_location" name="select_copymove_contact_location">
+                    <option value="personal">Personal</option>
+                    @if (Model.ContactsGeneric.Organization.Admin == User.Identity.Name)
+                    {
+                        <option value="org_@Model.ContactsGeneric.Organization.Id">Organizational</option>
+                    }
+                    @foreach (bearhug.ContactsServiceReference.Group grp in Model.ContactsGeneric.Organization.Groups)
+                    {
+                        if (grp.Members.Exists(g => g.UID == User.Identity.Name))
+                        {
+                            if (grp.Admin == User.Identity.Name || Model.ContactsGeneric.Organization.Admin == User.Identity.Name)
+                            {
+                        <option value="grp_@grp.Id">@grp.Name</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btn-cancel-modal-copymove-contact" class="button tiny radius secondary" aria-hidden="true" type="button">No</button>
+            <button class="button tiny radius right alert" type="submit">Yes</button>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-contacts').addClass('active');
+
+        $('.btn-expand-all').click(function (e) {
+            e.preventDefault();
+            $(this).parents().eq(3).next('.contact-rows').find('.accordion-navigation').addClass('active');
+            $(this).parents().eq(3).next('.contact-rows').find('.content').addClass('active');
+        });
+
+        $('.btn-collapse-all').click(function (e) {
+            e.preventDefault();
+            $(this).parents().eq(3).next('.contact-rows').find('.accordion-navigation').removeClass('active');
+            $(this).parents().eq(3).next('.contact-rows').find('.accordion-navigation').find('.content').removeClass('active');
+        });
+
+        $('.f-dropdown li a').click(function (e) {
+            e.preventDefault();
+            $(this).parents().eq(2).next().find('.contacts-search').val('');
+            var tag = $(this).data('tag');
+            $(this).parents().eq(1).prevAll('a').text($(this).text());
+            if (tag == 'all') {
+                $(this).parents().eq(3).nextAll('.contact-rows').find('li').show();
+            }
+            else {
+                $(this).parents().eq(3).nextAll('.contact-rows').find('li').each(function (i, li) {
+                    var tags = $(li).data('tags').split(",");
+                    if (tags.indexOf(tag) == -1) {
+                        $(li).hide();
+                    }
+                    else {
+                        $(li).show();
+                    }
+                });
+            }
+            Foundation.libs.dropdown.close($('#' + $(this).parents().eq(1).attr('id')));
+        });
+
+        $('.contacts-search').keyup(function (e) {
+            e.preventDefault();
+            $(this).parents().eq(2).prev().find('.dropdown').text('All');
+            var txt = $(this).val();
+            var items = $(this).parents().eq(3).nextAll('.contact-rows').find('li');
+            $(items).each(function (i, li) {
+                if (String($(li).data('name')).toLowerCase().indexOf(txt.toLowerCase()) == -1) {
+                    $(li).hide();
+                }
+                else {
+                    $(li).show();
+                }
+            });
+        });
+
+        $('.contacts-search-clear').click(function (e) {
+            e.preventDefault();
+            $(this).parent().prev().find('.contacts-search').val('');
+            var items = $(this).parents().eq(3).nextAll('.contact-rows').find('li').show();
+        });
+
+        $('.copymove-contact').click(function () {
+            $('#hdn_copymove_cid').val($(this).data('cid'));
+            $('#hdn_copymove_cid_type').val($(this).data('type'));
+            $('#hdn_copymove_cid_typesrc').val($(this).data('typesrc'));
+            $('#copymove_contact_name').text($(this).parents().eq(3).data('name'));
+            if ($(this).data('typesrc') == "personal") {
+                $('#select_copymove_contact_location option[value="personal"]').attr('disabled', true);
+            }
+            else if ($(this).data('typesrc') == "organization") {
+                $('#select_copymove_contact_location option[value="org_' + $(this).data('orgid') + '"]').attr('disabled', true);
+                $('#hdn_copymove_org').val($(this).data('orgid'));
+            }
+            else if ($(this).data('typesrc') == "group") {
+                $('#select_copymove_contact_location option[value="grp_' + $(this).data('grpid') + '"]').attr('disabled', true);
+                $('#hdn_copymove_org').val($(this).data('orgid'));
+                $('#hdn_copymove_grp').val($(this).data('grpid'));
+            }
+            $('#modal-copymove-contact').foundation('reveal', 'open');
+        });
+
+        $('#btn-cancel-modal-copymove-contact').click(function () {
+            $('#modal-copymove-contact').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#btn-cancel-modal-copymove-contact', function () {
+            $('#hdn_copymove_cid').val('');
+            $('#hdn_copymove_cid_type').val('');
+            $('#hdn_copymove_cid_typesrc').val('');
+            $('#hdn_copymove_org').val('none');
+            $('#hdn_copymove_grp').val('none');
+            $('#copymove_contact_name').text('');
+            $('#select_copymove_contact_location option').removeAttr('disabled');
+            $('#select_copymove_contact_location').val([]);
+            var modal = $(this);
+        });
+
+        $('#select_copymove_contact_location').val([]);
+
+        $('.delete-contact').click(function () {
+            if ($(this).data('type') == "member") {
+                $('#hdn_mbr_id').val($(this).data('cid'));
+                $('#modal-delete-member-contact').foundation('reveal', 'open');
+            }
+            else if ($(this).data('type') == "nonmember") {
+                $('#hdn_nonmbr_id').val($(this).data('cid'));
+                $('#modal-delete-nonmember-contact').foundation('reveal', 'open');
+            }
+        });
+
+        $('#btn-cancel-modal-delete-member-contact').click(function () {
+            $('#modal-delete-member-contact').foundation('reveal', 'close');
+        });
+
+        $('#btn-cancel-modal-delete-nonmember-contact').click(function () {
+            $('#modal-delete-nonmember-contact').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-delete-member-contact', function () {
+            $('#hdn_mbr_id').val('');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-delete-nonmember-contact', function () {
+            $('#hdn_nonmbr_id').val('');
+        });
+
+        $('.delete-orgcontact').click(function () {
+            if ($(this).data('type') == "member") {
+                $('#hdn_org_mbr_id').val($(this).data('cid'));
+                $('#hdn_org_id_m').val($(this).data('orgid'));
+                $('#modal-delete-org-member-contact').foundation('reveal', 'open');
+            }
+            else if ($(this).data('type') == "nonmember") {
+                $('#hdn_org_nonmbr_id').val($(this).data('cid'));
+                $('#hdn_org_id_n').val($(this).data('orgid'));
+                $('#modal-delete-org-nonmember-contact').foundation('reveal', 'open');
+            }
+        });
+
+        $('#btn-cancel-modal-delete-org-member-contact').click(function () {
+            $('#modal-delete-org-member-contact').foundation('reveal', 'close');
+        });
+
+        $('#btn-cancel-modal-delete-org-nonmember-contact').click(function () {
+            $('#modal-delete-org-nonmember-contact').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-delete-org-member-contact', function () {
+            $('#hdn_org_mbr_id').val('');
+            $('#hdn_org_id_m').val('');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-delete-org-nonmember-contact', function () {
+            $('#hdn_org_nonmbr_id').val('');
+            $('#hdn_org_id_n').val('');
+        });
+
+        $('.delete-grpcontact').click(function () {
+            if ($(this).data('type') == "member") {
+                $('#hdn_grp_mbr_id').val($(this).data('cid'));
+                $('#hdn_grp_org_id_m').val($(this).data('orgid'));
+                $('#hdn_grp_id_m').val($(this).data('grpid'));
+                $('#modal-delete-grp-nonmember-contact').foundation('reveal', 'open');
+            }
+            else if ($(this).data('type') == "nonmember") {
+                $('#hdn_grp_nonmbr_id').val($(this).data('cid'));
+                $('#hdn_grp_org_id_n').val($(this).data('orgid'));
+                $('#hdn_grp_id_n').val($(this).data('grpid'));
+                $('#modal-delete-grp-nonmember-contact').foundation('reveal', 'open');
+            }
+        });
+
+        $('#btn-cancel-modal-delete-grp-member-contact').click(function () {
+            $('#modal-delete-grp-member-contact').foundation('reveal', 'close');
+        });
+
+        $('#btn-cancel-modal-delete-grp-nonmember-contact').click(function () {
+            $('#modal-delete-grp-nonmember-contact').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-delete-grp-member-contact', function () {
+            $('#hdn_grp_mbr_id').val('');
+            $('#hdn_grp_org_id_m').val('');
+            $('#hdn_grp_id_m').val('');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-delete-grp-nonmember-contact', function () {
+            $('#hdn_grp_nonmbr_id').val('');
+            $('#hdn_grp_org_id_n').val('');
+            $('#hdn_grp_id_n').val('');
+        });
+    });
+</script>

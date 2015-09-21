@@ -1,0 +1,389 @@
+﻿@model bearhug.Models.ReportModel
+@{
+    ViewBag.Title = "Reports";
+}
+
+<h4 class="subheader">Reports</h4>
+<ul class="tabs">
+    <li class="tab-title">@Html.ActionLink("Reminders", "Index", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Communication", "Communication", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Contacts", "Contacts", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Teams", "Teams", "Home")</li>
+    @if (User.Identity.Name == Model.Organization.Admin)
+    {        
+        <li class="tab-title active"><a id="reports-tab" href="#reports">Reports</a></li>
+    }
+    @if (User.Identity.Name != Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Emergency Access", "EmergencyAccess", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Patients (Admin Access)", "AdminPatients", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Audits (Admin Access)", "AdminAudits", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Admin", "Admin", "Home")</li>
+    }
+</ul>
+<div class="tabs-content min-tabs-content">
+    <div class="content active" id="reports">
+
+        <dl class="sub-nav" data-tab="">
+            <dd class="@(!Model.HasReport ? "active" : "")"><a href="#report_create">Select Report</a></dd>
+            <dd class="@(Model.HasReport ? "active" : "")"><a href="#report_results">Results</a></dd>
+        </dl>
+        <div class="tabs-content contact-management">
+            <div id="report_create" class="content @(!Model.HasReport ? "active" : "")">
+                @using (Html.BeginForm("Reports", "Home", FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="small-1 columns">
+                            &nbsp;
+                        </div>
+                        <div class="small-2 columns">
+                            <label class="right inline" for="select_report_type">Choose Report</label>
+                        </div>
+                        <div class="small-3 columns end">
+                            <select id="select_report_type" name="select_report_type">
+                                <option value="all">All Interactions</option>
+                                <option value="outgoing">Outgoing Interactions</option>
+                                <option value="patient">Patient Interactions</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-12 columns">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row patient-report-params">
+                        <div class="small-1 columns">
+                            &nbsp;
+                        </div>
+                        <div class="small-2 columns">
+                            <label class="right inline" for="select_patients">Select Patient</label>
+                        </div>
+                        <div class="small-3 columns end">
+                            <select id="select_patients" name="select_patients">
+                                @foreach (bearhug.OrganizationServiceReference.OrganizationPatient patient in Model.Organization.Patients)
+                                {
+                                    <option value="@patient.Id">@patient.LastName, @patient.FirstName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row patient-report-params">
+                        <div class="small-12 columns">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-2 columns">
+                            <label class="right inline">Select Date Range</label>
+                        </div>
+                        <div class="small-1 columns">
+                            <label class="right inline" for="select_patients">From</label>
+                        </div>
+                        <div class="small-3 columns end">
+                            <div class="input-append date" id="dp_from" data-date-format="mm/dd/yyyy">
+                                <input id="dp_date_from" name="dp_date_from" size="16" type="text" required="required" />
+                                <span class="add-on">
+                                    <i class="fa fa-th"></i>
+                                </span>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="small-2 columns">
+                            &nbsp;
+                        </div>
+                        <div class="small-1 columns">
+                                <label class="right inline" for="select_patients">To</label>
+                            </div>
+                        <div class="small-3 columns end">
+                                <div class="input-append date" id="dp_to" data-date-format="mm/dd/yyyy">
+                                    <input id="dp_date_to" name="dp_date_to" size="16" type="text" required="required" />
+                                    <span class="add-on">
+                                        <i class="fa fa-th"></i>
+                                    </span>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-12 columns">
+                            <hr />
+                        </div>
+                    </div>                
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <button class="button tiny radius right" type="submit">Go</button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div id="report_results" class="content @(Model.HasReport ? "active" : "")">
+                @if (Model.HasReport)
+                {
+                    switch (Model.Type)
+                    {
+                        case bearhug.Models.TransactionReportType.all:
+                            if (Model.IndividualTransactionReportByDate != null)
+                            {
+                                if (Model.IndividualTransactionReportByDate.Count > 0)
+                                {                   
+                    <h5 class="subheader">All Interactions Report</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Owner</th>
+                                <th>Patient</th>
+                                <th>Subject</th>
+                                <th>Opened</th>
+                                <th>Closed</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int itrCounter = 0;}
+                            @foreach (bearhug.ReportsServiceReference.IndividualTransactionReport itr in Model.IndividualTransactionReportByDate)
+                            {
+                                itrCounter++;
+                                <tr>
+                                    <td>@itrCounter.ToString()</td>
+                                    <td>@itr.Owner.LastName, @itr.Owner.FirstName</td>
+                                    <td>
+                                        @if (itr.Patient != null)
+                                        {
+                                            <label>@itr.Patient.LastName, @itr.Patient.FirstName</label>
+                                        }
+                                        else
+                                        {
+                                            <label>No Patient</label>
+                                        }
+                                    </td>
+                                    <td>@itr.Subject</td>
+                                    <td>@itr.OpenDate.ToShortDateString()</td>
+                                    <td>
+                                        @if (itr.CloseDate.Equals(DateTime.MinValue))
+                                        {
+                                            <label>Open</label>
+                                        }
+                                        else
+                                        {
+                                            <label>@itr.CloseDate.ToShortDateString()</label>
+                                        }
+                                    </td>
+                                    <td>@Html.ActionLink("View Detail", "InteractionDetail", new { @tid = itr.TransactionId, @select_report_type = Model.Type.ToString(), @dp_date_from = Model.FromDate, @dp_date_to = Model.ToDate, @select_patients = Model.Patient })</td>
+                                </tr>                               
+                            }
+                        </tbody>
+                    </table>     
+                                }
+                                else
+                                {
+                    <h5 class="subheader">No interactions.</h5>
+                                }
+                            }
+                            else
+                            {
+                    <h5 class="subheader">No interactions.</h5>
+                            }
+                            break;
+
+                        case bearhug.Models.TransactionReportType.outgoing:
+                            if (Model.OutgoingTransactionsReport.TransactionsSent != null)
+                            {
+                                if (Model.OutgoingTransactionsReport.TransactionsSent.Count > 0)
+                                { 
+                    <h5 class="subheader">Outgoing Interactions Report</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Orgnization</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int tsCounter = 0;}
+                            @foreach (bearhug.ReportsServiceReference.TransactionSent ts in Model.OutgoingTransactionsReport.TransactionsSent)
+                            {
+                                tsCounter++;
+                                <tr data-toggle="collapse" data-target="#ts_@tsCounter" class="accordion-toggle">
+                                    <td>@tsCounter.ToString()</td>
+                                    <td>@ts.LastName, @ts.FirstName</td>
+                                    <td>@ts.Organization</td>
+                                    <td>@ts.Count.ToString()</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="hiddenRow">
+                                        <div class="accordian-body collapse" id="ts_@tsCounter">
+                                            <table class="table table-condensed table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Owner</th>
+                                                        <th>Patient</th>
+                                                        <th>Subject</th>
+                                                        <th>Opened</th>
+                                                        <th>Closed</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{int tsItrCounter = 0;}
+                                                    @foreach (bearhug.ReportsServiceReference.IndividualTransactionReport itr in ts.Transactions)
+                                                    {
+                                                        tsItrCounter++;
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>@tsItrCounter.ToString()</td>
+                                                            <td>@itr.Owner.LastName, @itr.Owner.FirstName</td>
+                                                            <td>
+                                                                @if (itr.Patient != null)
+                                                                {
+                                                                    <label>@itr.Patient.LastName, @itr.Patient.FirstName</label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label>No Patient</label>
+                                                                }
+                                                            </td>
+                                                            <td>@itr.Subject</td>
+                                                            <td>@itr.OpenDate.ToShortDateString()</td>
+                                                            <td>
+                                                                @if (itr.CloseDate.Equals(DateTime.MinValue))
+                                                                {
+                                                                    <label>Open</label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label>@itr.CloseDate.ToShortDateString()</label>
+                                                                }
+                                                            </td>
+                                                            <td>@Html.ActionLink("View Detail", "InteractionDetail", new { @tid = itr.TransactionId })</td>
+                                                        </tr>                               
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                                }
+                                else
+                                {
+                    <h5 class="subheader">No outgoing interactions.</h5>
+                                }
+                            }
+                            else
+                            {
+                    <h5 class="subheader">No outgoing interactions.</h5>
+                            }
+                            break;
+
+                        case bearhug.Models.TransactionReportType.patient:
+                            if (Model.IndividualTransactionReportByPatientAndDate != null)
+                            {
+                                if (Model.IndividualTransactionReportByPatientAndDate.Count > 0)
+                                {              
+                    <h5 class="subheader">All Interactions for @Model.IndividualTransactionReportByPatientAndDate[0].Patient.FirstName @Model.IndividualTransactionReportByPatientAndDate[0].Patient.LastName</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Owner</th>
+                                <th>Patient</th>
+                                <th>Subject</th>
+                                <th>Opened</th>
+                                <th>Closed</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int itrPtCounter = 0;}
+                            @foreach (bearhug.ReportsServiceReference.IndividualTransactionReport itr in Model.IndividualTransactionReportByPatientAndDate)
+                            {
+                                itrPtCounter++;
+                                <tr>
+                                    <td>@itrPtCounter.ToString()</td>
+                                    <td>@itr.Owner.LastName, @itr.Owner.FirstName</td>
+                                    <td>
+                                        @if (itr.Patient != null)
+                                        {
+                                            <label>@itr.Patient.LastName, @itr.Patient.FirstName</label>
+                                        }
+                                        else
+                                        {
+                                            <label>No Patient</label>
+                                        }
+                                    </td>
+                                    <td>@itr.Subject</td>
+                                    <td>@itr.OpenDate.ToShortDateString()</td>
+                                    <td>
+                                        @if (itr.CloseDate.Equals(DateTime.MinValue))
+                                        {
+                                            <label>Open</label>
+                                        }
+                                        else
+                                        {
+                                            <label>@itr.CloseDate.ToShortDateString()</label>
+                                        }
+                                    </td>
+                                    <td>@Html.ActionLink("View Detail", "InteractionDetail", new { @tid = itr.TransactionId, @select_report_type = Model.Type.ToString(), @dp_date_from = Model.FromDate, @dp_date_to = Model.ToDate, @select_patients = Model.Patient })</td>
+                                </tr>                               
+                            }
+                        </tbody>
+                    </table>
+                                }
+                                else
+                                {
+                    <h5 class="subheader">No interactions for selected patient.</h5>
+                                }
+                            }
+                            else
+                            {
+                    <h5 class="subheader">No interactions for selected patient.</h5>
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    <h5 class="subheader">No report selected.</h5>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-home').addClass('active');
+
+        $('#select_report_type').change(function (e) {
+            if ($(this).find(':selected').val() == "patient") {
+                $('.patient-report-params').show();
+            }
+            else {
+                $('.patient-report-params').hide();
+            }
+        });
+
+        $('#dp_date_from').datepicker();
+        $('#dp_date_to').datepicker();
+
+    });
+</script>

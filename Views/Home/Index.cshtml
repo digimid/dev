@@ -1,0 +1,407 @@
+﻿@model bearhug.Models.OrganizationConstruct
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h4 class="subheader">@Model.Profile.FirstName @Model.Profile.LastName's Dashboard 
+    @if (Model.HasNewFax)
+    {
+        <small class="newFaxMessage"><span class="badge badge-warning">!</span> <b>You have a new fax.  Please click on the documents tab above to view.</b></small>
+    }
+</h4>
+
+<ul class="tabs">
+    <li class="tab-title active"><a id="reminders-tab" href="#reminders">Reminders</a></li>
+    <li class="tab-title">@Html.ActionLink("Communication", "Communication", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Contacts", "Contacts", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Teams", "Teams", "Home")</li>
+    @if (User.Identity.Name == Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Reports", "Reports", "Home")</li>
+    }
+    @if (User.Identity.Name != Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Emergency Access", "EmergencyAccess", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Patients (Admin Access)", "AdminPatients", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Audits (Admin Access)", "AdminAudits", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Admin", "Admin", "Home")</li>
+    }
+</ul>
+
+<div class="tabs-content min-tabs-content">
+
+    <div class="content active" id="reminders">
+        <div class="row">
+            <div class="small-6 columns">
+                <dl class="sub-nav reminders-nav">
+                    <dt>Show:</dt>
+                    <dd class="active"><a href="#">All</a></dd>
+                    <dd><a href="#">Completed</a></dd>
+                    <dd><a href="#">Not Completed</a></dd>
+                </dl>
+            </div>
+            <div class="small-6 columns text-right">
+                <button id="btn-add-reminder" type="button" class="button radius tiny" data-reveal-id="modal-new-reminder">Add New Reminder</button>
+            </div>
+        </div>
+        @if (Model.Dashboard.Reminders.Count > 0)
+        {
+            <div class="row">
+                <div class="small-12 columns">
+                    <hr />
+                    <ul class="small-block-grid-4 reminders-list">
+                        @foreach (bearhug.OrganizationServiceReference.Reminder reminder in Model.Dashboard.Reminders)
+                        {
+                            <li data-complete="@reminder.Completed.ToString()">
+                                @{string completed = reminder.Completed ? "Yes" : "No";
+                                  string priority = reminder.Priority == bearhug.OrganizationServiceReference.ReminderPriority.low ? "Low" :
+                                      reminder.Priority == bearhug.OrganizationServiceReference.ReminderPriority.medium ? "Medium" :
+                                      reminder.Priority == bearhug.OrganizationServiceReference.ReminderPriority.high ? "High" : "Low";
+                                  string classname = reminder.Priority == bearhug.OrganizationServiceReference.ReminderPriority.low ? "priority-low" :
+                                      reminder.Priority == bearhug.OrganizationServiceReference.ReminderPriority.medium ? "priority-medium" :
+                                      reminder.Priority == bearhug.OrganizationServiceReference.ReminderPriority.high ? "priority-high" : "priority-low";
+                                  bool includeicon = false;
+                                  if (reminder.EndDate.Date <= DateTime.Today && !reminder.Completed) { includeicon = true; }
+                                }
+                                <div class="panel radius @classname" data-complete="@completed" data-id="@reminder.Id" data-rid="@reminder.ReminderId">
+                                    <label class="hide">Created: <span class="reminder-start">@reminder.StartDate.ToShortDateString()</span></label>
+                                    <label>
+                                        Due: <span class="reminder-end">@reminder.EndDate.ToShortDateString() @if (includeicon)
+                                                                                                              { <span class="label alert radius"><b>!</b></span> }</span></label>
+                                    <label>Completed: <span class="reminder-complete">@completed</span></label>
+                                    <label class="hide">Priority: <span class="reminder-priority">@priority</span></label>
+                                    <label><span class="reminder-text">@reminder.Text</span></label>
+                                    <div class="text-right">
+                                        @if (User.Identity.Name == reminder.AdminId)
+                                        {
+                                            <button type="button" class="button tiny radius has-tip tip-top btn-edit-reminder icon-button" title="Edit" data-tooltip=""><i class="fi-pencil icon-size-10"></i></button>
+                                        }
+                                        @{bool isAdmin = reminder.AdminId == User.Identity.Name;}
+                                        <button type="button" data-type="@reminder.Type" data-isadmin="@isAdmin" class="button tiny radius has-tip tip-top btn-update-reminder icon-button" title="View/Update" data-tooltip=""><i class="fi-page icon-size-10"></i></button>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>                                    
+        }
+        else
+        {
+            <div class="row">
+                <div class="small-12 columns">
+                    <label class="text-center"><i>No reminders due at this time.  Click "Add New Reminder" button to create.</i></label>
+                </div>
+            </div>            
+        }
+    </div>
+
+</div>
+
+<div id="modal-new-reminder" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Create Reminder</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("AddReminder", "Home", FormMethod.Post, new { @id = "new-reminder-form" }))
+    {
+        <div class="row">
+            <div class="small-3 columns">
+                <label for="select_priority" class="right inline">Priority</label>
+            </div>
+            <div class="small-9 columns">
+                <select id="select_priority" name="select_priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-3 columns">
+                <label for="select_type" class="right inline">Type</label>
+            </div>
+            <div class="small-9 columns">
+                <select id="select_type" name="select_type">
+                    <option value="personal" selected="selected">Personal</option>
+                    @foreach (bearhug.OrganizationServiceReference.Group grp in Model.Organization.Groups)
+                    {
+                        if (User.Identity.Name == grp.Admin)
+                        {
+                        <option value="@grp.Id">@grp.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-3 columns">
+                <label for="select_priority" class="right inline">Due Date</label>
+            </div>
+            <div class="small-9 columns">
+                <div class="input-append date" id="input_end_date" data-date-format="mm/dd/yyyy">
+                    <input name="input_end_date" class="span2" size="16" type="text">
+                    <span class="add-on"><i class="fa fa-th"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-3 columns">
+                <label for="input_reminder" class="right inline">Reminder</label>
+            </div>
+            <div class="small-9 columns">
+                <textarea id="input_reminder" name="input_reminder"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12">
+                <input id="hdn_new_reminder_orgid" name="hdn_new_reminder_orgid" value="@Model.Organization.Id" type="hidden" />
+                <button id="btn-cancel-new-reminder" class="button radius tiny secondary" type="button">Cancel</button>
+                <button id="btn-add" class="button radius tiny right" type="submit">Create</button>
+            </div>
+        </div>            
+    }
+</div>
+
+<div id="modal-edit-reminder" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Details</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("EditReminder", "Home", FormMethod.Post, new { @id = "edit-reminder-form" }))
+    {
+        <div class="row">
+            <div class="small-3 columns">
+                <label class="right inline" for="edit_select_priority">Priority</label>
+            </div>
+            <div class="small-9 columns">
+                <select id="edit_select_priority" name="edit_select_priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-3 columns">
+                <label class="right inline" for="edit_input_end_date">Date</label>
+            </div>
+            <div class="small-9 columns">
+                <div class="input-append date" id="edit_input_end_date" data-date-format="mm/dd/yyyy">
+                    <input name="edit_input_end_date" class="span2" size="16" type="text">
+                    <span class="add-on"><i class="fa fa-th"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-3 columns">
+                <label class="right inline" for="edit_input_reminder">Reminder</label>
+            </div>
+            <div class="small-9 columns">
+                <textarea id="edit_input_reminder" name="edit_input_reminder"></textarea>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="hdn_rid_edit" name="hdn_rid_edit" type="hidden" />
+                <button id="btn-cancel-edit-reminder-form" class="button tiny radius secondary" type="button">Cancel</button>
+                <button id="btn-edit" class="button tiny radius right" type="submit">Save</button>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="small-12 columns">
+            <hr />
+        </div>
+    </div>
+    @using (Html.BeginForm("DeleteReminder", "Home", FormMethod.Post, new { @id = "delete-reminder-form" }))
+    {               
+        <div class="row">
+            <div class="small-12 columns">
+                <button id="btn-delete-reminder" class="button tiny radius info" aria-hidden="true" type="button">Delete</button>
+                <label id="lbl-confirm-delete">
+                    Are you sure?
+                <button id="btn-confirm-delete-reminder" class="button tiny radius alert" aria-hidden="true" type="submit">Yes</button>
+                    <button id="btn-cancel-delete-reminder" class="button tiny radius" aria-hidden="true" type="button">No</button>
+                </label>
+                <input id="hdn_rid_delete" name="hdn_rid_delete" type="hidden" />
+            </div>
+        </div>
+    }
+</div>
+
+<div id="modal-update-reminder" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Details</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateReminderAsComplete", "Home", FormMethod.Post, new { @id = "update-reminder-form" }))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <label>Due: <span id="lbl-end"></span></label>
+                <label>Created: <span id="lbl-start"></span></label>
+                <label>Priority: <span id="lbl-priority"></span></label>
+                <label>Complete: <span id="lbl-complete"></span></label>
+                <label><span id="lbl-text"></span></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label id="lbl-chk-complete" for="chk_complete">
+                    <input id="chk_complete" name="chk_complete" type="checkbox">
+                    Mark as Complete</label><br />
+            </div>
+        </div>        
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="hdn_rid_update" name="hdn_rid_update" type="hidden" />
+                <button id="btn-cancel-update-reminder-form" class="button tiny radius secondary" type="button">Close</button>
+                <button id="btn-save" class="button tiny radius right" type="submit">Save</button>
+            </div>
+        </div>        
+    }
+</div>
+
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-home').addClass('active');
+
+        $('.reminders-nav dd a').click(function (e) {
+            e.preventDefault();
+            $('.reminders-nav dd').removeClass('active');
+            $(this).parent().addClass('active');
+            if ($(this).text() == "All") {
+                $('.reminders-list li').show();
+            }
+            else if ($(this).text() == "Completed") {
+                $('.reminders-list li').each(function (idx, li) {
+                    if ($(this).data('complete') == 'True') {
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                });
+            }
+            else if ($(this).text() == "Not Completed") {
+                $('.reminders-list li').each(function (idx, li) {
+                    if ($(this).data('complete') != 'True') {
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+
+        $('#input_end_date').datepicker();
+
+        $('#btn-cancel-new-reminder').click(function () {
+            $('#modal-new-reminder').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-new-reminder', function () {
+            $('#new-reminder-form')[0].reset();
+        });
+
+        $('.btn-edit-reminder').click(function () {
+            var curDate = $(this).parent().parent().find('.reminder-end').text();
+            var year = curDate.substr(curDate.lastIndexOf("/") + 1, 4);
+            var month = curDate.substring(0, curDate.indexOf("/")) - 1;
+            var day = curDate.substring(curDate.indexOf("/") + 1, curDate.lastIndexOf("/"));
+            var newDate = padLeft(month, 2) + "/" + padLeft(day, 2) + "/" + year;
+            var setDate = new Date(year, month, day);
+            var nd = new Date();
+            $('#edit_select_priority').val($(this).parent().parent().find('.reminder-priority').text().toLocaleLowerCase());
+            $('#edit_input_end_date').datepicker('update', setDate);
+            $('#edit_input_reminder').val($(this).parent().parent().find('.reminder-text').text().toLocaleLowerCase());
+            $('#hdn_rid_edit').val($(this).parent().parent().data('rid'));
+            $('#hdn_rid_delete').val($(this).parent().parent().data('rid'));
+            $('#modal-edit-reminder').foundation('reveal', 'open');
+        });
+
+        function padLeft(num, size) {
+            var s = "000000000" + num;
+            return s.substr(s.length - size);
+        }
+
+        $('#btn-cancel-edit-reminder-form').click(function () {
+            $('#modal-edit-reminder').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-edit-reminder', function () {
+            $('#edit-reminder-form')[0].reset();
+        });
+
+        $('.btn-update-reminder').click(function () {
+            if ($(this).parents().eq(1).find('.reminder-complete').text() == "Yes") {
+                $('#lbl-chk-complete').hide();
+                $('#btn-save').hide();
+            }
+            else {
+                $('#lbl-chk-complete').show().change(function () {
+                    if ($('#chk_complete').is(':checked')) {
+                        $('#btn-save').show();
+                    }
+                    else {
+                        $('#btn-save').hide();
+                    }
+                });
+            }
+            var curDate = $(this).parents().eq(1).find('.reminder-end').text();
+            var year = curDate.substr(curDate.lastIndexOf("/") + 1, 4);
+            var month = curDate.substring(0, curDate.indexOf("/"));
+            var day = curDate.substring(curDate.indexOf("/") + 1, curDate.lastIndexOf("/"));
+            var newDate = padLeft(month, 2) + "/" + padLeft(day, 2) + "/" + year;
+            $('#lbl-end').text(newDate);
+            var curDate2 = $(this).parents().eq(1).find('.reminder-start').text();
+            var year2 = curDate2.substr(curDate.lastIndexOf("/") + 1, 4);
+            var month2 = curDate2.substring(0, curDate.indexOf("/"));
+            var day2 = curDate2.substring(curDate.indexOf("/") + 1, curDate.lastIndexOf("/"));
+            var newDate2 = padLeft(month2, 2) + "/" + padLeft(day2, 2) + "/" + year2;
+            $('#lbl-start').text(newDate2);
+            $('#lbl-priority').text($(this).parents().eq(1).find('.reminder-priority').text());
+            $('#lbl-complete').text($(this).parents().eq(1).find('.reminder-complete').text());
+            $('#lbl-text').text($(this).parents().eq(1).find('.reminder-text').text());
+            $('#hdn_rid_update').val($(this).parents().eq(1).data('rid'));
+            $('#modal-update-reminder').foundation('reveal', 'open');
+        });
+
+        $('#btn-cancel-update-reminder-form').click(function () {
+            $('#modal-update-reminder').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#modal-update-reminder', function () {
+            $('#lblend').text('');
+            $('#lblstart').text('');
+            $('#lblpriority').text('');
+            $('#lblcomplete').text('');
+            $('#lbltext').text('');
+            $('#hdn_rid_update').val('');
+            $('#chk_complete').attr('checked', false);
+            $('#update-reminder-form')[0].reset();
+        });
+
+        $('#btn-delete-reminder').click(function () {
+            $(this).hide();
+            $('#lbl-confirm-delete').show();
+            $('#btn-confirm-delete-reminder').show();
+            $('#btn-cancel-delete-reminder').show();
+        });
+
+        $('#btn-cancel-delete-reminder').click(function () {
+            $(this).hide();
+            $('#lbl-confirm-delete').hide();
+            $('#btn-confirm-delete-reminder').hide();
+            $('#btn-delete-reminder').show();
+        });
+
+
+    });
+</script>

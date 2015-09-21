@@ -1,0 +1,87 @@
+﻿@model bearhug.Models.CCD
+@{
+    ViewBag.Title = "View Record";
+}
+
+<div class="row">
+    <div class="small-6 columns">
+        <h5 class="subheader">Patient Information: @Model.Patient.FirstName @Model.Patient.LastName (email: @Model.Patient.PatientId)</h5>
+    </div>
+    <div class="small-6 columns">
+        @Html.ActionLink("Back to Patients", "Index", null, new { @class = "button tiny radius right" })
+    </div>
+</div>
+
+<ul class="tabs" data-tab="">
+    <li class="tab-title active"><a id="general-tab" href="#general">General Information</a></li>
+    @if (Model.Patient.Ammendments.Count > 0)
+    {
+        <li class="tab-title"><a id="amendments-tab" href="#amendments">Amendments</a></li>
+    }
+</ul>
+<div class="tabs-content">
+
+    <div class="content active patient-record-view" id="general">
+        @bearhug.Helpers.HtmlHelperXmlExtensions.RenderXmlMemory(Model.CCD_XML_File, Model.StylesheetFilename, Model.Parameters)
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                @Html.ActionLink("Edit Record", "EditRecord", new { @patient_id = Model.Patient.Id, @recordid = Model.Patient.RecordId, @release_id = Model.ReleaseId }, new { @class = "button tiny radius right" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Patient.Ammendments.Count > 0)
+    {
+        <div class="content" id="amendments">
+        <table>
+                <thead class="fixed-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Change</th>
+                        <th>By</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                @foreach (bearhug.PatientsServiceReference.PatientAmmendment pa in Model.Patient.Ammendments)
+                {
+                    string className = pa.Approved == bearhug.PatientsServiceReference.AmmendmentApprovedStatus.Yes ? "amendment-approved" : pa.Approved == bearhug.PatientsServiceReference.AmmendmentApprovedStatus.No ? "amendment-denied" : "amendment-pending";
+                    string status = "Pending";
+                    if (className == "amendment-approved")
+                    {
+                        status = "Approved by " + pa.ApprovedBy + " on " + pa.DateApproved.ToShortDateString() + " " + pa.DateApproved.ToLongTimeString();
+                    }
+                    else if (className == "amendment-denied")
+                    {
+                        status = "Denied by " + pa.ApprovedBy + " on " + pa.DateApproved.ToShortDateString() + " " + pa.DateApproved.ToLongTimeString();
+                    }
+                    else if (className == "amendment-pending")
+                    {
+                        status = "Pending";
+                    }
+                    <tr class="@className">
+                        <td>@pa.Field</td>
+                        <td>Changed from "@pa.From" to "@pa.To"</td>
+                        <td>Amendment requested by @Model.Patient.FirstName @Model.Patient.LastName and entered by @pa.AmmendedBy on @pa.Date.ToShortDateString() @pa.Date.ToLongTimeString()</td>
+                        <td>@status</td>
+                    </tr>
+                }
+            </table>
+            </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+    $('.top-bar-section ul li').removeClass('active');
+    $('#li-patients').addClass('active');
+</script>

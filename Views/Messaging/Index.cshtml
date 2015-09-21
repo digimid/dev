@@ -1,0 +1,315 @@
+﻿@model bearhug.Models.MessageConstruct
+@{
+    ViewBag.Title = "Messages";
+}
+
+<link href="~/Content/select2/select2.css" rel="stylesheet" />
+<div class="row">
+    <div class="small-6 columns">
+        <h4 class="subheader">Messaging</h4>
+    </div>
+    <div class="small-6 columns">
+        <button name="new-mail" id="new-mail" class="button tiny radius right" data-reveal-id="new-message-modal">Compose</button>
+    </div>
+</div>
+
+@if (Model.MessageGroupContainer.MessageGroups.Count > 0)
+{
+    <div class="row" data-equalizer="">
+
+        <div class="small-12 columns" data-equalizer-watch="">
+
+            <div class="row">
+
+                <div class="small-12 columns">
+                    <button id="delete-mail" class="button tiny radius delete-msgs tip-right" title="Delete" aria-haspopup="true" data-tooltip="" data-reveal-id="delete-message-modal" disabled="disabled"><i class="fi-trash"></i></button>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="small-12 columns">
+                    <table class="messaging-table" data-provides="rowlink">
+                        <thead>
+                            <tr>
+                                <th class="chk">
+                                    <input id="chk-all" name="chk-all" type="checkbox" /></th>
+                                <th class="open"></th>
+                                <th class="img-new"></th>
+                                <th class="img-attachment"></th>
+                                <th class="from">From</th>
+                                <th class="subject">Subject</th>
+                                <th class="text">Message</th>
+                                <th class="msgs"></th>
+                                <th class="datetime">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.MessageGroupContainer.MessageGroups.Count; i++)
+                            {
+                                <tr>
+                                    <td class="chk nolink">
+                                        <input class="chk-del" name="chk-for-delete" value="@Model.MessageGroupContainer.MessageGroups[i].MessageId" type="checkbox" />
+                                    </td>
+                                    <td class="open">
+                                        <a class="btn btn-link btn-mini" href="@Url.Action("Message", "Messaging", new { mid = @Model.MessageGroupContainer.MessageGroups[i].MessageId })"></a>
+                                    </td>
+                                    @{bool hasUpdate = false; bool hasAttachment = false;
+                                    }
+                                    @foreach (bearhug.MessagingServiceReference.Message msg in Model.MessageGroupContainer.MessageGroups[i].Messages)
+                                    {
+                                        if (msg.Status == bearhug.MessagingServiceReference.MessageStatus.unread)
+                                        {
+                                            hasUpdate = true;
+                                        }
+                                        if (msg.Documents.Count > 0)
+                                        {
+                                            hasAttachment = true;
+                                        }
+                                    }
+                                    <td class="img-new">
+                                        @if (hasUpdate)
+                                        {
+@*<img src="~/Images/exclamation-icon.png" alt="New message" height="20" width="20" />*@
+                                            <span class="badge badge-warning">!</span>
+                                        }
+                                    </td>
+                                    <td class="img-attachment">
+                                        @if (hasAttachment)
+                                        {
+                                            <img src="~/Images/paperclip.png" alt="Attachment" height="20" width="20" />
+                                        }
+                                    </td>
+                                    <td class="from">
+                                        @Model.MessageGroupContainer.MessageGroups[i].LastFrom
+                                    </td>
+                                    <td class="subject">
+                                        @Model.MessageGroupContainer.MessageGroups[i].Subject
+                                    </td>
+                                    <td class="text">
+                                        @Model.MessageGroupContainer.MessageGroups[i].LastMessage
+                                    </td>
+                                    <td class="msgs">
+                                        @{
+                                        string numMsgs = "";
+                                        if (Model.MessageGroupContainer.MessageGroups[i].Messages.Count == 2)
+                                        {
+                                            numMsgs = "1 other message...";
+                                        }
+                                        else if (Model.MessageGroupContainer.MessageGroups[i].Messages.Count > 2)
+                                        {
+                                            numMsgs = (Model.MessageGroupContainer.MessageGroups[i].Messages.Count - 1).ToString() + " other messages";
+                                        }
+                                        }@numMsgs
+                                    </td>
+                                    <td class="datetime">
+                                        @Model.MessageGroupContainer.MessageGroups[i].LastDateTimeStamp.ToShortDateString()
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+else
+{
+    <label class="text-center"><i>No messages.  Click the 'Compose' button above to communicate with other members of Bearhug.</i></label>
+}
+
+<div id="new-message-modal" class="reveal-modal medium" data-reveal="">
+    <a class="close-reveal-modal">&#215;</a>
+    <div class="row">
+        <div class="small-12 columns">
+            <h5>New Message</h5>
+        </div>
+    </div>
+    @using (Html.BeginForm("New", "Messaging", FormMethod.Post, new { @id = "new-message-form", @class = "form-horizontal", @enctype = "multipart/form-data" }))
+    {
+        <div class="new-message-container">
+            <div class="row">
+                <div class="small-2 columns">
+                    <label class="right inline" for="new_message_to_emails">To</label>
+                </div>
+                <div class="small-9 columns end">
+                    <select multiple="multiple" name="new_message_to_emails" id="new_message_to_emails" tabindex="-1" style="width: 100%;">
+                        @foreach (bearhug.ContactsServiceReference.Member member in Model.MemberContacts)
+                        {
+                            string name;
+                            if (member.FirstName.Length > 0 || member.LastName.Length > 0)
+                            {
+                                name = member.FirstName + " " + member.LastName;
+                            }
+                            else
+                            {
+                                name = member.ContactID;
+                            }
+                            if (member.Initial == "MessagingTeam")
+                            {
+                            <option class="messaging-team" value="@member.ContactID">@member.LastName</option>
+                            }
+                            else
+                            {
+                            <option value="@member.ContactID">@name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns">
+                    <label class="right inline" for="new_message_subject">Subject</label>
+                </div>
+                <div class="small-9 columns end">
+                    <input id="new_message_subject" name="new_message_subject" type="text" autocomplete="off" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns">
+                    <label class="right inline" for="new_message_file">Files</label>
+                </div>
+                <div class="small-9 columns end">
+                    <div class="row collapse">
+                        <div class="small-10 columns">
+                            <input id="new_message_files_text" name="new_message_files_text" placeholder="(optional)" disabled="disabled" type="text" />
+                        </div>
+                        <div class="small-2 columns">
+                            <div class="fileUpload button radius postfix">
+                                <span>Upload</span>
+                                <input id="new_message_files" name="new_message_files" type="file" multiple="multiple" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns">
+                    <label class="right inline" for="new_message_body">Message</label>
+                </div>
+                <div class="small-9 columns end">
+                    <textarea id="new_message_body" name="new_message_body"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-2 columns">
+                &nbsp;
+            </div>
+            <div class="small-1 columns">
+                <button id="cancel-new-message" class="button tiny radius secondary" type="button">Cancel</button>
+            </div>
+            <div class="small-8 columns end">
+                <button class="button tiny radius right" type="submit">Send</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="delete-message-modal" class="reveal-modal small" data-reveal="">
+    <a class="close-reveal-modal">&#215;</a>
+    <h6>Are you sure you want to delete these messages?</h6>
+    <label>Warning, deleting message will remove them permanently.</label>
+    @using (Html.BeginForm("Delete", "Messaging", FormMethod.Post))
+    {
+        <input id="hdn_mids" name="hdn_mids" type="hidden" />
+        <hr />
+        <div class="row">
+            <div class="small-6 columns">
+                <button id="cancel-delete-message" type="button" class="button tiny radius secondary">No</button>
+            </div>
+            <div class="small-6 columns">
+                <button type="submit" class="button tiny radius alert right">Yes</button>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="~/Scripts/select2/select2.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-messages').addClass('active');
+
+        $("#new_message_to_emails").select2();
+
+        document.getElementById("new_message_files").onchange = function () {
+            if (this.files.length > 1) {
+                document.getElementById("new_message_files_text").value = this.files.length + " files";
+            }
+            else {
+                document.getElementById("new_message_files_text").value = this.files[0].name;
+            }
+        };
+
+        $('#cancel-new-message').click(function (e) {
+            $('#new-message-modal').foundation('reveal', 'close');
+        });
+
+        $(document).on('close', '#new-message-modal', function (e) {
+            $('#new-message-form')[0].reset();
+            $('#new_message_to_emails').select2("val", "");
+        });
+
+        $('.chk-del').change(function () {
+            if ($(this).is(':checked') && $(this).is('input')) {
+                $(this).closest('td').closest('tr').find('td').addClass('checked-background');
+            }
+            else if (!$(this).is(':checked') && $(this).is('input')) {
+                $(this).closest('td').closest('tr').find('td').removeClass('checked-background');
+            }
+            checkForChecked();
+        });
+
+        $('#chk-all').change(function () {
+            var isChecked = $(this).is(':checked');
+            $('.messaging-table tbody tr').each(function (idx, tr) {
+                $($(tr).children('td').find('.chk-del')[0]).prop('checked', isChecked);
+                if (isChecked) {
+                    $(tr).closest('tr').find('td').addClass('checked-background');
+                }
+                else {
+                    $(tr).closest('tr').find('td').removeClass('checked-background');
+                }
+            });
+            checkForChecked();
+        });
+
+        function checkForChecked() {
+            var anyChecked = 'disabled';
+            var checkedCount = 0;
+            $('.messaging-table tbody tr').each(function (idx, tr) {
+                if ($($(tr).children('td').find('.chk-del')[0]).prop('checked')) {
+                    anyChecked = false;
+                    checkedCount++;
+                }
+            });
+            $('#delete-mail').prop('disabled', anyChecked);
+            $('#chk-all').prop('checked', checkedCount == $('.messaging-table tbody tr').length);
+        }
+
+        $(document).on('open', '#delete-message-modal', function () {
+            var mids = [];
+            $('.messaging-table tbody tr').find('input[class*="chk"]').each(function (idx, chk) {
+                if ($(this).prop('checked')) {
+                    mids.push($(this).val());
+                }
+            });
+            $('#hdn_mids').val(mids.join());
+        });
+
+        $('#cancel-delete-message').click(function (e) {
+            $('#delete-message-modal').foundation('reveal', 'close');
+        });
+
+        $(document).on('close', '#delete-message-modal', function (e) {
+            $('#hdn_mids').val("");
+        });
+
+    });
+</script>
+

@@ -1,0 +1,1702 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:i0="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:i16="https://www.assuresign.net/Services/DocumentNOW/Download" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:i17="https://www.assuresign.net/Services/DocumentNOW/DownloadTemplate" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:i3="https://www.assuresign.net/Services/DocumentNOW/CheckStatus" xmlns:i6="https://www.assuresign.net/Services/DocumentNOW/ListTemplates" xmlns:i8="https://www.assuresign.net/Services/DocumentNOW/RetrieveTemplateInfo" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:i13="https://www.assuresign.net/Services/DocumentNOW/UpdateSignatory" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:i14="https://www.assuresign.net/Services/DocumentNOW/GetDocumentValues" xmlns:i15="https://www.assuresign.net/Services/DocumentNOW/Envelopes" xmlns:i1="https://www.assuresign.net/Services/DocumentNOW/Submit" xmlns:i10="https://www.assuresign.net/Services/DocumentNOW/Cancel" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:i11="https://www.assuresign.net/Services/DocumentNOW/ListNotifications" xmlns:i12="https://www.assuresign.net/Services/DocumentNOW/ResendNotification" xmlns:i9="https://www.assuresign.net/Services/DocumentNOW/Expire" xmlns:i7="https://www.assuresign.net/Services/DocumentNOW/ListParameters" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:i5="https://www.assuresign.net/Services/DocumentNOW/ListSignatories" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:i2="https://www.assuresign.net/Services/DocumentNOW/LookupSession" xmlns:i18="https://www.assuresign.net/Services/DocumentNOW/Users" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:i19="https://www.assuresign.net/Services/DocumentNOW/Ping" xmlns:i20="https://www.assuresign.net/Services/DocumentNOW/ValidateDocument" xmlns:i21="https://www.assuresign.net/Services/DocumentNOW/Links" xmlns:i22="https://www.assuresign.net/Services/DocumentNOW/Accounts" xmlns:tns="http://tempuri.org/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:i4="https://www.assuresign.net/Services/DocumentNOW/ViewHistory" name="DocumentNowWcfService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_IAuthenticateDownloadService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_ISubmitService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="CustomBinding_ISubmitService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsap:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_ISubmitService1_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_ILookupSessionService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_ICheckStatusService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IViewHistoryService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IListSignatoriesService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IListTemplatesService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IListParametersService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IRetrieveTemplateInfoService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IExpireService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_ICancelService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IListNotificationsService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IResendNotificationService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IUpdateSignatoryService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IGetDocumentValuesService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IEnvelopeService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="CustomBinding_IEnvelopeService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsap:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IEnvelopeService1_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IDownloadService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="CustomBinding_IDownloadService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsap:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IDownloadService1_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IDownloadTemplateService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="CustomBinding_IDownloadTemplateService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsap:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IDownloadTemplateService1_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IUserService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IPingService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IValidateDocumentService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_ILinkService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_IAccountService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl0" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Submit" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl1" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/LookupSession" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl2" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/CheckStatus" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl3" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/ViewHistory" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl4" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/ListSignatories" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl5" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/ListTemplates" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl6" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/ListParameters" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl7" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/RetrieveTemplateInfo" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl8" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Expire" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl9" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Cancel" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl10" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/ListNotifications" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl11" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/ResendNotification" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl12" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/UpdateSignatory" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl13" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/GetDocumentValues" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl14" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Envelopes" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl15" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Download" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl16" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/DownloadTemplate" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl17" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Users" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl18" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Ping" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl19" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/ValidateDocument" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl20" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Links" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl21" />
+  <wsdl:import namespace="https://www.assuresign.net/Services/DocumentNOW/Accounts" location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?wsdl=wsdl22" />
+  <wsdl:types />
+  <wsdl:binding name="BasicHttpBinding_IAuthenticateDownloadService" type="i0:IAuthenticateDownloadService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IAuthenticateDownloadService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AuthenticateDownload">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload/IAuthenticateDownloadService/AuthenticateDownload" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_ISubmitService" type="i1:ISubmitService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_ISubmitService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SubmitWithFile">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/SubmitWithFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmitWithFile">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmitWithFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitWithFileRetrieval">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/SubmitWithFileRetrieval" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmitWithFileRetrieval">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmitWithFileRetrieval" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Submit">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/Submit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmit">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CustomBinding_ISubmitService" type="i1:ISubmitService">
+    <wsp:PolicyReference URI="#CustomBinding_ISubmitService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SubmitWithFile">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/SubmitWithFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmitWithFile">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmitWithFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitWithFileRetrieval">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/SubmitWithFileRetrieval" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmitWithFileRetrieval">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmitWithFileRetrieval" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Submit">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/Submit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmit">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_ISubmitService1" type="i1:ISubmitService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_ISubmitService1_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SubmitWithFile">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/SubmitWithFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmitWithFile">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmitWithFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitWithFileRetrieval">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/SubmitWithFileRetrieval" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmitWithFileRetrieval">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmitWithFileRetrieval" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Submit">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/Submit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AsyncSubmit">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Submit/ISubmitService/AsyncSubmit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_ILookupSessionService" type="i2:ILookupSessionService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_ILookupSessionService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="LookupSession">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/LookupSession/ILookupSessionService/LookupSession" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_ICheckStatusService" type="i3:ICheckStatusService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_ICheckStatusService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckStatus">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/CheckStatus/ICheckStatusService/CheckStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IViewHistoryService" type="i4:IViewHistoryService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IViewHistoryService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ViewHistory">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/ViewHistory/IViewHistoryService/ViewHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IListSignatoriesService" type="i5:IListSignatoriesService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IListSignatoriesService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListSignatories">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/ListSignatories/IListSignatoriesService/ListSignatories" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IListTemplatesService" type="i6:IListTemplatesService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IListTemplatesService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListTemplates">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/ListTemplates/IListTemplatesService/ListTemplates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IListParametersService" type="i7:IListParametersService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IListParametersService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListParameters">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/ListParameters/IListParametersService/ListParameters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IRetrieveTemplateInfoService" type="i8:IRetrieveTemplateInfoService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IRetrieveTemplateInfoService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RetrieveTemplateInfo">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/RetrieveTemplateInfo/IRetrieveTemplateInfoService/RetrieveTemplateInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IExpireService" type="i9:IExpireService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IExpireService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Expire">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Expire/IExpireService/Expire" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_ICancelService" type="i10:ICancelService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_ICancelService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Cancel">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Cancel/ICancelService/Cancel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IListNotificationsService" type="i11:IListNotificationsService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IListNotificationsService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListNotifications">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/ListNotifications/IListNotificationsService/ListNotifications" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IResendNotificationService" type="i12:IResendNotificationService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IResendNotificationService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ResendNotification">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/ResendNotification/IResendNotificationService/ResendNotification" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IUpdateSignatoryService" type="i13:IUpdateSignatoryService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IUpdateSignatoryService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="UpdateSignatory">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/UpdateSignatory/IUpdateSignatoryService/UpdateSignatory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IGetDocumentValuesService" type="i14:IGetDocumentValuesService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IGetDocumentValuesService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetDocumentValues">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/GetDocumentValues/IGetDocumentValuesService/GetDocumentValues" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IEnvelopeService" type="i15:IEnvelopeService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IEnvelopeService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateEnvelope">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CreateEnvelope" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseEnvelope">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CloseEnvelope" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelEnvelope">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CancelEnvelope" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeDocuments">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckEnvelopeStatus">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CheckEnvelopeStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadEnvelopeDocuments">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/DownloadEnvelopeDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeTemplates">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeTemplates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CustomBinding_IEnvelopeService" type="i15:IEnvelopeService">
+    <wsp:PolicyReference URI="#CustomBinding_IEnvelopeService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateEnvelope">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CreateEnvelope" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseEnvelope">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CloseEnvelope" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelEnvelope">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CancelEnvelope" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeDocuments">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeDocuments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckEnvelopeStatus">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CheckEnvelopeStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadEnvelopeDocuments">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/DownloadEnvelopeDocuments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeTemplates">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeTemplates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IEnvelopeService1" type="i15:IEnvelopeService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IEnvelopeService1_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateEnvelope">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CreateEnvelope" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseEnvelope">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CloseEnvelope" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelEnvelope">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CancelEnvelope" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeDocuments">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckEnvelopeStatus">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CheckEnvelopeStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadEnvelopeDocuments">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/DownloadEnvelopeDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeTemplates">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeTemplates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IDownloadService" type="i16:IDownloadService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IDownloadService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Download">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Download/IDownloadService/Download" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CustomBinding_IDownloadService" type="i16:IDownloadService">
+    <wsp:PolicyReference URI="#CustomBinding_IDownloadService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Download">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Download/IDownloadService/Download" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IDownloadService1" type="i16:IDownloadService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IDownloadService1_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Download">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Download/IDownloadService/Download" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IDownloadTemplateService" type="i17:IDownloadTemplateService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IDownloadTemplateService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DownloadTemplate">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/DownloadTemplate/IDownloadTemplateService/DownloadTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CustomBinding_IDownloadTemplateService" type="i17:IDownloadTemplateService">
+    <wsp:PolicyReference URI="#CustomBinding_IDownloadTemplateService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DownloadTemplate">
+      <soap12:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/DownloadTemplate/IDownloadTemplateService/DownloadTemplate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IDownloadTemplateService1" type="i17:IDownloadTemplateService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IDownloadTemplateService1_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DownloadTemplate">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/DownloadTemplate/IDownloadTemplateService/DownloadTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IUserService" type="i18:IUserService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IUserService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AuthenticateUser">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/AuthenticateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/CreateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/GetUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListUsers">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/ListUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IPingService" type="i19:IPingService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IPingService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Ping/IPingService/Ping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IValidateDocumentService" type="i20:IValidateDocumentService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IValidateDocumentService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ValidateDocument">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/ValidateDocument/IValidateDocumentService/ValidateDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_ILinkService" type="i21:ILinkService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_ILinkService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAccessLink">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Links/ILinkService/GetAccessLink" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSigningLinks">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Links/ILinkService/GetSigningLinks" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IAccountService" type="i22:IAccountService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IAccountService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateAccount">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Accounts/IAccountService/CreateAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccount">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Accounts/IAccountService/GetAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAccount">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Accounts/IAccountService/UpdateAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListAccounts">
+      <soap:operation soapAction="https://www.assuresign.net/Services/DocumentNOW/Accounts/IAccountService/ListAccounts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DocumentNowWcfService">
+    <wsdl:port name="BasicHttpBinding_IAuthenticateDownloadService" binding="tns:BasicHttpBinding_IAuthenticateDownloadService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/AuthenticateDownload/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_ISubmitService" binding="tns:BasicHttpBinding_ISubmitService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Submit/mtom" />
+    </wsdl:port>
+    <wsdl:port name="CustomBinding_ISubmitService" binding="tns:CustomBinding_ISubmitService">
+      <soap12:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Submit/mtom_compat" />
+      <wsa:EndpointReference>
+        <wsa:Address>https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Submit/mtom_compat</wsa:Address>
+      </wsa:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_ISubmitService1" binding="tns:BasicHttpBinding_ISubmitService1">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Submit/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_ILookupSessionService" binding="tns:BasicHttpBinding_ILookupSessionService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/LookupSession/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_ICheckStatusService" binding="tns:BasicHttpBinding_ICheckStatusService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/CheckStatus/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IViewHistoryService" binding="tns:BasicHttpBinding_IViewHistoryService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/ViewHistory/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IListSignatoriesService" binding="tns:BasicHttpBinding_IListSignatoriesService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/ListSignatories/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IListTemplatesService" binding="tns:BasicHttpBinding_IListTemplatesService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/ListTemplates/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IListParametersService" binding="tns:BasicHttpBinding_IListParametersService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/ListParameters/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IRetrieveTemplateInfoService" binding="tns:BasicHttpBinding_IRetrieveTemplateInfoService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/RetrieveTemplateInfo/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IExpireService" binding="tns:BasicHttpBinding_IExpireService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Expire/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_ICancelService" binding="tns:BasicHttpBinding_ICancelService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Cancel/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IListNotificationsService" binding="tns:BasicHttpBinding_IListNotificationsService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/ListNotifications/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IResendNotificationService" binding="tns:BasicHttpBinding_IResendNotificationService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/ResendNotification/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IUpdateSignatoryService" binding="tns:BasicHttpBinding_IUpdateSignatoryService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/UpdateSignatory/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IGetDocumentValuesService" binding="tns:BasicHttpBinding_IGetDocumentValuesService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/GetDocumentValues/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IEnvelopeService" binding="tns:BasicHttpBinding_IEnvelopeService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Envelopes/mtom" />
+    </wsdl:port>
+    <wsdl:port name="CustomBinding_IEnvelopeService" binding="tns:CustomBinding_IEnvelopeService">
+      <soap12:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Envelopes/mtom_compat" />
+      <wsa:EndpointReference>
+        <wsa:Address>https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Envelopes/mtom_compat</wsa:Address>
+      </wsa:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IEnvelopeService1" binding="tns:BasicHttpBinding_IEnvelopeService1">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Envelopes/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IDownloadService" binding="tns:BasicHttpBinding_IDownloadService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Download/mtom" />
+    </wsdl:port>
+    <wsdl:port name="CustomBinding_IDownloadService" binding="tns:CustomBinding_IDownloadService">
+      <soap12:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Download/mtom_compat" />
+      <wsa:EndpointReference>
+        <wsa:Address>https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Download/mtom_compat</wsa:Address>
+      </wsa:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IDownloadService1" binding="tns:BasicHttpBinding_IDownloadService1">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Download/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IDownloadTemplateService" binding="tns:BasicHttpBinding_IDownloadTemplateService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/DownloadTemplate/mtom" />
+    </wsdl:port>
+    <wsdl:port name="CustomBinding_IDownloadTemplateService" binding="tns:CustomBinding_IDownloadTemplateService">
+      <soap12:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/DownloadTemplate/mtom_compat" />
+      <wsa:EndpointReference>
+        <wsa:Address>https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/DownloadTemplate/mtom_compat</wsa:Address>
+      </wsa:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IDownloadTemplateService1" binding="tns:BasicHttpBinding_IDownloadTemplateService1">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/DownloadTemplate/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IUserService" binding="tns:BasicHttpBinding_IUserService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Users/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IPingService" binding="tns:BasicHttpBinding_IPingService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Ping/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IValidateDocumentService" binding="tns:BasicHttpBinding_IValidateDocumentService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/ValidateDocument/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_ILinkService" binding="tns:BasicHttpBinding_ILinkService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Links/text" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IAccountService" binding="tns:BasicHttpBinding_IAccountService">
+      <soap:address location="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc/Accounts/text" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

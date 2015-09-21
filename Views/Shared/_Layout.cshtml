@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Bearhug</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/Content/foundation/foundation.css" />
+    <link rel="stylesheet" href="~/Content/foundation/foundation-icons.css" />
+    <link rel="stylesheet" href="~/Content/foundation/foundation-datepicker.css" />
+    <link rel="stylesheet" href="~/Content/bearhug.css" />
+
+    <script type="text/javascript" src="~/Scripts/jquery/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/foundation/vendor/modernizr.js"></script>
+    <script type="text/javascript" src="~/Scripts/foundation/foundation.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/foundation/foundation.magellan.js"></script>
+    <script type="text/javascript" src="~/Scripts/foundation/foundation.joyride.js"></script>
+    <script type="text/javascript" src="~/Scripts/foundation/vendor/foundation-datepicker.js"></script>
+    <script type="text/javascript" src="~/Scripts/start.js"></script>
+    <script type="text/javascript" src="~/Scripts/rowlink.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="top-bar" data-topbar="" data-options="is_hover: false">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="#"></a></h1>
+                </li>
+            </ul>
+            <section class="top-bar-section">
+                @if (User.Identity.IsAuthenticated)
+                {                    
+                    <ul class="left">
+                        @if (!User.IsInRole("Members"))
+                        {
+                            <li id="li-nonmember-home">@Html.ActionLink("Bearhug", "Index", "Home")</li>
+                        }
+                        @if (User.IsInRole("Members"))
+                        {
+                            <li id="li-home" class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li id="li-profile">@Html.ActionLink("Profile", "Index", "Profile")</li>
+                            <li id="li-contacts">@Html.ActionLink("Contacts", "Index", "Contacts")</li>
+                            <li id="li-patients">@Html.ActionLink("Patients", "Index", "Patients")</li>
+                            <li id="li-messages">@Html.ActionLink("Messages", "Index", "Messaging")</li>
+                        }
+                        <li id="li-interactions">@Html.ActionLink("Interactions", "Index", "Interactions")</li>
+                        @if (User.IsInRole("Members"))
+                        {
+                            <li id="li-documents">@Html.ActionLink("Documents", "Index", "Documents")</li>
+                            <li id="li-community">@Html.ActionLink("Community", "Index", "Community")</li>
+                        }
+                    </ul>
+                }
+                <ul class="right">
+                    <li>@Html.Partial("_LoginPartial")</li>
+                </ul>
+            </section>
+        </nav>
+    </header>
+    <div class="body-content">
+        <div class="body-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+    <footer>
+        <div class="footer-wrapper">
+            <div class="row">
+                <div class="small-5 columns">
+                    <h6><small>&copy; @DateTime.Now.Year - Bearhug Technologies (version 1)</small></h6>
+                </div>
+                <div class="small-7 columns end">
+                    <a href="https://www.facebook.com/bearhugtechnologies" target="_blank">
+                        <img src="~/Images/facebook.png" alt="Facebook" width="36" /></a>
+                    <a href="https://plus.google.com/111016155471693622503/posts" target="_blank">
+                        <img src="~/Images/googleplus.png" alt="Google +" width="36" /></a>
+                    <a href="https://www.linkedin.com/company/the-great-ascent-consulting-services-llc" target="_blank">
+                        <img src="~/Images/linkedin.png" alt="Linkedin" width="36" /></a>
+                    <a href="https://twitter.com/bearhugtech" target="_blank">
+                        <img src="~/Images/twitter.png" alt="Twitter" width="36" /></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

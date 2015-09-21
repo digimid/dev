@@ -1,0 +1,235 @@
+﻿@model bearhug.Models.OrganizationConstruct
+@{
+    ViewBag.Title = "Teams";
+}
+
+<h4 class="subheader">@Model.Profile.FirstName @Model.Profile.LastName's Dashboard 
+    @if (Model.HasNewFax)
+    {
+        <small class="newFaxMessage"><span class="badge badge-warning">!</span> <b>You have a new fax.  Please click on the documents tab above to view.</b></small>
+    }
+</h4>
+
+<ul class="tabs">
+    <li class="tab-title">@Html.ActionLink("Reminders", "Index", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Communication", "Communication", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Contacts", "Contacts", "Home")</li>
+    <li class="tab-title active"><a id="teams-tab" href="#teams">Teams</a></li>
+    @if (User.Identity.Name == Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Reports", "Reports", "Home")</li>
+    }
+    @if (User.Identity.Name != Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Emergency Access", "EmergencyAccess", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Patients (Admin Access)", "AdminPatients", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Audits (Admin Access)", "AdminAudits", "Home")</li>
+    }
+    @if (User.Identity.Name == "jesseglascock@gmail.com")
+    {
+        <li class="tab-title">@Html.ActionLink("Admin", "Admin", "Home")</li>
+    }
+</ul>
+
+<div class="tabs-content min-tabs-content">
+
+    <div class="content active" id="teams">
+
+        @if (User.Identity.Name == Model.Organization.Admin)
+        {
+            <div class="row">
+                <div class="small-12 columns">
+                    <button type="button" class="button tiny radius right" data-reveal-id="add-team">Create Team</button>
+                </div>
+            </div>
+        }
+        @if (Model.Organization.Groups.Count > 0)
+        {
+            <ul class="small-block-grid-1 medium-block-grid-4 large-block-grid-6">
+
+                @for (int i = 0; i < Model.Organization.Groups.Count; i++)
+                {
+                    <li>
+                        <dl class="accordion" data-accordion="">
+                            <dd class="accordion-navigation">
+                                <a href="#collapse-@Model.Organization.Groups[i].Id">@Model.Organization.Groups[i].Name</a>
+                                <div id="collapse-@Model.Organization.Groups[i].Id" class="content">
+                                    @foreach (bearhug.OrganizationServiceReference.GroupMember orgMember in Model.Organization.Groups[i].Members)
+                                    {
+                                        if (orgMember.UID == Model.Organization.Groups[i].Admin)
+                                        {
+                                            string name;
+                                            if (orgMember.LastName.Length > 0 || orgMember.FirstName.Length > 0)
+                                            {
+                                                name = orgMember.LastName + ", " + orgMember.FirstName;
+                                            }
+                                            else
+                                            {
+                                                name = orgMember.UID;
+                                            }
+                                        <label data-uid="@orgMember.UID" data-isadmin="true"><b>@Html.ActionLink(name, "UserProfile", new { @oid = new System.Text.Base32Encoder().Encode(System.Text.Encoding.ASCII.GetBytes(Model.Organization.Id)), @mid = new System.Text.Base32Encoder().Encode(System.Text.Encoding.ASCII.GetBytes(orgMember.UID)) })</b> <small>(Admin)</small></label>
+                                        }
+                                    }
+                                    @foreach (bearhug.OrganizationServiceReference.GroupMember orgMember in Model.Organization.Groups[i].Members)
+                                    {
+                                        if (orgMember.UID != Model.Organization.Groups[i].Admin)
+                                        {
+                                            string name;
+                                            if (orgMember.LastName.Length > 0 || orgMember.FirstName.Length > 0)
+                                            {
+                                                name = orgMember.LastName + ", " + orgMember.FirstName;
+                                            }
+                                            else
+                                            {
+                                                name = orgMember.UID;
+                                            }
+                                        <label data-uid="@orgMember.UID" data-isadmin="false" >@Html.ActionLink(name, "UserProfile", new { @oid = new System.Text.Base32Encoder().Encode(System.Text.Encoding.ASCII.GetBytes(Model.Organization.Id)), @mid = new System.Text.Base32Encoder().Encode(System.Text.Encoding.ASCII.GetBytes(orgMember.UID)) })</label>
+                                        }
+                                    }
+                                    @if (User.Identity.Name == Model.Organization.Admin)
+                                    {
+                                        <hr />
+                                        <button data-tooltip="" aria-haspopup="true" type="button" class="button tiny radius edit-group has-tip right" title="Edit team" data-grpid="@Model.Organization.Groups[i].Id"><i class="fi-clipboard-pencil"></i></button>
+                                    }
+                                </div>
+                            </dd>
+                        </dl>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="row">
+                <div class="small-12 columns">
+                    <label class="text-center"><i>No groups created.</i></label>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+<div id="add-team" class="reveal-modal large" data-reveal="">
+    <h5 class="subheader">Create a Team</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    <div class="row">
+        <div class="small-6 columns">
+            @using (Html.BeginForm("CreateTeam", "Home", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="small-4 columns">
+                        <label class="inline right" for="input_name">Name</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <input id="input_name" name="input_name" type="text" placeholder="Name" required="required">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-4 columns">
+                        <label class="inline right" for="input_name">Administrator</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <select id="input_admin" name="input_admin" required="required">
+                            @foreach (bearhug.OrganizationServiceReference.OrganizationMember member in Model.Organization.Members)
+                            {
+                                if (member.FirstName.Length > 0 || member.LastName.Length > 0)
+                                {
+                                <option value="@member.UID">@member.LastName, @member.FirstName</option>
+                                }
+                                else
+                                {
+                                <option value="@member.UID">@member.UID</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-4 columns">
+                        <label class="inline right" for="input_members">Members</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <select id="input_members" name="input_members" multiple="multiple" required="required">
+                            @foreach (bearhug.OrganizationServiceReference.OrganizationMember member in Model.Organization.Members)
+                            {
+                                if (member.FirstName.Length > 0 || member.LastName.Length > 0)
+                                {
+                                <option value="@member.UID">@member.LastName, @member.FirstName</option>
+                                }
+                                else
+                                {
+                                <option value="@member.UID">@member.UID</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="small-12 columns">
+                        <input id="input_org" name="input_org" type="hidden" value="@Model.Organization.Id" />
+                        <button type="submit" class="button tiny radius right">Create</button>
+                    </div>
+                </div>                                          
+            }
+        </div>
+        <div id="selected-members" class="small-6 columns">
+            Selected Members
+                <ul>
+                </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-home').addClass('active');
+
+        $('#input_admin').change(function () {
+            $('#input_members option').removeAttr('disabled');
+            $('#input_members option:selected').removeAttr('selected');
+            $('#selected-members ul li').remove();
+            var adminVal = $(this).val();
+            $('#input_members option').each(function () {
+                if ($(this).val() == adminVal) {
+                    $(this).attr('disabled', 'disabled');
+                }
+            });
+        });
+
+        $('#input_edit_admin').change(function () {
+            $('#input_edit_members option').removeAttr('disabled');
+            $('#input_edit_members option:selected').removeAttr('selected');
+            $('#selected-edit-members ul li').remove();
+            var adminVal = $(this).val();
+            $('#input_edit_members option').each(function () {
+                if ($(this).val() == adminVal) {
+                    $(this).attr('disabled', 'disabled');
+                }
+            });
+        });
+
+        $('#input_members option:first').attr('disabled', 'disabled');
+
+        $('#input_members').change(function () {
+            $('#selected-members ul li').remove();
+            $('#input_members option:selected').each(function () {
+                $('#selected-members ul').append('<li>' + $(this).text() + '</li>');
+            });
+        });
+
+        $('#input_edit_members').change(function () {
+            $('#selected-edit-members ul li').remove();
+            $('#input_edit_members option:selected').each(function () {
+                $('#selected-edit-members ul').append('<li>' + $(this).text() + '</li>');
+            });
+        });
+    });
+</script>

@@ -1,0 +1,107 @@
+﻿@model bearhug.Models.ReportTransactionDetail
+@{
+    ViewBag.Title = "Interaction Detail";
+}
+<div class="row">
+    <div class="small-6 columns">
+        <h4 class="subheader">Interaction Detail</h4>
+    </div>
+    <div class="small-6 columns">
+        @Html.ActionLink("Back to Reports", "Reports", null, new { @class = "button tiny radius right" })
+    </div>
+</div>
+<ul class="tabs" data-tab="">
+    <li class="tab-title active"><a href="#general" data-toggle="tab">General</a></li>
+    <li class="tab-title"><a href="#users" data-toggle="tab">Users</a></li>
+    <li class="tab-title"><a href="#history" data-toggle="tab">History</a></li>
+</ul>
+<div class="tabs-content">
+
+    <div class="content active" id="general">
+        <h5>General Information</h5>
+        <dl>
+            <dt>Prepared By</dt>
+            <dd>@Model.TransactionReport.UserId</dd>
+            <dt>Patient</dt>
+            <dd>
+                @if (Model.TransactionReport.Patient == null)
+                {
+                    <span>No patient assigned</span>
+                }
+                else
+                {
+                    <span>@Model.TransactionReport.Patient.FirstName @Model.TransactionReport.Patient.LastName</span>
+                }
+            </dd>
+            <dt>Subject</dt>
+            <dd>@Model.TransactionReport.Subject</dd>
+            <dt>Status</dt>
+            <dd>@Model.TransactionReport.Status</dd>
+            <dt>Opened</dt>
+            <dd>@Model.TransactionReport.DateTimeStamp.ToShortDateString()</dd>
+            <dt>Closed</dt>
+            <dd>
+                @if (Model.TransactionReport.CloseDate.Equals(DateTime.MinValue))
+                {
+                    <span>Open</span>
+                }
+                else
+                {
+                    <span>@Model.TransactionReport.CloseDate.ToShortDateString()</span>
+                }
+            </dd>            
+        </dl>
+    </div>
+
+    <div class="content" id="users">
+        <h5>User Information</h5>
+        <ul class="unstyled">
+            <li>@Model.TransactionReport.UserId - admin</li>
+            @if(Model.TransactionReport.Members.Count > 0)
+            {
+                foreach(bearhug.ReportsServiceReference.TransactionMember member in Model.TransactionReport.Members)
+                {
+                    <li>@member.Name - @member.Role</li>
+                }
+            }
+            @if(Model.TransactionReport.NonMembers.Count > 0)
+            {
+                foreach(bearhug.ReportsServiceReference.TransactionNonMember nonmember in Model.TransactionReport.NonMembers)
+                {
+                    <li>@nonmember.Name - user</li>
+                }
+            }
+        </ul>
+    </div>
+
+    <div class="content" id="history">
+        <h4>History</h4>
+        <hr />
+        <div class="comment-container">
+            @foreach (bearhug.ReportsServiceReference.TransactionComment tc in Model.TransactionReport.Comments)
+            {
+                <blockquote>
+                    <dl>
+                        <dt>Comment</dt>
+                        <dd>
+                            @tc.Comment
+                            <small>@tc.DateTimeStamp.ToShortDateString() @tc.DateTimeStamp.ToShortTimeString()</small>
+                        </dd>
+                        @if (tc.Documents.Count > 0)
+                        {
+                            <dt>Documents</dt>
+                            foreach (bearhug.ReportsServiceReference.TransactionDocument td in tc.Documents)
+                            {
+                            <dd><span><a href='@Url.Action("getDocument", "Reports", new { @tid = Model.TransactionReport.TransactionId, @cid = tc.Id, @docid = td.Id })' target="_blank">Download</a> @td.DocumentName</span></dd>
+                            }
+                        }
+                        <dt>From</dt>
+                        <dd><small>@tc.SourceId</small></dd>
+                    </dl>
+                </blockquote>            
+                <hr />
+            }               
+        </div>
+    </div>
+
+</div>

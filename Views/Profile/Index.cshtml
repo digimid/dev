@@ -1,0 +1,1499 @@
+﻿@model bearhug.ProfileServiceReference.UserProfile
+@{
+    ViewBag.Title = "Profile";
+}
+<link href="~/Content/select2/select2.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="small-6 columns">
+        <h4 class="subheader">Profile</h4>
+    </div>
+    <div class="small-6 columns">
+        <button data-tooltip="" aria-haspopup="true" class="button tiny radius right has-tip help-button" title="Click for help with this page."><i class="fi-info"></i></button>
+    </div>
+</div>
+<div class="scroll-container">
+    <div class="row scroll-container-header-anchor"></div>
+    <div class="row scroll-container-header">
+        <dl id="step1" class="sub-nav">
+            <dd class="active"><a href="#general">General</a></dd>
+            <dd><a href="#background">Background</a></dd>
+            <dd><a href="#specializations">Specializations</a></dd>
+            <dd><a href="#financial">Financial</a></dd>
+            <dd><a href="#referring">Referring</a></dd>
+            <dd><a href="#documents">Brochures and Marketing Documents</a></dd>
+        </dl>
+    </div>
+    <div class="scroll-container-scroller">
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="general" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>General</h5>
+                        </div>
+                        <div class="small-6 columns">
+                            <button id="step2" data-dropdown="drop-update-general" aria-controls="drop-update-general" aria-expanded="false" class="button tiny radius right dropdown profile-button"><i class="fi-clipboard-pencil"></i></button>
+                            <br>
+                            <ul id="drop-update-general" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                <li><a href="#" data-reveal-id="update-profile-general">General Profile</a></li>
+                                <li><a href="#" data-reveal-id="update-profile-picture">Profile Picture</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-4 columns">
+                            <label>
+                                <b>Name</b> @if (Model.FirstName == "" || Model.LastName == "")
+                                            {<i>Not set</i>}
+                                            else
+                                            {<span>@Model.FirstName @Model.LastName</span>}</label>
+                            <label><b>Organization</b> @Model.Organization</label>
+                            <label><b>Address</b></label>
+                            <address>
+                                @if (Model.Address1 == "" || Model.Address1 == null)
+                                {<i>Not set</i>}
+                                else
+                                {@Model.Address1}<br />
+                                @if (@Model.Address2 != "")
+                                {
+                                    @Model.Address2<br />
+                                }
+                                @if (Model.City != "" && Model.City != null)
+                                {@Model.City<span>,</span>} @Model.State @Model.ZipCode
+                            </address>
+                            <label>
+                                <b>Phone</b> @if (Model.Phone == "")
+                                             {<i>Not set</i>}
+                                             else
+                                             {@Model.Phone}</label>
+                            <label>
+                                <b>Fax</b> @if (Model.Fax == "")
+                                           {<i>Not set</i>}
+                                           else
+                                           {<span id="step3">@System.Text.RegularExpressions.Regex.Replace(Model.Fax, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")</span>}</label>
+                            <label><b>Email</b> @Model.UID</label>
+                            <label>
+                                <b>Website</b> @if (Model.WebsiteUrl == "" || Model.WebsiteUrl == null)
+                                               {<i>Not set</i>}
+                                               else
+                                               {<a href="@Model.WebsiteUrl" target="_blank">@Model.WebsiteName</a>}</label>
+                        </div>
+                        <div class="small-4 columns">
+                            @if (Model.ProfilePic == null)
+                            {
+                                <img class="img-profile" src="~/Images/default-user.png" alt="Upload your photo" width="150"
+                                    height="150" style="border: 1px solid" />
+                            }
+                            else
+                            {
+                                <img class="img-profile" width="150" height="300" style="border: 1px solid" src="@Url.Action("getProfileImage", "Profile", new { profileid = Model.UID })" alt="Your profile picture" />
+                            }
+                        </div>
+                        <div class="small-4 columns">
+                            @if (Model.SocialLinks.FaceBookUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.FaceBookUrl" target="_blank">
+                                    <img src="~/Images/facebook.png" alt="Facebook" width="22" />
+                                    Facebook</a>
+                                <br />            
+                            }
+                            @if (Model.SocialLinks.GooglePlusUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.GooglePlusUrl" target="_blank">
+                                    <img src="~/Images/googleplus.png" alt="Google +" width="22" />
+                                    Google+</a>
+                                <br />            
+                            }
+                            @if (Model.SocialLinks.LinkedInUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.LinkedInUrl" target="_blank">
+                                    <img src="~/Images/linkedin.png" alt="Linkedin" width="22" />
+                                    LinkedIn</a>
+                                <br />            
+                            }
+                            @if (Model.SocialLinks.TwitterUrl.Length > 0)
+                            {
+                                <a href="@Model.SocialLinks.TwitterUrl" target="_blank">
+                                    <img src="~/Images/twitter.png" alt="Twitter" width="22" />
+                                    Twitter</a>
+                                <br />            
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="background" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Background</h5>
+                        </div>
+                        <div class="small-6 columns">
+                            <button data-dropdown="drop-update-background" aria-controls="drop-update-background" aria-expanded="false" class="button tiny radius right dropdown profile-button"><i class="fi-clipboard-pencil"></i></button>
+                            <br>
+                            <ul id="drop-update-background" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                <li><a href="#" data-reveal-id="add-edu">Add Educational Degree</a></li>
+                                <li><a href="#" data-reveal-id="add-lic">Add License</a></li>
+                                <li><a href="#" data-reveal-id="add-cert">Add Certification</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <label class="subheader"><b>Education</b></label>
+                        </div>
+                        <div class="small-6 columns">
+                            <label class="subheader"><b>Licenses</b></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Background.Educations.Count > 0)
+                            {
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><i>Degree</i></th>
+                                            <th><i>School</i></th>
+                                            <th><i>Year</i></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Background.Educations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Degree
+                                                </td>
+                                                <td>
+                                                    @item.School
+                                                </td>
+                                                <td>
+                                                    @item.Year
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Delete", "DeleteBackgroundEducation", new { @edu_degree = @item.Degree, @edu_school = @item.School, @edu_year = @item.Year })
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <i>Not set.  Click on the menu to the right to add.</i>
+                            }
+                        </div>
+                        <div class="small-6 columns">
+                            @if (Model.Background.Licenses.Count > 0)
+                            {
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><i>Name</i></th>
+                                            <th><i>State</i></th>
+                                            <th><i>Number</i></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Background.Licenses)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    @item.State
+                                                </td>
+                                                <td>
+                                                    @item.Number
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Delete", "DeleteBackgroundLicense", new { @lic_name = @item.Name, @lic_state = @item.State, @lic_number = @item.Number })
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <i>Not set.  Click on the menu to the right to add.</i>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <label class="subheader"><b>Certifications</b></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Background.Certifications.Count > 0)
+                            {
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><i>Name</i></th>
+                                            <th><i>Authority</i></th>
+                                            <th><i>Number</i></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Background.Certifications)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    @item.Authority
+                                                </td>
+                                                <td>
+                                                    @item.Number
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Delete", "DeleteBackgroundCertification", new { @cert_name = @item.Name, @cert_authority = @item.Authority, @cert_number = @item.Number })
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <i>Not set.  Click on the menu to the right to add.</i>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="specializations" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Specializations</h5>
+                        </div>
+                        <div class="small-6 columns">
+                            <button data-dropdown="drop-update-specializations" aria-controls="drop-update-specializations" aria-expanded="false" class="button tiny radius right dropdown profile-button"><i class="fi-clipboard-pencil"></i></button>
+                            <br>
+                            <ul id="drop-update-specializations" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                <li><a href="#" data-reveal-id="add-spc">Edit Primary Specialization</a></li>
+                                <li><a href="#" data-reveal-id="add-pop">Edit Populations Served</a></li>
+                                <li><a href="#" data-reveal-id="add-trt">Edit Treatment Structure</a></li>
+                                <li><a href="#" data-reveal-id="add-mod">Edit Treatment Modalities</a></li>
+                                <li><a href="#" data-reveal-id="add-thr">Edit Specific Therapies Practiced</a></li>
+                                <li><a href="#" data-reveal-id="add-adn">Additional Details</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Primary Specializations</b></dt>
+                                <dd>
+                                    @if (Model.Specializations.PrimarySpecializations.Count > 0)
+                                    {
+                                        @String.Join(",", Model.Specializations.PrimarySpecializations).Replace(",", ", ")
+                                    }
+                                    else
+                                    {
+                                        <i>Not set.  Click on the menu to the right to add.</i>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Populations Served</b></dt>
+                                <dd>
+                                    @if (Model.Specializations.Populations.Count > 0)
+                                    {
+                                        @String.Join(",", Model.Specializations.Populations).Replace(",", ", ")
+                                    }
+                                    else
+                                    {
+                                        <i>Not set.  Click on the menu to the right to add.</i>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Treatment Structure</b></dt>
+                                <dd>
+                                    @if (Model.Specializations.Treatments.Count > 0)
+                                    {
+                                        @String.Join(",", Model.Specializations.Treatments).Replace(",", ", ")
+                                    }
+                                    else
+                                    {
+                                        <i>Not set.  Click on the menu to the right to add.</i>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Treatment Modalities</b></dt>
+                                <dd>
+                                    @if (Model.Specializations.Modalities.Count > 0)
+                                    {
+                                        @String.Join(",", Model.Specializations.Modalities).Replace(",", ", ")
+                                    }
+                                    else
+                                    {
+                                        <i>Not set.  Click on the menu to the right to add.</i>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Specific Therapies Practiced</b></dt>
+                                <dd>
+                                    @if (Model.Specializations.Therapies.Count > 0)
+                                    {
+                                        @String.Join(",", Model.Specializations.Therapies).Replace(",", ", ")
+                                    }
+                                    else
+                                    {
+                                        <i>Not set.  Click on the menu to the right to add.</i>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Additional Details</b></dt>
+                                <dd>
+                                    @if (Model.Specializations.Details != null)
+                                    {
+                                        if (Model.Specializations.Details.Length > 0)
+                                        {
+                                        @Model.Specializations.Details
+                                        }
+                                        else
+                                        {
+                                        <i>Not set.  Click on the menu to the right to add.</i>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <i>Not set.  Click on the menu to the right to add.</i>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="financial" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Financial</h5>
+                        </div>
+                        <div class="small-6 columns">
+                            <button data-dropdown="drop-update-financial" aria-controls="drop-update-financial" aria-expanded="false" class="button tiny radius right dropdown profile-button"><i class="fi-clipboard-pencil"></i></button>
+                            <br>
+                            <ul id="drop-update-financial" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                <li><a href="#" data-reveal-id="update-financial-details">Update Financial Details</a></li>
+                                <li><a href="#" data-reveal-id="update-financial-providers">Update Insurances/Providers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Financial Details</b></dt>
+                                @if (Model.Financial.Rate == null && Model.Financial.RateDetails == null && Model.Financial.ProviderDetails == null)
+                                {
+                                    <dd><i>Not set.  Click on the menu to the right to add.</i></dd>
+                                }
+                                else
+                                {
+                                    <dd><b><i>Rate (Out-of-Pocket):</i></b> $@Model.Financial.Rate.ToString().00</dd>
+                                    <dd><b><i>Rate Details:</i></b> @Model.Financial.RateDetails</dd>
+                                    <dd><b><i>Insurance Details:</i></b> @Model.Financial.ProviderDetails</dd>
+                                }
+                            </dl>
+                        </div>
+                        <div class="small-6 columns">
+                            <label class="subheader"></label>
+                            <dl>
+                                <dt class="subheader"><b>Insurances Accepted</b></dt>
+                                @if (Model.Financial.Providers.Count > 0)
+                                {
+                                    <dd>@String.Join(",", Model.Financial.Providers).Replace(",", ", ")</dd>
+                                }
+                                else
+                                {
+                                    <dd><i>Not set.  Click on the menu to the right to add.</i></dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="referring" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Referring</h5>
+                        </div>
+                        <div class="small-6 columns">
+                            <button data-dropdown="drop-update-referring" aria-controls="drop-update-referring" aria-expanded="false" class="button tiny radius right dropdown profile-button"><i class="fi-clipboard-pencil"></i></button>
+                            <br>
+                            <ul id="drop-update-referring" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                <li><a href="#" data-reveal-id="update-referring-details">Update Referring Details</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>How to Refer (Who to call, documents needed, etc.)</b></dt>
+                                @if (Model.Referring.HowTo == null)
+                                {
+                                    <dd><i>Not set.  Click on the menu to the right to add.</i></dd>
+                                }
+                                else
+                                {
+                                    <dd>@Model.Referring.HowTo</dd>
+                                }
+                            </dl>
+                        </div>
+                        <div class="small-6 columns">
+                            <dl>
+                                <dt class="subheader"><b>Example Patient Profile</b></dt>
+                                @if (Model.Referring.TypicalProfile == null)
+                                {
+                                    <dd><i>Not set.  Click on the menu to the right to add.</i></dd>
+                                }
+                                else
+                                {
+                                    <dd>@Model.Referring.TypicalProfile</dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                        </div>
+                        <div class="small-6 columns">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row profile-row">
+            <div class="small-12 columns">
+                <div id="documents" class="scroll-section">
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <h5>Documents</h5>
+                        </div>
+                        <div class="small-6 columns">
+                            <button data-dropdown="drop-update-docs" aria-controls="drop-update-docs" aria-expanded="false" class="button tiny radius right dropdown profile-button"><i class="fi-clipboard-pencil"></i></button>
+                            <br>
+                            <ul id="drop-update-docs" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                <li><a href="#" data-reveal-id="add-docs">Add Documents</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            @if (Model.Documents.Count > 0)
+                            {
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Document Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Documents.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@Convert.ToString(i + 1)</td>
+                                                <td>@Model.Documents[i].DocumentName</td>
+                                                <td><a href="@Url.Action("getDocument", "Profile", new { @docid = Model.Documents[i].Id })" target="_blank">Download</a></td>
+                                                <td><a href="#" class="btn-link delete-doc" data-docid="@Model.Documents[i].Id" data-docname="@Model.Documents[i].DocumentName">Delete</a></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <i>No documents uploaded.</i>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+
+<div id="update-profile-general" class="reveal-modal" data-reveal="">
+    <h5 class="subheader">Update Profile</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateProfile", "Profile", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-6 columns">
+                <div class="row">
+                    <div class="small-6 columns">
+                        <label>
+                            First Name
+                            <input name="UserProfile.FirstName" type="text" class="radius" tabindex="1" value="@Model.FirstName" />
+                        </label>
+                    </div>
+                    <div class="small-6 columns">
+                        <label>
+                            Last Name
+                            <input name="UserProfile.LastName" type="text" class="radius" tabindex="2" value="@Model.LastName" />
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        <label>
+                            Address
+                            <input name="UserProfile.Address1" type="text" class="radius" tabindex="3" value="@Model.Address1" />
+                        </label>
+                    </div>
+                    <div class="small-6 columns">
+                        <label>
+                            Address
+                            <input name="UserProfile.Address2" type="text" class="radius" tabindex="4" placeholder="optional" value="@Model.Address2" />
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        <label>
+                            City
+                            <input name="UserProfile.City" type="text" class="radius" tabindex="5" value="@Model.City" />
+                        </label>
+                    </div>
+                    <div class="small-2 columns">
+                        <label>
+                            State
+                            <select id="user_state" name="UserProfile.State" class="radius" tabindex="6">
+                                <option disabled="disabled" selected="selected"></option>
+                                <option value="AL">AL</option>
+                                <option value="AK">AK</option>
+                                <option value="AZ">AZ</option>
+                                <option value="AR">AR</option>
+                                <option value="CA">CA</option>
+                                <option value="CO">CO</option>
+                                <option value="CT">CT</option>
+                                <option value="DE">DE</option>
+                                <option value="DC">DC</option>
+                                <option value="FL">FL</option>
+                                <option value="GA">GA</option>
+                                <option value="HI">HI</option>
+                                <option value="ID">ID</option>
+                                <option value="IL">IL</option>
+                                <option value="IN">IN</option>
+                                <option value="IA">IA</option>
+                                <option value="KS">KS</option>
+                                <option value="KY">KY</option>
+                                <option value="LA">LA</option>
+                                <option value="ME">ME</option>
+                                <option value="MD">MD</option>
+                                <option value="MA">MA</option>
+                                <option value="MI">MI</option>
+                                <option value="MN">MN</option>
+                                <option value="MS">MS</option>
+                                <option value="MO">MO</option>
+                                <option value="MT">MT</option>
+                                <option value="NE">NE</option>
+                                <option value="NV">NV</option>
+                                <option value="NH">NH</option>
+                                <option value="NJ">NJ</option>
+                                <option value="NM">NM</option>
+                                <option value="NY">NY</option>
+                                <option value="NC">NC</option>
+                                <option value="ND">ND</option>
+                                <option value="OH">OH</option>
+                                <option value="OK">OK</option>
+                                <option value="OR">OR</option>
+                                <option value="PA">PA</option>
+                                <option value="RI">RI</option>
+                                <option value="SC">SC</option>
+                                <option value="SD">SD</option>
+                                <option value="TN">TN</option>
+                                <option value="TX">TX</option>
+                                <option value="UT">UT</option>
+                                <option value="VT">VT</option>
+                                <option value="VA">VA</option>
+                                <option value="WA">WA</option>
+                                <option value="WV">WV</option>
+                                <option value="WI">WI</option>
+                                <option value="WY">WY</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="small-4 columns">
+                        <label>
+                            Zip Code
+                            <input name="UserProfile.ZipCode" type="text" class="radius" tabindex="7" value="@Model.ZipCode" />
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        <label>
+                            Phone
+                            <input id="user_phone" name="UserProfile.Phone" type="text" class="radius" tabindex="8" value="@Model.Phone" />
+                        </label>
+                    </div>
+                    <div class="small-6 columns">
+                        <label>
+                            Organization
+                            <input name="UserProfile.Organization" type="text" class="radius" tabindex="9" value="@Model.Organization" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="small-6 columns">
+                <div class="row">
+                    <div class="small-6 columns">
+                        <label>
+                            Website URL Address
+                            <input name="UserProfile.WebsiteName" type="text" class="radius" tabindex="10" placeholder="optional" value="@Model.WebsiteUrl" />
+                        </label>
+                    </div>
+                    <div class="small-6 columns">
+                        <label>
+                            Website Display Name
+                            <input name="UserProfile.WebsiteUrl" type="text" class="radius" tabindex="11" placeholder="optional" value="@Model.WebsiteName" />
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        <label>
+                            Facebook URL
+                            <input name="UserProfile.SocialLinks.FaceBookUrl" type="text" class="radius" tabindex="12" placeholder="optional" value="@Model.SocialLinks.FaceBookUrl" />
+                        </label>
+                    </div>
+                    <div class="small-6 columns">
+                        <label>
+                            Google+ URL
+                            <input name="UserProfile.SocialLinks.GooglePlusUrl" type="text" class="radius" tabindex="13" placeholder="optional" value="@Model.SocialLinks.GooglePlusUrl" />
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        <label>
+                            LinkedIn URL
+                            <input name="UserProfile.SocialLinks.LinkedInUrl" type="text" class="radius" tabindex="14" placeholder="optional" value="@Model.SocialLinks.LinkedInUrl" />
+                        </label>
+                    </div>
+                    <div class="small-6 columns">
+                        <label>
+                            Twitter URL
+                            <input name="UserProfile.SocialLinks.TwitterUrl" type="text" class="radius" tabindex="15" placeholder="optional" value="@Model.SocialLinks.TwitterUrl" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right" tabindex="16">Save</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="update-profile-picture" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Profile Picture</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateProfilePic", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>For best results upload a picture that measures 150x150.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                @if (Model.ProfilePic == null)
+                {
+                    <img class="imgProfile" src="~/Images/default-user.png" alt="Upload your photo" width="150" height="150" />
+                }
+                else
+                {
+                    <img class="imgProfile" src="@Url.Action("getProfileImage", "Profile", new { profileid = Model.UID })" alt="Your profile picture" />
+                }
+            </div>
+            <input id="inputProfilePic" name="inputProfilePic" type="file" accept="image/jpg,image/jpeg,image/png" />
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Save</button>
+            </div>
+        </div>        
+    }
+</div>
+
+<div id="add-edu" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Add Educational Degree</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("AddBackgroundEducation", "Profile", FormMethod.Post, new { @id = "form-education" }))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Degree
+                            <input id="edu_degree" name="edu_degree" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    School
+                            <input id="edu_school" name="edu_school" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Year
+                            <input id="edu_year" name="edu_year" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Add</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="add-lic" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Add Professional License</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("AddBackgroundLicense", "Profile", FormMethod.Post, new { @id = "form-license" }))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Name
+                            <input id="lic_name" name="lic_name" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    State
+                            <input id="lic_state" name="lic_state" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Number
+                            <input id="lic_number" name="lic_number" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Add</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="add-cert" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Add Certification</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("AddBackgroundCertification", "Profile", FormMethod.Post, new { @id = "form-certification" }))
+    {       
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Name
+                            <input id="cert_name" name="cert_name" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Authority
+                            <input id="cert_authority" name="cert_authority" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Number
+                            <input id="cert_number" name="cert_number" type="text" required="required" class="radius" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Add</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="add-spc" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Primary Specializations</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateSpecializationsPrimary", "Profile", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input id="input_spec" type="text" class="radius">
+                    </div>
+                    <div class="small-2 columns">
+                        <button id="btn_add_spec" class="button tiny radius postfix" type="button">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="txt_specializations" name="txt_specializations" style="width: 100%;" value="@String.Join(",", Model.Specializations.PrimarySpecializations)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>                          
+    }
+</div>
+
+<div id="add-pop" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Populations Served</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateSpecializationsPopulations", "Profile", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input id="input_pops" type="text" class="radius">
+                    </div>
+                    <div class="small-2 columns">
+                        <button id="btn_add_pops" class="button tiny radius postfix" type="button">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="txt_populations" name="txt_populations" style="width: 100%;" value="@String.Join(",", Model.Specializations.Populations)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>                           
+    }
+</div>
+
+<div id="add-trt" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Treatments</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateSpecializationsTreatments", "Profile", FormMethod.Post))
+    {                        
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input id="input_trts" type="text" class="radius">
+                    </div>
+                    <div class="small-2 columns">
+                        <button id="btn_add_trts" class="button tiny radius postfix" type="button">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="txt_treatments" name="txt_treatments" style="width: 100%;" value="@String.Join(",", Model.Specializations.Treatments)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>                       
+    }
+</div>
+
+<div id="add-mod" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Modalities</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateSpecializationsModalities", "Profile", FormMethod.Post))
+    {                        
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input id="input_mods" type="text" class="radius">
+                    </div>
+                    <div class="small-2 columns">
+                        <button id="btn_add_mods" class="button tiny radius postfix" type="button">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="txt_modalities" name="txt_modalities" style="width: 100%;" value="@String.Join(",", Model.Specializations.Modalities)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>                             
+    }
+</div>
+
+<div id="add-thr" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Therapies</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateSpecializationsTherapies", "Profile", FormMethod.Post))
+    {                        
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input id="input_thrp" type="text" class="radius">
+                    </div>
+                    <div class="small-2 columns">
+                        <button id="btn_add_thrp" class="button tiny radius postfix" type="button">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="txt_therapies" name="txt_therapies" style="width: 100%;" value="@String.Join(",", Model.Specializations.Therapies)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="button" class="button tiny radius cancel" data-parent="therapies">Cancel</button>
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>                        
+    }
+</div>
+
+<div id="add-adn" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Additional Details</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateAdditionalDetails", "Profile", FormMethod.Post))
+    {                       
+        <div class="row">
+            <div class="small-12 columns">
+                <textarea id="txt_details" name="txt_details" class="radius" rows="7">@Model.Specializations.Details</textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="update-financial-details" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Financial Details</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateFinancialDetails", "Profile", FormMethod.Post, new { @class = "form-horizontal" }))
+    {                        
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Rate</label>
+                <div class="row collapse">
+                    <div class="small-1 columns">
+                        <span class="prefix radius">$</span>
+                    </div>
+                    <div class="small-10 columns">
+                        <input id="fin_rate" name="fin_rate" type="text" value="@Model.Financial.Rate.ToString()" />
+                    </div>
+                    <div class="small-1 columns">
+                        <span class="postfix radius">.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>
+                    Rate Details
+                                            <textarea id="fin_rate_details" name="fin_rate_details" class="radius" rows="4">@Model.Financial.RateDetails</textarea>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>
+                    Insurance Details
+                                            <textarea id="fin_insurance_details" name="fin_insurance_details" class="radius" rows="4">@Model.Financial.ProviderDetails</textarea>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="update-financial-providers" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Financial Providers</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateFinancialProviders", "Profile", FormMethod.Post))
+    {                        
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input id="input_provs" type="text" class="radius">
+                    </div>
+                    <div class="small-2 columns">
+                        <button id="btn_add_provs" class="button tiny radius postfix" type="button">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <input id="txt_providers" name="txt_providers" style="width: 100%;" value="@String.Join(",", Model.Financial.Providers)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>                          
+    }
+</div>
+
+<div id="update-referring-details" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Update Referring Details</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("UpdateReferring", "Profile", FormMethod.Post))
+    {                        
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    How to Refer to Me
+                                    <textarea id="txt_howto" name="txt_howto" class="radius" rows="5">@Model.Referring.HowTo</textarea>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label>
+                    Typical Profile of Referred Client/Patient
+                                    <textarea id="txt_typical" name="txt_typical" class="radius" rows="5">@Model.Referring.TypicalProfile</textarea>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="submit" class="button tiny radius right">Update</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="add-docs" class="reveal-modal" data-reveal="">
+    <h5 class="subheader">Add Documents</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("AddProfileDocuments", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <table id="documents-table">
+                    <thead>
+                        <tr>
+                            <td>
+                                <input type="button" id="btnAddDocument" value="Add Document" class="button tiny radius" />
+                            </td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>        
+        <div class="row">
+        </div>  
+        <div class="row">
+            <div class="small-12 columns">
+                <label id="errormessage" class="notification right"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-6 columns">
+                <h6 class="subheader right">When you are ready press Upload</h6>
+            </div>
+            <div class="small-6 columns">
+                <button type="submit" class="button tiny radius right save-button">Upload</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="confirm-delete-doc" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Document?</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteDocument", "Profile", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <label class="validation-summary-errors"><b>Are you sure you want to delete this document?</b></label>
+                <label id="file-name"></label>
+                <input id="hdn_document_id" name="hdn_document_id" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-6 columns">
+                <button type="submit" class="button tiny radius secondary cancel-delete-doc-button">No</button>
+            </div>
+            <div class="small-6 columns">
+                <button type="submit" class="button tiny radius alert right save-button">Yes</button>
+            </div>
+        </div>
+    }
+</div>
+
+<ol class="joyride-list" data-joyride="">
+    <li data-id="step1" data-text="Next" data-options="tip_location: right; prev_button: false; tip_animation:fade">
+        <p>You can update various aspects of your profile.  These are the different categories that belong to your professional profile for other members of Bearhug to see.</p>
+    </li>
+    <li data-id="step2" data-class="custom so-awesome" data-text="Next" data-prev-text="Prev" data-options="tip_location: left; tip_animation:fade">
+        <p>Click on the these menus for each category to make updates.</p>
+    </li>    
+    <li data-id="step3" data-class="custom so-awesome" data-text="Next" data-prev-text="Prev" data-options="tip_location: top; tip_animation:fade">
+        <p>You have a fax number!  This is courtesy of Bearhug.  This will allow you to transmit documents to your Bearhug account.  After faxing you can view and save the documents using the 'Documents' at the top menu.</p>
+    </li>
+    <li data-button="End" data-prev-text="Prev" data-options="tip_location: top; tip_animation:fade">
+        <p>At the bottom you can upload professional marketing documents for others to view.</p>
+    </li>
+</ol>
+
+<input id="hdn_state" type="hidden" value="@Model.State" />
+<script src="~/Scripts/jquery/jquery.maskedinput.js" type="text/javascript"></script>
+<script src="~/Scripts/select2/select2.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-profile').addClass('active');
+
+        $('.help-button').click(function (e) {
+            $(document).foundation({
+                joyride: {
+                    template: {
+                        button: '<a href="#" class="tiny radius button joyride-next-tip"></a>',
+                        prev_button: '<a href="#" class="tiny radius button joyride-prev-tip"></a>'
+                    }
+                }
+            }).foundation('joyride', 'start');
+        });
+
+        $("#user_phone").mask("(999) 999-9999", { placeholder: " " });
+
+        if ($('#hdn_state').val() != null) {
+            if ($('#hdn_state').val().length > 0) {
+                $('#user_state option[value="' + $('#hdn_state').val() + '"]').attr('selected', 'selected');
+            }
+        }
+
+        $('.delete-doc').click(function (e) {
+            e.preventDefault();
+            $('#file-name').text($(this).data('docname'));
+            $('#hdn_document_id').val($(this).data('docid'));
+            $('#confirm-delete-doc').foundation('reveal', 'open');
+        });
+
+        $('.cancel-delete-doc-button').click(function (e) {
+            e.preventDefault();
+            $('#confirm-delete-doc').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#confirm-delete-doc', function () {
+            $('#file-name').text('');
+            $('#hdn_document_id').val('');
+        });
+
+        $("#btnAddDocument").click(function (e) {
+            e.preventDefault();
+            var itemIndex = $('#documents-table tbody tr:last').data('idx') == undefined ? 0 : $('#documents-table tbody tr:last').data('idx') + 1;
+            //var newItem =
+            //    $('<tr id="row_ProfileDocuments_' + itemIndex + '" class="form-horizontal" data-idx="' + itemIndex + '">' +
+            //            '<td class="x">' +
+            //                '<a id="Remove_ProfileDocuments_' + itemIndex + '" class="btn" href="#"><i class="icon-remove"></i></a>' +
+            //            '</td>' +
+            //            '<td>' +
+            //                '<div class="fileupload fileupload-new" data-provides="fileupload">' +
+            //                    '<div class="input-append">' +
+            //                        '<div class="uneditable-input span2"><i class="icon-file fileupload-exists"></i><span class="fileupload-preview"></span></div>' +
+            //                        '<span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span><input type="file" class="pdoc" id="ProfileDocuments_' + itemIndex + '__UploadedFile" name="ProfileDocuments[' + itemIndex + '].UploadedFile" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>' +
+            //                    '</div>' +
+            //                '</div>' +
+            //            '</td>' +
+            //        '</tr>');
+            //$('#documents-table tbody').append(newItem);
+            $('#documents-table tbody').append(
+                $('<tr id="row_NewDocuments_' + itemIndex + '" class="form-horizontal" data-idx="' + itemIndex + '"></tr>').append(
+                    $('<td class="x"></td>').append(
+                        $('<a id="Remove_NewDocuments_' + itemIndex + '" class="btn" href="#"><i class="fi-x"></i></a>').click(function (e) {
+                            e.preventDefault();
+                            $(this).parents().eq(1).remove();
+                            getFileSizeTotal();
+                        })
+                    ),
+                    $('<td class="form-horizontal"></td>').append(
+                        $('<div class="row"></div>').append(
+                            $('<div class="small-12 columns"></div>').append(
+                                $('<div class="row collapse"></div>').append(
+                                    $('<div class="small-6 columns"><input class="uploaded_file_text" name="uploaded_file_text" disabled="disabled" type="text" /></div>'),
+                                    $('<div class="small-2 columns end"></div>').append(
+                                        $('<div class="fileUpload button radius postfix"></div>').append(
+                                            $('<span>Upload</span>'),
+                                            $('<input id="ProfileDocuments_' + itemIndex + '__UploadedFile" name="ProfileDocuments[' + itemIndex + '].UploadedFile" type="file" class="pdoc" />').change(function () {
+                                                if ($(this).val().length > 0) {
+                                                    $(this).parents().eq(1).prev().find('.uploaded_file_text').val($(this).prop('files')[0].name);
+                                                    getFileSizeTotal();
+                                                }
+                                                else {
+                                                    $(this).parents().eq(1).prev().find('.uploaded_file_text').val('');
+                                                    getFileSizeTotal();
+                                                }
+                                            })
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+            $('#Remove_ProfileDocuments_' + itemIndex).click(function (e) {
+                e.preventDefault();
+                $('#row_ProfileDocuments_' + itemIndex).remove();
+                getFileSizeTotal();
+            });
+            $('#ProfileDocuments_' + itemIndex + '__UploadedFile').change(function () {
+                getFileSizeTotal();
+            });
+        });
+
+        $("#txt_specializations").select2({ tags: [] });
+        $("#txt_populations").select2({ tags: [] });
+        $("#txt_treatments").select2({ tags: [] });
+        $("#txt_modalities").select2({ tags: [] });
+        $("#txt_therapies").select2({ tags: [] });
+        $("#txt_providers").select2({ tags: [] });
+
+        $('#btn_add_spec').click(function () {
+            var data = $("#txt_specializations").select2("data");
+            data.push({ id: $('#input_spec').val(), text: $('#input_spec').val() });
+            $("#txt_specializations").select2("data", data);
+            $('#input_spec').val("");
+        });
+        $('#btn_add_pops').click(function () {
+            var data = $("#txt_populations").select2("data");
+            data.push({ id: $('#input_pops').val(), text: $('#input_pops').val() });
+            $("#txt_populations").select2("data", data);
+            $('#input_pops').val("");
+        });
+        $('#btn_add_trts').click(function () {
+            var data = $("#txt_treatments").select2("data");
+            data.push({ id: $('#input_trts').val(), text: $('#input_trts').val() });
+            $("#txt_treatments").select2("data", data);
+            $('#input_trts').val("");
+        });
+        $('#btn_add_mods').click(function () {
+            var data = $("#txt_modalities").select2("data");
+            data.push({ id: $('#input_mods').val(), text: $('#input_mods').val() });
+            $("#txt_modalities").select2("data", data);
+            $('#input_mods').val("");
+        });
+        $('#btn_add_thrp').click(function () {
+            var data = $("#txt_therapies").select2("data");
+            data.push({ id: $('#input_thrp').val(), text: $('#input_thrp').val() });
+            $("#txt_therapies").select2("data", data);
+            $('#input_thrp').val("");
+        });
+        $('#btn_add_provs').click(function () {
+            var data = $("#txt_providers").select2("data");
+            data.push({ id: $('#input_provs').val(), text: $('#input_provs').val() });
+            $("#txt_providers").select2("data", data);
+            $('#input_provs').val("");
+        });
+
+        var $bodyWrapper = $('.body-wrapper'),
+            $listSectionHeader = $('.scroll-container-header'),
+            $listSectionHeaderAnchor = $('.scroll-container-header-anchor');
+
+        $bodyWrapper.scroll(function () {
+            var window_top = $bodyWrapper.scrollTop();
+            var div_top = $listSectionHeaderAnchor.offset().top;
+            var header_width = $listSectionHeader.width();
+            if (window_top > div_top) {
+                // Make the div sticky.
+                $listSectionHeader.addClass('sticky');
+                $listSectionHeader.width(header_width);
+                $listSectionHeaderAnchor.height($listSectionHeader.height());
+            }
+            else {
+                // Unstick the div.
+                $listSectionHeader.removeClass('sticky');
+                $listSectionHeaderAnchor.height(0);
+            }
+            checkSections();
+        });
+
+        function checkSections() {
+            var sections = $('.scroll-container-scroller').find('.scroll-section');
+            if ($bodyWrapper.scrollTop() + $bodyWrapper.innerHeight() >= $bodyWrapper[0].scrollHeight) {
+                console.log($(sections[sections.length - 1]).attr('id'));
+                $('.sub-nav dd').removeClass('active');
+                $('.sub-nav a[href="#' + $(sections[sections.length - 1]).attr('id') + '"').parent().addClass('active');
+            }
+            else {
+                for (i = 0; i < sections.length; i++) {
+                    if (isScrolledIntoView(sections[i])) {
+                        console.log($(sections[i]).attr('id'));
+                        $('.sub-nav dd').removeClass('active');
+                        $('.sub-nav a[href="#' + $(sections[i]).attr('id') + '"').parent().addClass('active');
+                        break;
+                    }
+                }
+            }
+        }
+
+        function isScrolledIntoView(elem) {
+            var docViewTop = $('.scroll-container-header').scrollTop();
+            var docViewBottom = docViewTop + $('.scroll-container-header').height();
+            console.log($bodyWrapper.scrollTop() + $bodyWrapper.innerHeight() + ':' + $bodyWrapper[0].scrollHeight);
+
+            var elem = $(elem);
+            var elemoffset = $(elem).offset();
+            var top = elemoffset.top;
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + $(elem).height() - 60;
+            //console.log($(elem).attr('id') + ' - ' + elemBottom + ":" + docViewBottom);
+
+            return (elemBottom >= docViewBottom);
+        }
+
+        function getFileSizeTotal() {
+            var fileSize = 0;
+            $('#documents-table').find('.pdoc').each(function () {
+                if (this.files.length > 0) {
+                    fileSize += this.files[0].size;
+                }
+            });
+            var mbsCurrent = (fileSize / 1048576).toFixed(2);
+            var mbsRemain = ((20971520 - (fileSize / 1048576)) / 1048576).toFixed(1);
+            if (fileSize == 0) {
+                $('#errormessage').text('');
+                $('.save-button').removeAttr("disabled");
+            }
+            else if (fileSize >= 20971520) {
+                $('#errormessage').text(mbsCurrent + 'MB uploaded.  You have exceeded the maximum allowed at this time.');
+                $('.save-button').attr("disabled", "disabled");
+            }
+            else {
+                $('#errormessage').text(mbsCurrent + 'MB uploaded.  ' + mbsRemain + 'MB remaining.');
+                $('.save-button').removeAttr("disabled");
+            }
+        }
+
+    });
+</script>
+
+

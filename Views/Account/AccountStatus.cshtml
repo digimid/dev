@@ -1,0 +1,7 @@
+﻿@model bearhug.Models.AccountStatus
+@{
+    ViewBag.Title = "Account Status";
+}
+<h4 class="subheader">Account Status</h4>
+<p>@Model.Status</p>
+<p>Click @Html.ActionLink("here", "Login", "Account") to go back to the login page.</p>

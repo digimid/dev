@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="https://www.assuresign.net/Services/DocumentNOW/Envelopes" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.assuresign.net/Services/DocumentNOW/Envelopes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="https://www.assuresign.net/Services/DocumentNOW/Envelopes/Imports">
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd16" namespace="https://www.assuresign.net/Services/DocumentNOW/Envelopes" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd0" namespace="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd1" namespace="http://microsoft.com/wsdl/types/" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd2" namespace="https://www.assuresign.net/Services/DocumentNOW/Submit" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd3" namespace="https://www.assuresign.net/Services/DocumentNOW/LookupSession" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd4" namespace="https://www.assuresign.net/Services/DocumentNOW/CheckStatus" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd5" namespace="https://www.assuresign.net/Services/DocumentNOW/ViewHistory" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd6" namespace="https://www.assuresign.net/Services/DocumentNOW/ListSignatories" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd7" namespace="https://www.assuresign.net/Services/DocumentNOW/ListTemplates" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd8" namespace="https://www.assuresign.net/Services/DocumentNOW/ListParameters" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd9" namespace="https://www.assuresign.net/Services/DocumentNOW/RetrieveTemplateInfo" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd10" namespace="https://www.assuresign.net/Services/DocumentNOW/Expire" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd11" namespace="https://www.assuresign.net/Services/DocumentNOW/Cancel" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd12" namespace="https://www.assuresign.net/Services/DocumentNOW/ListNotifications" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd13" namespace="https://www.assuresign.net/Services/DocumentNOW/ResendNotification" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd14" namespace="https://www.assuresign.net/Services/DocumentNOW/UpdateSignatory" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd15" namespace="https://www.assuresign.net/Services/DocumentNOW/GetDocumentValues" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IEnvelopeService_CreateEnvelope_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateEnvelope" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_CreateEnvelope_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateEnvelopeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_CloseEnvelope_InputMessage">
+    <wsdl:part name="parameters" element="tns:CloseEnvelope" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_CloseEnvelope_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CloseEnvelopeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_CancelEnvelope_InputMessage">
+    <wsdl:part name="parameters" element="tns:CancelEnvelope" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_CancelEnvelope_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelEnvelopeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_ListEnvelopeDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListEnvelopeDocuments" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_ListEnvelopeDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListEnvelopeDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_CheckEnvelopeStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckEnvelopeStatus" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_CheckEnvelopeStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckEnvelopeStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_DownloadEnvelopeDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadEnvelopeDocuments" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_DownloadEnvelopeDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadEnvelopeDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_ListEnvelopeTemplates_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListEnvelopeTemplates" />
+  </wsdl:message>
+  <wsdl:message name="IEnvelopeService_ListEnvelopeTemplates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListEnvelopeTemplatesResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IEnvelopeService">
+    <wsdl:operation name="CreateEnvelope">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CreateEnvelope" message="tns:IEnvelopeService_CreateEnvelope_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CreateEnvelopeResponse" message="tns:IEnvelopeService_CreateEnvelope_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CloseEnvelope">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CloseEnvelope" message="tns:IEnvelopeService_CloseEnvelope_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CloseEnvelopeResponse" message="tns:IEnvelopeService_CloseEnvelope_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelEnvelope">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CancelEnvelope" message="tns:IEnvelopeService_CancelEnvelope_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CancelEnvelopeResponse" message="tns:IEnvelopeService_CancelEnvelope_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeDocuments">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeDocuments" message="tns:IEnvelopeService_ListEnvelopeDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeDocumentsResponse" message="tns:IEnvelopeService_ListEnvelopeDocuments_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckEnvelopeStatus">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CheckEnvelopeStatus" message="tns:IEnvelopeService_CheckEnvelopeStatus_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/CheckEnvelopeStatusResponse" message="tns:IEnvelopeService_CheckEnvelopeStatus_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadEnvelopeDocuments">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/DownloadEnvelopeDocuments" message="tns:IEnvelopeService_DownloadEnvelopeDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/DownloadEnvelopeDocumentsResponse" message="tns:IEnvelopeService_DownloadEnvelopeDocuments_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListEnvelopeTemplates">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeTemplates" message="tns:IEnvelopeService_ListEnvelopeTemplates_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Envelopes/IEnvelopeService/ListEnvelopeTemplatesResponse" message="tns:IEnvelopeService_ListEnvelopeTemplates_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

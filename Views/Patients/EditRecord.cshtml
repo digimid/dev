@@ -1,0 +1,15 @@
+﻿@model bearhug.Models.CCD
+@{
+    ViewBag.Title = "EditRecord";
+}
+
+<h4 class="subheader">Edit Patient Record</h4>
+@using (Html.BeginForm("EditRecord", "Patients", new { @patient_id = Model.Patient.Id, @patientid = Model.Patient.PatientId, @recordid = Model.Patient.RecordId, @release_id = Model.ReleaseId }, FormMethod.Post, new { @id = "edit-patient-record-form" }))
+{
+    @bearhug.Helpers.HtmlHelperXmlExtensions.RenderXmlMemory(Model.CCD_XML_File, Model.StylesheetFilename, Model.Parameters)
+    <div class="row">        
+        <div class="small-12 columns">
+            <button type="submit" class="button tiny radius right">Save</button>
+        </div>
+    </div>    
+}

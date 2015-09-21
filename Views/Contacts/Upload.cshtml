@@ -1,0 +1,241 @@
+﻿@model bearhug.ContactsServiceReference.ContactList
+@{
+    ViewBag.Title = "Contact Management";
+}
+
+<h4 class="subheader">Create Contact</h4>
+<ul class="tabs">
+    <li class="tab-title">@Html.ActionLink("Contact List", "Index", "Contacts")</li>
+    <li class="tab-title">@Html.ActionLink("Organize Contacts", "Organize", "Contacts")</li>
+    <li class="tab-title">@Html.ActionLink("Add Contact", "Add", "Contacts")</li>
+    <li class="tab-title active"><a href="#upload">Upload Contact List</a></li>
+</ul>
+<div class="tabs-content min-tabs-content">
+    <div class="content active" id="add-contact">
+
+        @if (Model != null)
+        {
+            <div class="row">
+                <div class="small-10 columns">
+                    <h4>Validation Results <small>Scroll to the bottom to save after you are satisfied with the results.</small></h4>
+                </div>
+                <div class="small-2 columns">
+                    @Html.ActionLink("Cancel", "Upload", null, new { @class = "button tiny radius right alert" })
+                </div>
+            </div>            
+            <div class="validation-results">
+                <hr />
+                @if (Model.NonMembers.Count != 0)
+                {   
+                    <h6 class="subheader"><i>The following contacts are ready to be added to your contact list</i></h6>
+                    <table>
+                        <tr>
+                            <th>FirstName</th>
+                            <th>Initial</th>
+                            <th>LastName</th>
+                            <th>Address1</th>
+                            <th>Address2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Title</th>
+                            <th>Organization</th>
+                        </tr>
+                        @foreach (bearhug.ContactsServiceReference.NonMember nm in (List<bearhug.ContactsServiceReference.NonMember>)Model.NonMembers)
+                        {
+                            <tr>
+                                <td>@nm.FirstName</td>
+                                <td>@nm.Initial</td>
+                                <td>@nm.LastName</td>
+                                <td>@nm.Address1</td>
+                                <td>@nm.Address2</td>
+                                <td>@nm.City</td>
+                                <td>@nm.State</td>
+                                <td>@nm.Phone</td>
+                                <td>@nm.Email</td>
+                                <td>@nm.Title</td>
+                                <td>@nm.Organization</td>
+                            </tr>
+                        }
+
+                    </table>
+                }
+                <hr />
+                @if (Model.Members.Count != 0)
+                {
+                    <h6 class="subheader"><i>The following contacts are already members of Bearhug and will be added to your contacts with their information.</i></h6>
+                    <table>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                        @foreach (bearhug.ContactsServiceReference.Member m in (List<bearhug.ContactsServiceReference.Member>)Model.Members)
+                        {
+                            <tr>
+                                <td>@m.FirstName</td>
+                                <td>@m.LastName</td>
+                                <td>@m.ContactID</td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <hr />
+                @if (ViewBag.MembersAlreadyContacts.Count != 0)
+                {
+                    <h6 class="subheader"><i>The following contacts are already in your contact list and will not be added.</i></h6>
+                    <table>
+                        @foreach (bearhug.ContactsServiceReference.Member m in (List<bearhug.ContactsServiceReference.Member>)ViewBag.MembersAlreadyContacts)
+                        {
+                            <tr>
+                                <td>@m.FirstName</td>
+                                <td>@m.LastName</td>
+                            </tr>
+                        }
+
+                        @foreach (bearhug.ContactsServiceReference.NonMember nm in (List<bearhug.ContactsServiceReference.NonMember>)ViewBag.NonMembersAlreadyContacts)
+                        {
+                            <tr>
+                                <td>@nm.FirstName</td>
+                                <td>@nm.LastName</td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <hr />
+                @if (ViewBag.InvalidContactsList.Count != 0)
+                {
+                    <h6 class="subheader"><i>The following contacts had either empty required fields or fields with invalid formats and will not be added.</i></h6>
+                    <table>
+                        <tr>
+                            <th>FirstName</th>
+                            <th>Initial</th>
+                            <th>LastName</th>
+                            <th>Address1</th>
+                            <th>Address2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Title</th>
+                            <th>Organization</th>
+                        </tr>
+
+                        @foreach (bearhug.ContactsServiceReference.NonMember nm in (List<bearhug.ContactsServiceReference.NonMember>)ViewBag.InvalidContactsList)
+                        {
+                            <tr>
+                                <td>@nm.FirstName</td>
+                                <td>@nm.Initial</td>
+                                <td>@nm.LastName</td>
+                                <td>@nm.Address1</td>
+                                <td>@nm.Address2</td>
+                                <td>@nm.City</td>
+                                <td>@nm.State</td>
+                                <td>@nm.Phone</td>
+                                <td>@nm.Email</td>
+                                <td>@nm.Title</td>
+                                <td>@nm.Organization</td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <hr />
+            </div>          
+            
+                using (Html.BeginForm("UploadComplete", "Contacts", FormMethod.Post))
+                {
+                    for (int i = 0; i < Model.NonMembers.Count; i++)
+                    {
+            @Html.HiddenFor(m => m.NonMembers[i].FirstName);
+            @Html.HiddenFor(m => m.NonMembers[i].Initial);
+            @Html.HiddenFor(m => m.NonMembers[i].LastName);
+            @Html.HiddenFor(m => m.NonMembers[i].Address1);
+            @Html.HiddenFor(m => m.NonMembers[i].Address2);
+            @Html.HiddenFor(m => m.NonMembers[i].City);
+            @Html.HiddenFor(m => m.NonMembers[i].State);
+            @Html.HiddenFor(m => m.NonMembers[i].Zip);
+            @Html.HiddenFor(m => m.NonMembers[i].Title); 
+            @Html.HiddenFor(m => m.NonMembers[i].Organization); 
+            @Html.HiddenFor(m => m.NonMembers[i].Phone); 
+            @Html.HiddenFor(m => m.NonMembers[i].Email);
+            @Html.HiddenFor(m => m.NonMembers[i].ContactID);
+                    }
+                    for (int i = 0; i < Model.Members.Count; i++)
+                    {
+            @Html.HiddenFor(m => m.Members[i].ContactID);
+                    }
+            <div class="row">
+                <div class="small-12 columns">
+                    
+                </div>
+                <div class="small-6 columns">
+                    <input type="submit" value="Save Contacts" class="button tiny radius right" />
+                </div>
+            </div>      
+                }
+        }
+        else
+        {
+            <div class="row">
+                <div class="small-6 columns">
+                    <a href="~/Files/UploadTemplate.csv" target="_blank" class="button small radius">Download Template</a>
+                </div>
+                <div class="small-6 columns">
+                    @using (Html.BeginForm("Upload", "Contacts", FormMethod.Post, new { @id = "upload-new-document-form", @enctype = "multipart/form-data" }))
+                    {
+                        <div class="row collapse">
+                            <div class="small-6 columns">
+                                <input id="file_text" name="file_text" disabled="disabled" type="text" />
+                            </div>
+                            <div class="small-2 columns">
+                                <div class="fileUpload button radius postfix">
+                                    <span>Upload</span>
+                                    <input id="file" name="file" type="file" accept="text/csv" required="required" />
+                                </div>
+                            </div>
+                            <div class="small-2 columns end">
+                                <button type="button" class="button tiny radius alert postfix btn-remove-file">Remove</button>
+                            </div>                            
+                        </div>
+                        <div class="row">
+                            <div class="small-10 columns">
+                                <input type="submit" value="Submit" class="button tiny radius right btn-submit-file" />
+                            </div>
+                        </div>                                 
+                    }
+                </div>
+            </div>
+            <div class="row">
+                
+            </div>                                        
+        }
+
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#file').change(function () {
+            if ($(this).val().length > 0) {
+                $('.fileUpload').removeClass('radius');
+                $('.btn-submit-file').show();
+                $('.btn-remove-file').show();
+                $('#file_text').val($(this).prop('files')[0].name);
+            }
+            else {
+                $('.fileUpload').addClass('radius');
+                $('.btn-submit-file').hide();
+                $('.btn-remove-file').hide();
+                $('#file_text').val('');
+            }
+        });
+
+        $('.btn-remove-file').click(function (e) {
+            $('#upload-new-document-form')[0].reset();
+            $('.fileUpload').addClass('radius');
+            $('.btn-submit-file').hide();
+            $('.btn-remove-file').hide();
+        });
+    });
+</script>

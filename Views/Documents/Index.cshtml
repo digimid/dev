@@ -1,0 +1,259 @@
+﻿@model bearhug.ProfileServiceReference.ProfileDocuments
+@{
+    ViewBag.Title = "Documents";
+}
+
+@{bool hasNewFax = false;}
+@if (Model.UploadedDocuments.Any(item => item.DocumentType == bearhug.ProfileServiceReference.BearhugDocumentType.fax) && Model.UploadedDocuments.Count > 0)
+{
+    foreach (bearhug.ProfileServiceReference.ProfileUploadedDocument pud in Model.UploadedDocuments)
+    {
+        if (pud.DocumentType == bearhug.ProfileServiceReference.BearhugDocumentType.fax)
+        {
+            if (pud.Type == "recent")
+            {
+                hasNewFax = true;
+            }
+        }
+    }
+}
+<h4 class="subheader">Documents</h4>
+<ul class="tabs vertical" data-tab="">
+    <li class="tab-title active"><a href="#general" data-toggle="tab">General</a></li>
+    @if (hasNewFax)
+    {
+        <li class="tab-title"><a href="#faxes" data-toggle="tab"><span class="badge badge-warning">!</span> Faxes</a></li>
+    }
+    else
+    {
+        <li class="tab-title"><a href="#faxes" data-toggle="tab">Faxes</a></li>
+    }
+</ul>
+<div class="tabs-content vertical">
+
+    <div class="content active" id="general">
+        @using (Html.BeginForm("Upload", "Documents", FormMethod.Post, new { @id = "upload-new-document-form", @enctype = "multipart/form-data" }))
+        {
+            <fieldset>
+                <legend>Add Document</legend>
+                <div class="row">
+                    <div class="small-6 columns">
+                        <div class="row collapse">
+                            <div class="small-6 columns">
+                                <input id="uploaded_file_text" name="uploaded_file_text" disabled="disabled" type="text" />
+                            </div>
+                            <div class="small-2 columns">
+                                <div class="fileUpload button radius postfix">
+                                    <span>Upload</span>
+                                    <input id="uploaded_file" name="uploaded_file" type="file" />
+                                </div>
+                            </div>
+                            <div class="small-2 columns end">
+                                <button type="button" class="button tiny radius alert postfix btn-remove-file">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="small-3 columns end">
+                        <button type="submit" class="button tiny radius btn-submit-file">Save</button>
+                    </div>
+                </div>
+            </fieldset>                                                         
+        }
+        @if (Model.UploadedDocuments.Any(item => item.DocumentType == bearhug.ProfileServiceReference.BearhugDocumentType.uploads) && Model.UploadedDocuments.Count > 0)
+        {
+            <table class="documents-table">
+                <thead>
+                    <tr>
+                        <th class="docs-name">Name</th>
+                        <th class="docs-view">Actions</th>
+                        <th class="docs-blocks"></th>
+                        <th class="docs-delete"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (bearhug.ProfileServiceReference.ProfileUploadedDocument pud in Model.UploadedDocuments)
+                    {
+                        if (pud.DocumentType == bearhug.ProfileServiceReference.BearhugDocumentType.uploads)
+                        {
+                        <tr>
+                            <td class="docs-name">@pud.Name</td>
+                            <td class="docs-view">
+                                @Html.ActionLink("View", "GetUploadedDocument", new { @docid = pud.Id, @doctype = pud.Type })
+                            </td>
+                            <td class="docs-blocks">
+                                @if (pud.Type == "application/pdf" || pud.Type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || pud.Type == "application/msword")
+                                {
+                                    string hasBlocks = "";
+                                    if (pud.FormFields != null)
+                                    {
+                                        if (pud.FormFields.Count > 0)
+                                        {
+                                            hasBlocks = "Edit Signature Blocks";
+                                        }
+                                        else
+                                        {
+                                            hasBlocks = "Add Signature Blocks";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        hasBlocks = "Add Signature Blocks";
+                                    }
+                                  
+                                    @Html.ActionLink(@hasBlocks, "SignatureBlocks", new { @docid = pud.Id, @doctype = pud.Type })
+                                }
+                            </td>
+                            <td class="docs-delete">
+                                <button class="button tiny radius alert right doc-delete" type="button"><i class="icon-trash"></i>Delete</button>
+                                <label class="lbl-doc-delete right">
+                                    Are you sure?
+                                        @Html.ActionLink("Yes", "DeleteUploadedDocument", new { @docid = pud.Id }, new { @class = "button tiny radius alert" })
+                                    <button class="button tiny radius doc-cancel-delete" type="button">No</button>
+                                </label>
+                            </td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+    <div class="content" id="faxes">
+        <div class="row">
+            <div class="small-12 columns">
+                <label>Your fax number: <b><i>@System.Text.RegularExpressions.Regex.Replace(Model.FaxNumber, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3")</i></b></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <label><b>Note</b>: Any document in the list below will not be available to add to transactions, messages, etc. until they have been saved to your profile.  To do this simply click the button "Save to Profile" and the document will show up in the documents tab to the left.  The original fax document in the list below will not be deleted until you click the "Delete" button.</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                @if (Model.UploadedDocuments.Any(item => item.DocumentType == bearhug.ProfileServiceReference.BearhugDocumentType.fax) && Model.UploadedDocuments.Count > 0)
+                {
+                    <table class="documents-table">
+                        <thead>
+                            <tr>
+                                <th class="docs-name">Name</th>
+                                <th class="docs-view">Actions</th>
+                                <th class="docs-blocks"></th>
+                                <th class="docs-delete"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (bearhug.ProfileServiceReference.ProfileUploadedDocument pud in Model.UploadedDocuments)
+                            {
+                                if (pud.DocumentType == bearhug.ProfileServiceReference.BearhugDocumentType.fax)
+                                {
+                                <tr>
+                                    @if (pud.Type == "recent")
+                                    {
+                                        <td class="docs-name"><span class="badge badge-warning">!</span> @pud.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="docs-name">@pud.Name</td>
+                                    }
+                                    <td class="docs-view">
+                                        @Html.ActionLink("View", "GetFaxDocument", new { @fid = pud.Id, @fname = pud.Name })
+                                    </td>
+                                    <td class="docs-blocks">
+                                        <button class="button tiny radius success right doc-save" type="submit">Save to Documents</button>
+                                        <div class="row save-doc-to-profile">
+                                            <div class="small-12 columns">
+                                                @using (Html.BeginForm("SaveToProfile", "Documents", FormMethod.Post))
+                                                {                                            
+                                                    <div class="row">
+                                                        <div class="small-12 columns">
+                                                            <div class="row collapse postfix-radius">
+                                                                <div class="small-8 columns">
+                                                                    <input class="input_file_name" name="input_file_name" type="text" required="required" placeholder="Enter file name">
+                                                                </div>
+                                                                <div class="small-2 columns">
+                                                                    <button class="button tiny postfix" type="submit">Save</button>
+                                                                    <input type="hidden" name="hnd_fid" value="@pud.Id" />
+                                                                </div>
+                                                                <div class="small-2 columns">
+                                                                    <button class="button tiny postfix secondary radius doc-cancel-save" type="button">Cancel</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                        
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="docs-delete">
+                                        <button class="button tiny radius alert right doc-delete" type="button">Delete</button>
+                                        <label class="lbl-doc-delete right">
+                                            Are you sure?
+                                        @Html.ActionLink("Yes", "DeleteFaxDocument", new { @fid = pud.Id, @fname = pud.Name }, new { @class = "button tiny radius alert" })
+                                            <button class="button tiny radius doc-cancel-delete" type="button">No</button>
+                                        </label>
+                                    </td>
+                                </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-documents').addClass('active');
+
+        $('.doc-delete').click(function (e) {
+            e.preventDefault();
+            $(this).hide();
+            $(this).siblings('.lbl-doc-delete').show();
+        });
+
+        $('.doc-cancel-delete').click(function (e) {
+            e.preventDefault();
+            $(this).parent().hide();
+            $(this).parent().siblings('.doc-delete').show();
+        });
+
+        $('#uploaded_file').change(function () {
+            if ($(this).val().length > 0) {
+                $('.fileUpload').removeClass('radius');
+                $('.btn-submit-file').show();
+                $('.btn-remove-file').show();
+                $('#uploaded_file_text').val($(this).prop('files')[0].name);
+            }
+            else {
+                $('.fileUpload').addClass('radius');
+                $('.btn-submit-file').hide();
+                $('.btn-remove-file').hide();
+                $('#uploaded_file_text').val('');
+            }
+        });
+
+        $('.btn-remove-file').click(function (e) {
+            $('#upload-new-document-form')[0].reset();
+            $('.fileUpload').addClass('radius');
+            $('.btn-submit-file').hide();
+            $('.btn-remove-file').hide();
+        });
+
+        $('.doc-save').click(function (e) {
+            e.preventDefault();
+            $(this).hide();
+            $(this).siblings('.save-doc-to-profile').show();
+        });
+
+        $('.doc-cancel-save').click(function (e) {
+            e.preventDefault();
+            $(this).parents().eq(6).hide();
+            $(this).parents().eq(6).siblings('.doc-save').show();
+        });
+    });
+</script>

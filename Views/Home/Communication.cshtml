@@ -1,0 +1,224 @@
+﻿@model bearhug.Models.OrganizationConstruct
+@{
+    ViewBag.Title = "Communication";
+}
+
+<h4 class="subheader">@Model.Profile.FirstName @Model.Profile.LastName's Dashboard 
+    @if (Model.HasNewFax)
+    {
+        <small class="newFaxMessage"><span class="badge badge-warning">!</span> <b>You have a new fax.  Please click on the documents tab above to view.</b></small>
+    }
+</h4>
+
+<ul class="tabs">
+    <li class="tab-title">@Html.ActionLink("Reminders", "Index", "Home")</li>
+    <li class="tab-title active"><a id="communication-tab" href="#communication">Communication</a></li>
+    <li class="tab-title">@Html.ActionLink("Contacts", "Contacts", "Home")</li>
+    <li class="tab-title">@Html.ActionLink("Teams", "Teams", "Home")</li>
+    @if (User.Identity.Name == Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Reports", "Reports", "Home")</li>
+    }
+    @if (User.Identity.Name != Model.Organization.Admin)
+    {
+        <li class="tab-title">@Html.ActionLink("Emergency Access", "EmergencyAccess", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Patients (Admin Access)", "AdminPatients", "Home")</li>
+    }
+    @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+    {
+        <li class="tab-title">@Html.ActionLink("Audits (Admin Access)", "AdminAudits", "Home")</li>
+    }
+    @if (User.Identity.Name == "jesseglascock@gmail.com")
+    {
+        <li class="tab-title">@Html.ActionLink("Admin", "Admin", "Home")</li>
+    }
+</ul>
+
+<div class="tabs-content home-tabs-content">
+    <div class="content active" id="communication">
+        <div class="row">
+            <div class="small-12 columns">
+
+                <ul class="tabs" data-tab="">
+                    <li class="tab-title active"><a href="#recent-messages">Messages</a></li>
+                </ul>
+
+                <div class="tabs-content">
+                    <div class="content active" id="recent-messages">
+                        @if (Model.Dashboard.RecentMessages.Count > 0)
+                        {
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="open"></th>
+                                        <th class="img-new"></th>
+                                        <th class="img-attachment"></th>
+                                        <th class="from">From</th>
+                                        <th class="subject">Subject</th>
+                                        <th class="text">Message</th>
+                                        <th class="datetime">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (bearhug.OrganizationServiceReference.MessageGroup msggrp in Model.Dashboard.RecentMessages)
+                                    {
+                                        if (msggrp.GroupId == "none" && msggrp.GroupName == "none")
+                                        {
+                                        <tr>
+                                            <td class="open">
+                                                <a class="btn btn-link btn-mini" href="@Url.Action("OpenedMessage", "Messaging", new { mid = msggrp.MessageId })"></a>
+                                            </td>
+                                            @{bool hasUpdate = false; bool hasAttachment = false;
+                                            }
+                                            @foreach (bearhug.OrganizationServiceReference.Message msg in msggrp.Messages)
+                                            {
+                                                if (msg.Status == bearhug.OrganizationServiceReference.MessageStatus.unread)
+                                                {
+                                                    hasUpdate = true;
+                                                }
+                                                if (msg.Documents.Count > 0)
+                                                {
+                                                    hasAttachment = true;
+                                                }
+                                            }
+                                            <td class="img-new">
+                                                @if (hasUpdate)
+                                                {
+@*<img src="~/Images/exclamation-icon.png" alt="New message" height="20" width="20" />*@
+                                                    <span class="badge badge-warning">!</span>
+                                                }
+                                            </td>
+                                            <td class="img-attachment">
+                                                @if (hasAttachment)
+                                                {
+                                                    <img src="~/Images/paperclip.png" alt="Attachment" height="20" width="20" />
+                                                }
+                                            </td>
+                                            <td class="from">
+                                                @msggrp.LastFrom
+                                            </td>
+                                            <td class="subject">
+                                                @msggrp.Subject
+                                            </td>
+                                            <td class="text">
+                                                @msggrp.LastMessage
+                                            </td>
+                                            <td class="datetime">
+                                                @msggrp.LastDateTimeStamp.ToShortDateString()
+                                            </td>
+                                        </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <label class="text-center"><i>No messages.  Visit the messages menu above to communicate with other members of Bearhug.</i></label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="small-12 columns">
+                <ul class="tabs" data-tab="">
+                    <li class="tab-title active"><a href="#recent-transactions">Interactions</a></li>
+                </ul>
+                <div class="tabs-content">
+                    <div class="content active" id="recent-transactions">
+                        @if (Model.Dashboard.RecentTransactions.Count > 0)
+                        {
+                            <table data-provides="rowlink">
+                                <thead>
+                                    <tr>
+                                        <th class="open"></th>
+                                        <th class="img-new"></th>
+                                        <th class="img-attachment"></th>
+                                        <th class="from">From</th>
+                                        <th class="subject">Subject</th>
+                                        <th class="text">Message</th>
+                                        <th class="datetime">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.Dashboard.RecentTransactions.Count; i++)
+                                    {
+                                        if (Model.Dashboard.RecentTransactions[i].Comments.Count > 0)
+                                        {                
+                                        <tr>
+                                            <td class="open">
+                                                <a class="btn btn-link btn-mini" href="@Url.Action("OpenedTransaction", "Transactions", new { tid = @Model.Dashboard.RecentTransactions[i].TransactionId })"></a>
+                                            </td>
+                                            @{bool hasUpdate = false; bool hasAttachment = false;
+                                            }
+                                            @foreach (bearhug.OrganizationServiceReference.TransactionComment cmt in Model.Dashboard.RecentTransactions[i].Comments)
+                                            {
+                                                if (cmt.Status == bearhug.OrganizationServiceReference.TransactionCommentStatus.unread)
+                                                {
+                                                    hasUpdate = true;
+                                                }
+                                                if (cmt.Documents.Count > 0)
+                                                {
+                                                    hasAttachment = true;
+                                                }
+                                            }
+                                            <td class="img-new">
+                                                @if (hasUpdate)
+                                                {
+@*<img src="~/Images/exclamation-icon.png" alt="New message" height="20" width="20" />*@
+                                                    <span class="badge badge-warning">!</span>
+                                                }
+                                            </td>
+                                            <td class="img-attachment">
+                                                @if (hasAttachment)
+                                                {
+                                                    <img src="~/Images/paperclip.png" alt="Attachment" height="20" width="20" />
+                                                }
+                                            </td>
+                                            <td class="from">
+                                                @Model.Dashboard.RecentTransactions[i].Comments[Model.Dashboard.RecentTransactions[i].Comments.Count - 1].From
+                                            </td>
+                                            <td class="subject">
+                                                @Model.Dashboard.RecentTransactions[i].Subject
+                                            </td>
+                                            <td class="text">
+                                                @Model.Dashboard.RecentTransactions[i].Comments[Model.Dashboard.RecentTransactions[i].Comments.Count - 1].Comment
+                                            </td>
+                                            <td class="datetime">
+                                                @Model.Dashboard.RecentTransactions[i].Comments[Model.Dashboard.RecentTransactions[i].Comments.Count - 1].DateTimeStamp.ToShortDateString()
+                                            </td>
+                                        </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <label class="text-center"><i>No interactions.  Visit the Interactions menu above to for your coordinated care platform.</i></label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+    });
+</script>

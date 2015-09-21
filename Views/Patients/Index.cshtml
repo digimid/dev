@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Patients";
+}
+
+<div class="row">
+    <div class="small-6 columns">
+        <h4 class="subheader">Patients</h4>
+    </div>
+    <div class="small-6 columns">
+        @Html.ActionLink("Add Patient", "AddPatient", null, new { @class = "button tiny radius right" })
+    </div>
+</div>
+<div class="row">
+    <div class="small-12 columns">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="small-9 columns end">
+        <div class="row collapse">
+            <div class="small-8 columns">
+                <input type="text" class="patients-search" placeholder="Search by name" autocomplete="off">
+            </div>
+            <div class="small-2 columns end">
+                <button class="button tiny radius postfix patients-search-clear" type="button">Clear</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="small-12 columns">
+        @if (Model.Patients.Count > 0)
+        {
+            <table class="patient-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Patient Status</th>
+                        <th>Interaction History</th>
+                        @*<th colspan="2">Patient Status and Interaction History</th>*@
+                        @*<th>Archive</th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (bearhug.PatientsServiceReference.Patient patient in Model.Patients)
+                    {
+                        <tr>
+                            <td>@patient.FirstName @patient.LastName</td>
+                            <td>@if (patient.Status.RecordStatus == bearhug.PatientsServiceReference.RecordStatus.HasRecord)
+                                {
+                                    if (patient.Status.ReleaseStatus == bearhug.PatientsServiceReference.ReleaseStatus.Signed)
+                                    {                                    
+                                @Html.ActionLink("View Record", "ViewRecord", new { @patient_id = patient.Id, @recordid = patient.RecordId, @release_id = patient.Status.ReleaseId })
+                                    }
+                                    else
+                                    {
+                                <span>Has Record</span>                            
+                                    }
+                                }
+                                else
+                                {
+                                @Html.ActionLink("Create Record", "CreateRecord", patient)
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("View Interactions", "Index", new { @select_report_type = "patient", @dp_date_from = DateTime.MinValue.ToShortDateString(), @dp_date_to = DateTime.MaxValue.ToShortDateString(), @select_patients = patient.Id })
+                            </td>
+                            @*<td>
+                                <a href="#" class="button tiny radius btn-delete-patient" data-pid="@patient.Id" data-pname="@patient.FirstName @patient.LastName">Archive</a>
+                            </td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <label>You currently do no have any patients in record yet.  Please click the "Add Patient" patient button to the left to get started.</label>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-patients').addClass('active');
+
+        $('.patients-search').keyup(function (e) {
+            e.preventDefault();
+            var txt = $(this).val();
+            $('.patient-table tr').each(function (i, row) {
+                var t = $(row).find('td').eq(0).text();
+                if (String($(row).find('td').eq(0).text()).toLowerCase().indexOf(txt.toLowerCase()) == -1) {
+                    $(row).hide();
+                }
+                else {
+                    $(row).show();
+                }
+            });
+        });
+
+        $('.patients-search-clear').click(function (e) {
+            e.preventDefault();
+            $(this).parent().prev().find('.patients-search').val('');
+            $('.patient-table tr').show();
+        });
+
+    });
+</script>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="https://www.assuresign.net/Services/DocumentNOW/Users" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.assuresign.net/Services/DocumentNOW/Users" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="https://www.assuresign.net/Services/DocumentNOW/Users/Imports">
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd19" namespace="https://www.assuresign.net/Services/DocumentNOW/Users" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd0" namespace="https://www.assuresign.net/Services/DocumentNOW/AuthenticateDownload" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd1" namespace="http://microsoft.com/wsdl/types/" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd2" namespace="https://www.assuresign.net/Services/DocumentNOW/Submit" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd3" namespace="https://www.assuresign.net/Services/DocumentNOW/LookupSession" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd4" namespace="https://www.assuresign.net/Services/DocumentNOW/CheckStatus" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd5" namespace="https://www.assuresign.net/Services/DocumentNOW/ViewHistory" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd6" namespace="https://www.assuresign.net/Services/DocumentNOW/ListSignatories" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd7" namespace="https://www.assuresign.net/Services/DocumentNOW/ListTemplates" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd8" namespace="https://www.assuresign.net/Services/DocumentNOW/ListParameters" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd9" namespace="https://www.assuresign.net/Services/DocumentNOW/RetrieveTemplateInfo" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd10" namespace="https://www.assuresign.net/Services/DocumentNOW/Expire" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd11" namespace="https://www.assuresign.net/Services/DocumentNOW/Cancel" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd12" namespace="https://www.assuresign.net/Services/DocumentNOW/ListNotifications" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd13" namespace="https://www.assuresign.net/Services/DocumentNOW/ResendNotification" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd14" namespace="https://www.assuresign.net/Services/DocumentNOW/UpdateSignatory" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd15" namespace="https://www.assuresign.net/Services/DocumentNOW/GetDocumentValues" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd16" namespace="https://www.assuresign.net/Services/DocumentNOW/Envelopes" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd17" namespace="https://www.assuresign.net/Services/DocumentNOW/Download" />
+      <xsd:import schemaLocation="https://na1.assuresign.net/services/documentnow/v2/documentnow.svc?xsd=xsd18" namespace="https://www.assuresign.net/Services/DocumentNOW/DownloadTemplate" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IUserService_AuthenticateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AuthenticateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_CreateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_CreateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_UpdateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_UpdateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_DeleteUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_DeleteUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ListUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListUsers" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ListUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListUsersResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IUserService">
+    <wsdl:operation name="AuthenticateUser">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/AuthenticateUser" message="tns:IUserService_AuthenticateUser_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/AuthenticateUserResponse" message="tns:IUserService_AuthenticateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/CreateUser" message="tns:IUserService_CreateUser_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/CreateUserResponse" message="tns:IUserService_CreateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/GetUser" message="tns:IUserService_GetUser_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/GetUserResponse" message="tns:IUserService_GetUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/UpdateUser" message="tns:IUserService_UpdateUser_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/UpdateUserResponse" message="tns:IUserService_UpdateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/DeleteUser" message="tns:IUserService_DeleteUser_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/DeleteUserResponse" message="tns:IUserService_DeleteUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListUsers">
+      <wsdl:input wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/ListUsers" message="tns:IUserService_ListUsers_InputMessage" />
+      <wsdl:output wsaw:Action="https://www.assuresign.net/Services/DocumentNOW/Users/IUserService/ListUsersResponse" message="tns:IUserService_ListUsers_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

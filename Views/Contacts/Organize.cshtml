@@ -1,0 +1,889 @@
+﻿@model bearhug.Models.ContactsModel
+@{
+    ViewBag.Title = "Contact Management";
+}
+
+<h4 class="subheader">Organize Contacts</h4>
+<ul class="tabs">
+    <li class="tab-title">@Html.ActionLink("Contact List", "Index", "Contacts")</li>
+    <li class="tab-title active"><a href="#organize">Organize Contacts</a></li>
+    <li class="tab-title">@Html.ActionLink("Add Contact", "Add", "Contacts")</li>
+    <li class="tab-title">@Html.ActionLink("Upload Contact List", "Upload", "Contacts")</li>
+</ul>
+<div class="tabs-content min-tabs-content">
+    <div class="content active" id="organize">
+
+        <ul class="tabs vertical" data-tab="">
+            <li class="tab-title active">
+                <a href="#personal" data-toggle="tab">Personal</a>
+            </li>
+            @if (User.Identity.Name == Model.ContactsGeneric.Organization.Admin)
+            {
+                <li class="tab-title">
+                    <a href="#organization" data-toggle="tab">Organizational</a>
+                </li>
+            }
+            @foreach (bearhug.ContactsServiceReference.Group grp in Model.ContactsGeneric.Organization.Groups)
+            {
+                if (User.Identity.Name == grp.Admin)
+                {
+                <li class="tab-title">
+                    <a href="#@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" data-toggle="tab">@grp.Name</a>
+                </li>
+                }
+            }
+        </ul>
+        <div class="tabs-content vertical">
+
+            <div class="content active" id="personal">
+
+                <dl class="sub-nav contact-management-nav" data-tab="">
+                    <dd class="active"><a href="#create_personal">Create</a></dd>
+                    <dd><a href="#edit_personal">Edit</a></dd>
+                </dl>
+                <div class="tabs-content contact-management">
+
+                    <div id="create_personal" class="content active">
+                        <label>Note: Contacts can be added to multiple groups.</label>
+                        @using (Html.BeginForm("CreateContactGroup", "Contacts", FormMethod.Post, new { @class = "create-group-form" }))
+                        {
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-4 columns">
+                                    <label>
+                                        Contact Group Name
+                                        <input name="input_group_name_tag" type="text" required="required" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row" data-equalizer="">
+                                <div class="small-4 columns" data-equalizer-watch="">
+                                    <label>Contacts</label>
+                                    <select name="select_contacts" multiple="multiple">
+                                        @for (int i = 0; i < Model.ContactsGeneric.PersonalContacts.Count; i++)
+                                        {
+                                            string val = "";
+                                            if (Model.ContactsGeneric.PersonalContacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                            {
+                                                val = "non_" + Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                            }
+                                            else
+                                            {
+                                                val = Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                            }
+                                            string name;
+                                            if (Model.ContactsGeneric.PersonalContacts[i].LastName.Length > 0 || Model.ContactsGeneric.PersonalContacts[i].FirstName.Length > 0)
+                                            {
+                                                name = Model.ContactsGeneric.PersonalContacts[i].LastName + ", " + Model.ContactsGeneric.PersonalContacts[i].FirstName;
+                                            }
+                                            else
+                                            {
+                                                name = Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                            }
+                                            <option data-idx="@i" value="@val">@name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="small-1 columns" data-equalizer-watch="">
+                                    <label>&nbsp;</label>
+                                    <ul class="stack button-group radius team-buttons">
+                                        <li><a href="#" class="button tiny btn_add_all"><b>>></b></a></li>
+                                        <li><a href="#" class="button tiny btn_add"><b>></b></a></li>
+                                        <li><a href="#" class="button tiny btn_remove"><b><</b></a></li>
+                                        <li><a href="#" class="button tiny btn_remove_all"><b><<</b></a></li>
+                                    </ul>
+                                </div>
+                                <div class="small-4 columns end" data-equalizer-watch="">
+                                    <label>Group</label>
+                                    <select name="select_contacts_selected" multiple="multiple">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-9 columns">
+                                    <input name="hdn_org" type="hidden" value="" />
+                                    <input name="hdn_grp" type="hidden" value="" />
+                                    <button type="submit" class="button tiny radius success right">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div id="edit_personal" class="content">
+                        @if (Model.ContactsGeneric.ContactGroupTags.Count == 0)
+                        {
+                            <label>No contact groups set.</label>
+                        }
+                        else
+                        {
+                            <label>Note: Contacts can be added to multiple groups.</label>
+                            using (Html.BeginForm("EditGroup", "Contacts", FormMethod.Post, new { @class = "edit-group-form" }))
+                            {
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-4 columns end">
+                                    <div class="row collapse">
+                                        <div class="small-9 columns">
+                                            <label>
+                                                Contact Group Name
+                                            <select name="select_edit_group" class="select_edit_groups">
+                                                @foreach (string tag in Model.ContactsGeneric.ContactGroupTags)
+                                                {
+                                                    <option value="@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")">@tag</option>
+                                                }
+                                            </select>
+                                            </label>
+                                        </div>
+                                        <div class="small-3 columns end">
+                                            <label>
+                                                &nbsp;
+                                            <button class="button tiny radius postfix alert btn-delete-group" type="button" data-orgid="" data-grpid="">Delete</button>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" data-equalizer="">
+                                <div class="small-4 columns" data-equalizer-watch="">
+                                    <label>Contacts</label>
+                                    <select name="select_contacts" multiple="multiple">
+                                        @for (int i = 0; i < Model.ContactsGeneric.PersonalContacts.Count; i++)
+                                        {
+                                            if (!Model.ContactsGeneric.PersonalContacts[i].Tags.Contains(Model.ContactsGeneric.ContactGroupTags[0]))
+                                            {
+                                                string val = "";
+                                                List<string> taggedstrings = new List<string>();
+                                                foreach (string taggedstring in Model.ContactsGeneric.PersonalContacts[i].Tags)
+                                                {
+                                                    taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                                                }
+                                                if (Model.ContactsGeneric.PersonalContacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                {
+                                                    val = "non_" + Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                                }
+                                                else
+                                                {
+                                                    val = Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                                }
+                                                string name;
+                                                if (Model.ContactsGeneric.PersonalContacts[i].LastName.Length > 0 || Model.ContactsGeneric.PersonalContacts[i].FirstName.Length > 0)
+                                                {
+                                                    name = Model.ContactsGeneric.PersonalContacts[i].LastName + ", " + Model.ContactsGeneric.PersonalContacts[i].FirstName;
+                                                }
+                                                else
+                                                {
+                                                    name = Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                                }
+                                            <option data-idx="@i" data-tags="@String.Join(",", taggedstrings.ToArray())" value="@val">@name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="small-1 columns" data-equalizer-watch="">
+                                    <label>&nbsp;</label>
+                                    <ul class="stack button-group radius team-buttons">
+                                        <li><a href="#" class="button tiny btn_add_all"><b>>></b></a></li>
+                                        <li><a href="#" class="button tiny btn_add"><b>></b></a></li>
+                                        <li><a href="#" class="button tiny btn_remove"><b><</b></a></li>
+                                        <li><a href="#" class="button tiny btn_remove_all"><b><<</b></a></li>
+                                    </ul>
+                                </div>
+                                <div class="small-4 columns end" data-equalizer-watch="">
+                                    <label>Group</label>
+                                    <select name="select_contacts_selected" multiple="multiple">
+                                        @for (int i = 0; i < Model.ContactsGeneric.PersonalContacts.Count; i++)
+                                        {
+                                            if (Model.ContactsGeneric.PersonalContacts[i].Tags.Contains(Model.ContactsGeneric.ContactGroupTags[0]))
+                                            {
+                                                string val = "";
+                                                List<string> taggedstrings = new List<string>();
+                                                foreach (string taggedstring in Model.ContactsGeneric.PersonalContacts[i].Tags)
+                                                {
+                                                    taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                                                }
+                                                if (Model.ContactsGeneric.PersonalContacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                {
+                                                    val = "non_" + @Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                                }
+                                                else
+                                                {
+                                                    val = @Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                                }
+                                                string name;
+                                                if (Model.ContactsGeneric.PersonalContacts[i].LastName.Length > 0 || Model.ContactsGeneric.PersonalContacts[i].FirstName.Length > 0)
+                                                {
+                                                    name = Model.ContactsGeneric.PersonalContacts[i].LastName + ", " + Model.ContactsGeneric.PersonalContacts[i].FirstName;
+                                                }
+                                                else
+                                                {
+                                                    name = Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                                }
+                                            <option data-idx="@i" data-tags="@String.Join(",", taggedstrings.ToArray())" value="@val">@name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-9 columns">
+                                    <input name="hdn_org" type="hidden" value="" />
+                                    <input name="hdn_grp" type="hidden" value="" />
+                                    <button type="submit" class="button tiny radius success right">Save</button>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            @if (User.Identity.Name == Model.ContactsGeneric.Organization.Admin)
+            {
+                <div class="content" id="organization">
+
+                    <dl class="sub-nav contact-management-nav" data-tab="">
+                        <dd class="active"><a href="#create_organization">Create</a></dd>
+                        <dd><a href="#edit_organization">Edit</a></dd>
+                    </dl>
+                    <div class="tabs-content contact-management">
+
+                        <div id="create_organization" class="content active">
+                            <label>Note: Contacts can be added to multiple groups.</label>
+                            @using (Html.BeginForm("CreateContactGroup", "Contacts", FormMethod.Post, new { @class = "create-group-form" }))
+                            {
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-4 columns">
+                                        <label>
+                                            Contact Group Name
+                                        <input name="input_group_name_tag" type="text" required="required" />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row" data-equalizer="">
+                                    <div class="small-4 columns" data-equalizer-watch="">
+                                        <label>Contacts</label>
+                                        <select name="select_contacts" multiple="multiple">
+                                            @for (int i = 0; i < Model.ContactsGeneric.Organization.Contacts.Count; i++)
+                                            {
+                                                string val = "";
+                                                if (Model.ContactsGeneric.Organization.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                {
+                                                    val = "non_" + @Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                }
+                                                else
+                                                {
+                                                    val = @Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                }
+                                                string name;
+                                                if (Model.ContactsGeneric.PersonalContacts[i].LastName.Length > 0 || Model.ContactsGeneric.PersonalContacts[i].FirstName.Length > 0)
+                                                {
+                                                    name = Model.ContactsGeneric.PersonalContacts[i].LastName + ", " + Model.ContactsGeneric.PersonalContacts[i].FirstName;
+                                                }
+                                                else
+                                                {
+                                                    name = Model.ContactsGeneric.PersonalContacts[i].ContactID;
+                                                }
+                                                <option data-idx="@i" value="@val">@name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="small-1 columns" data-equalizer-watch="">
+                                        <label>&nbsp;</label>
+                                        <ul class="stack button-group radius team-buttons">
+                                            <li><a href="#" class="button tiny btn_add_all"><b>>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_add"><b>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove"><b><</b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove_all"><b><<</b></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="small-4 columns end" data-equalizer-watch="">
+                                        <label>Group</label>
+                                        <select name="select_contacts_selected" multiple="multiple">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-9 columns">
+                                        <input name="hdn_org" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+                                        <input name="hdn_grp" type="hidden" value="" />
+                                        <button type="submit" class="button tiny radius success right">Save</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div id="edit_organization" class="content">
+                            @if (Model.ContactsGeneric.Organization.ContactGroupTags.Count == 0)
+                            {
+                                <label>No contact groups set.</label>
+                            }
+                            else
+                            {
+                                <label>Note: Contacts can be added to multiple groups.</label>
+                                using (Html.BeginForm("EditGroup", "Contacts", FormMethod.Post, new { @class = "edit-group-form" }))
+                                {
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-4 columns end">
+                                        <div class="row collapse">
+                                            <div class="small-9 columns">
+                                                <label>
+                                                    Contact Group Name
+                                            <select name="select_edit_group" class="select_edit_groups">
+                                                @foreach (string tag in Model.ContactsGeneric.Organization.ContactGroupTags)
+                                                {
+                                                    <option value="@tag">@tag</option>
+                                                }
+                                            </select>
+                                                </label>
+                                            </div>
+                                            <div class="small-3 columns end">
+                                                <label>
+                                                    &nbsp;
+                                            <button class="button tiny radius alert postfix btn-delete-group" type="button" data-orgid="@Model.ContactsGeneric.Organization.Id" data-grpid="">Delete</button>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" data-equalizer="">
+                                    <div class="small-4 columns" data-equalizer-watch="">
+                                        <label>Contacts</label>
+                                        <select name="select_contacts" multiple="multiple">
+                                            @for (int i = 0; i < Model.ContactsGeneric.Organization.Contacts.Count; i++)
+                                            {
+                                                if (!Model.ContactsGeneric.Organization.Contacts[i].Tags.Contains(Model.ContactsGeneric.Organization.ContactGroupTags[0]))
+                                                {
+                                                    string val = "";
+                                                    List<string> taggedstrings = new List<string>();
+                                                    foreach (string taggedstring in Model.ContactsGeneric.Organization.Contacts[i].Tags)
+                                                    {
+                                                        taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                                                    }
+                                                    if (Model.ContactsGeneric.Organization.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                    {
+                                                        val = "non_" + @Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                    }
+                                                    else
+                                                    {
+                                                        val = @Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                    }
+                                                    string name;
+                                                    if (Model.ContactsGeneric.Organization.Contacts[i].LastName.Length > 0 || Model.ContactsGeneric.Organization.Contacts[i].FirstName.Length > 0)
+                                                    {
+                                                        name = Model.ContactsGeneric.Organization.Contacts[i].LastName + ", " + Model.ContactsGeneric.Organization.Contacts[i].FirstName;
+                                                    }
+                                                    else
+                                                    {
+                                                        name = Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                    }
+                                                <option data-idx="@i" data-tags="@String.Join(",", taggedstrings.ToArray())" value="@val">@name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="small-1 columns" data-equalizer-watch="">
+                                        <label>&nbsp;</label>
+                                        <ul class="stack button-group radius team-buttons">
+                                            <li><a href="#" class="button tiny btn_add_all"><b>>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_add"><b>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove"><b><</b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove_all"><b><<</b></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="small-4 columns end" data-equalizer-watch="">
+                                        <label>Group</label>
+                                        <select name="select_contacts_selected" multiple="multiple">
+                                            @for (int i = 0; i < Model.ContactsGeneric.Organization.Contacts.Count; i++)
+                                            {
+                                                if (Model.ContactsGeneric.Organization.Contacts[i].Tags.Contains(Model.ContactsGeneric.Organization.ContactGroupTags[0]))
+                                                {
+                                                    string val = "";
+                                                    List<string> taggedstrings = new List<string>();
+                                                    foreach (string taggedstring in Model.ContactsGeneric.Organization.Contacts[i].Tags)
+                                                    {
+                                                        taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                                                    }
+                                                    if (Model.ContactsGeneric.Organization.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                    {
+                                                        val = "non_" + @Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                    }
+                                                    else
+                                                    {
+                                                        val = @Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                    }
+                                                    string name;
+                                                    if (Model.ContactsGeneric.Organization.Contacts[i].LastName.Length > 0 || Model.ContactsGeneric.Organization.Contacts[i].FirstName.Length > 0)
+                                                    {
+                                                        name = Model.ContactsGeneric.Organization.Contacts[i].LastName + ", " + Model.ContactsGeneric.Organization.Contacts[i].FirstName;
+                                                    }
+                                                    else
+                                                    {
+                                                        name = Model.ContactsGeneric.Organization.Contacts[i].ContactID;
+                                                    }
+                                                <option data-idx="@i" data-tags="@String.Join(",", taggedstrings.ToArray())" value="@val">@name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-9 columns">
+                                        <input name="hdn_org" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+                                        <input name="hdn_grp" type="hidden" value="" />
+                                        <button type="submit" class="button tiny radius success right">Save</button>
+                                    </div>
+                                </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            @foreach (bearhug.ContactsServiceReference.Group grp in Model.ContactsGeneric.Organization.Groups)
+            {
+                if (User.Identity.Name == grp.Admin)
+                {
+                <div class="content" id="@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")">
+
+                    <dl class="sub-nav contact-management-nav" data-tab="">
+                        <dd class="active"><a href="#create_@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")">Create</a></dd>
+                        <dd><a href="#edit_@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")">Edit</a></dd>
+                    </dl>
+                    <div class="tabs-content contact-management">
+
+                        <div id="create_@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" class="content active">
+                            <label>Note: Contacts can be added to multiple groups.</label>
+                            @using (Html.BeginForm("GroupContacts", "Contacts", FormMethod.Post, new { @class = "create-group-form" }))
+                            {
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-4 columns">
+                                        <label>
+                                            Contact Group Name
+                                        <input name="input_group_name_tag" type="text" required="required" />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row" data-equalizer="">
+                                    <div class="small-4 columns" data-equalizer-watch="">
+                                        <label>Contacts</label>
+                                        <select name="select_contacts" multiple="multiple">
+                                            @for (int i = 0; i < grp.Contacts.Count; i++)
+                                            {
+                                                string val = "";
+                                                if (@grp.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                {
+                                                    val = "non_" + @grp.Contacts[i].ContactID;
+                                                }
+                                                else
+                                                {
+                                                    val = grp.Contacts[i].ContactID;
+                                                }
+                                                string name;
+                                                if (grp.Contacts[i].LastName.Length > 0 || grp.Contacts[i].FirstName.Length > 0)
+                                                {
+                                                    name = grp.Contacts[i].LastName + ", " + grp.Contacts[i].FirstName;
+                                                }
+                                                else
+                                                {
+                                                    name = grp.Contacts[i].ContactID;
+                                                }
+                                                <option data-idx="@i" value="@val">@name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="small-1 columns" data-equalizer-watch="">
+                                        <label>&nbsp;</label>
+                                        <ul class="stack button-group radius team-buttons">
+                                            <li><a href="#" class="button tiny btn_add_all"><b>>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_add"><b>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove"><b><</b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove_all"><b><<</b></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="small-4 columns end" data-equalizer-watch="">
+                                        <label>Group</label>
+                                        <select name="select_contacts_selected" multiple="multiple">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-9 columns">
+                                        <input name="hdn_org" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+                                        <input name="hdn_grp" type="hidden" value="@grp.Id" />
+                                        <button type="submit" class="button tiny radius success right">Save</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div id="edit_@System.Text.RegularExpressions.Regex.Replace(grp.Name, @"[^\w]", "_")" class="content">
+                            @if (grp.ContactGroupTags.Count == 0)
+                            {
+                                <label>No contact groups set.</label>
+                            }
+                            else
+                            {
+                                <label>Note: Contacts can be added to multiple groups.</label>
+                                using (Html.BeginForm("EditGroup", "Contacts", FormMethod.Post, new { @class = "edit-group-form" }))
+                                {
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-4 columns end">
+                                        <div class="row collapse">
+                                            <div class="small-9 columns">
+                                                <label>
+                                                    Contact Group Name
+                                            <select name="select_edit_group" class="select_edit_groups">
+                                                @foreach (string tag in grp.ContactGroupTags)
+                                                {                                                    
+                                                    <option value="@System.Text.RegularExpressions.Regex.Replace(tag, @"[^\w]", "_")">@tag</option>
+                                                }
+                                            </select>
+                                                </label>
+                                            </div>
+                                            <div class="small-3 columns end">
+                                                <label>
+                                                    &nbsp;
+                                            <button class="button tiny radius alert postfix btn-delete-group" type="button" data-orgid="@Model.ContactsGeneric.Organization.Id" data-grpid="@grp.Id">Delete</button>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" data-equalizer="">
+                                    <div class="small-4 columns" data-equalizer-watch="">
+                                        <label>Contacts</label>
+                                        <select name="select_contacts" multiple="multiple">
+                                            @for (int i = 0; i < grp.Contacts.Count; i++)
+                                            {
+                                                if (!grp.Contacts[i].Tags.Contains(grp.ContactGroupTags[0]))
+                                                {
+                                                    string val = "";
+                                                    List<string> taggedstrings = new List<string>();
+                                                    foreach (string taggedstring in grp.Contacts[i].Tags)
+                                                    {
+                                                        taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                                                    }
+                                                    if (grp.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                    {
+                                                        val = "non_" + @grp.Contacts[i].ContactID;
+                                                    }
+                                                    else
+                                                    {
+                                                        val = @grp.Contacts[i].ContactID;
+                                                    }
+                                                    string name;
+                                                    if (grp.Contacts[i].LastName.Length > 0 || grp.Contacts[i].FirstName.Length > 0)
+                                                    {
+                                                        name = grp.Contacts[i].LastName + ", " + grp.Contacts[i].FirstName;
+                                                    }
+                                                    else
+                                                    {
+                                                        name = grp.Contacts[i].ContactID;
+                                                    }
+                                                <option data-idx="@i" data-tags="@String.Join(",", taggedstrings.ToArray())" value="@val">@name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="small-1 columns" data-equalizer-watch="">
+                                        <label>&nbsp;</label>
+                                        <ul class="stack button-group radius team-buttons">
+                                            <li><a href="#" class="button tiny btn_add_all"><b>>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_add"><b>></b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove"><b><</b></a></li>
+                                            <li><a href="#" class="button tiny btn_remove_all"><b><<</b></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="small-4 columns end" data-equalizer-watch="">
+                                        <label>Contact</label>
+                                        <select name="select_contacts_selected" multiple="multiple">
+                                            @for (int i = 0; i < grp.Contacts.Count; i++)
+                                            {
+                                                if (grp.Contacts[i].Tags.Contains(grp.ContactGroupTags[0]))
+                                                {
+                                                    string val = "";
+                                                    List<string> taggedstrings = new List<string>();
+                                                    foreach (string taggedstring in grp.Contacts[i].Tags)
+                                                    {
+                                                        taggedstrings.Add(System.Text.RegularExpressions.Regex.Replace(taggedstring, @"[^\w]", "_"));
+                                                    }
+                                                    if (grp.Contacts[i].Type == bearhug.ContactsServiceReference.Source.nonmember)
+                                                    {
+                                                        val = "non_" + @grp.Contacts[i].ContactID;
+                                                    }
+                                                    else
+                                                    {
+                                                        val = @grp.Contacts[i].ContactID;
+                                                    }
+                                                    string name;
+                                                    if (grp.Contacts[i].LastName.Length > 0 || grp.Contacts[i].FirstName.Length > 0)
+                                                    {
+                                                        name = grp.Contacts[i].LastName + ", " + grp.Contacts[i].FirstName;
+                                                    }
+                                                    else
+                                                    {
+                                                        name = grp.Contacts[i].ContactID;
+                                                    }
+                                                <option data-idx="@i" data-tags="@String.Join(",", taggedstrings.ToArray())" value="@val">@name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="small-9 columns">
+                                        <input name="hdn_org" type="hidden" value="@Model.ContactsGeneric.Organization.Id" />
+                                        <input name="hdn_grp" type="hidden" value="@grp.Id" />
+                                        <button type="submit" class="button tiny radius success right">Save</button>
+                                    </div>
+                                </div>
+                                }
+                            }
+                        </div>
+
+                    </div>
+
+                </div>
+                }
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<div id="delete-contact-group" class="reveal-modal tiny" data-reveal="">
+    <h5 class="subheader">Delete Contact Group</h5>
+    <a class="close-reveal-modal">&#215;</a>
+    @using (Html.BeginForm("DeleteGroup", "Contacts", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Are you sure you want to delete this group?</p>
+                <strong id="lbl_delete_group_name"></strong>
+                <input id="hdn_delete_group_name" name="hdn_delete_group_name" type="hidden" value="" />
+                <input id="hdn_delete_group_orgid" name="hdn_delete_group_orgid" type="hidden" value="" />
+                <input id="hdn_delete_group_grpid" name="hdn_delete_group_grpid" type="hidden" value="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button id="btn-cancel-modal-delete-group" class="button tiny radius secondary" type="button">No</button>
+                <button id="btn-delete-group" class="button tiny radius alert right" type="submit">Yes</button>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-contacts').addClass('active');
+
+        $('.btn-delete-group').click(function (e) {
+            e.preventDefault();
+            var oid = $(this).data('orgid');
+            $('#hdn_delete_group_orgid').val($(this).data('orgid'));
+            $('#hdn_delete_group_grpid').val($(this).data('grpid'));
+            $('#hdn_delete_group_name').val($(this).parents().eq(1).prev().find(':selected').text());
+            $('#lbl_delete_group_name').text($(this).parents().eq(1).prev().find(':selected').text());
+            $('#delete-contact-group').foundation('reveal', 'open');
+        });
+
+        $('#btn-cancel-modal-delete-group').click(function () {
+            $('#delete-contact-group').foundation('reveal', 'close');
+        });
+
+        $(document).on('closed.fndtn.reveal', '#delete-contact-group', function () {
+            $('#hdn_delete_group_orgid').val('');
+            $('#hdn_delete_group_grpid').val('');
+            $('#hdn_delete_group_name').val('');
+            $('#lbl_delete_group_name').text('');
+        });
+
+        $('.create-group-form').submit(function (e) {
+            var selOpts = $(this).find('select[name="select_contacts_selected"]');
+            $(selOpts).find('option').each(function (i, opt) {
+                $(opt).attr('selected', 'selected');
+            });
+        });
+
+        $('.edit-group-form').submit(function (e) {
+            $(this).find('select[name="select_contacts"]').find('option').each(function (i, opt) {
+                $(opt).attr('selected', 'selected');
+            });
+            $(this).find('select[name="select_contacts_selected"]').find('option').each(function (i, opt) {
+                $(opt).attr('selected', 'selected');
+            });
+        });
+
+        $('.select_edit_groups').change(function (e) {
+            var tag = $(this).find(':selected').val();
+            var regexTag = tag.replace(/[^\w]/g, "_");
+            var selFrom = $(this).parents().eq(4).siblings().find('select[name="select_contacts"]');
+            var selTo = $(this).parents().eq(4).siblings().find('select[name="select_contacts_selected"]');
+            var options = [];
+            $(selFrom).find('option').each(function (i, opt) {
+                var optClone = $(opt).clone();
+                options.push(opt);
+            });
+            $(selTo).find('option').each(function (i, opt) {
+                var optClone = $(opt).clone();
+                options.push(opt);
+            });
+            $(selFrom).empty();
+            $(selTo).empty();
+            $(options).each(function (i, opt) {
+                var tags = $(opt).data('tags').split(',');
+                if (tags.indexOf(regexTag) != -1) {
+                    $(selTo).append(opt);
+                }
+                else {
+                    $(selFrom).append(opt);
+                }
+            });
+            var fromOpts = $(selFrom).find('option');
+            fromOpts.sort(sorter);
+            $(selFrom).empty().append(fromOpts);
+            var toOpts = $(selTo).find('option');
+            toOpts.sort(sorter);
+            $(selTo).empty().append(toOpts);
+        });
+
+        $('.btn_add').click(function (e) {
+            e.preventDefault();
+            var selFrom = $(this).parents().eq(2).prev().find('select[name="select_contacts"]');
+            var selTo = $(this).parents().eq(2).next().find('select[name="select_contacts_selected"]');
+            var fromOpts = $(selFrom).find('option');
+            $(fromOpts).each(function (i, opt) {
+                if ($(opt).is(':selected')) {
+                    $(opt).attr('selected', 'selected');
+                    var optClone = $(opt).clone();
+                    $(selTo).append(optClone);
+                    $(opt).remove();
+                }
+            });
+            var toOpts = $(selTo).find('option');
+            toOpts.sort(sorter);
+            $(selTo).empty().append(toOpts);
+        });
+
+        $('.btn_add_all').click(function (e) {
+            e.preventDefault();
+            var selFrom = $(this).parents().eq(2).prev().find('select[name="select_contacts"]');
+            var selTo = $(this).parents().eq(2).next().find('select[name="select_contacts_selected"]');
+            var fromOpts = $(selFrom).find('option');
+            $(fromOpts).each(function (i, opt) {
+                $(opt).attr('selected', 'selected');
+                var optClone = $(opt).clone();
+                $(selTo).append(optClone);
+                $(opt).remove();
+            });
+            var toOpts = $(selTo).find('option');
+            toOpts.sort(sorter);
+            $(selTo).empty().append(toOpts);
+        });
+
+        $('.btn_remove').click(function (e) {
+            e.preventDefault();
+            var selFrom = $(this).parents().eq(2).next().find('select[name="select_contacts_selected"]');
+            var selTo = $(this).parents().eq(2).prev().find('select[name="select_contacts"]');
+            var fromOpts = $(selFrom).find('option');
+            $(fromOpts).each(function (i, opt) {
+                if ($(opt).is(':selected')) {
+                    var optClone = $(opt).clone();
+                    $(selTo).append(optClone);
+                    $(opt).remove();
+                }
+            });
+            var toOpts = $(selTo).find('option');
+            toOpts.sort(sorter);
+            $(selTo).empty().append(toOpts);
+        });
+
+        $('.btn_remove_all').click(function (e) {
+            e.preventDefault();
+            var selFrom = $(this).parents().eq(2).next().find('select[name="select_contacts_selected"]');
+            var selTo = $(this).parents().eq(2).prev().find('select[name="select_contacts"]');
+            var fromOpts = $(selFrom).find('option');
+            $(fromOpts).each(function (i, opt) {
+                var optClone = $(opt).clone();
+                $(selTo).append(optClone);
+                $(opt).remove();
+            });
+            var toOpts = $(selTo).find('option');
+            toOpts.sort(sorter);
+            $(selTo).empty().append(toOpts);
+        });
+
+        function sorter(a, b) {
+            return ($(a).data('idx') > $(b).data('idx')) ? 1 : -1;
+        }
+    });
+</script>

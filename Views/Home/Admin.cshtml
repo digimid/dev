@@ -1,0 +1,488 @@
+﻿@model bearhug.Models.OrganizationConstruct
+@{
+    ViewBag.Title = "Administrator";
+}
+
+@if (User.Identity.Name == Model.Organization.Admin)
+{
+    <h4 class="subheader">Administrator</h4>
+    <ul class="tabs">
+        <li class="tab-title">@Html.ActionLink("Reminders", "Index", "Home")</li>
+        <li class="tab-title">@Html.ActionLink("Communication", "Communication", "Home")</li>
+        <li class="tab-title">@Html.ActionLink("Contacts", "Contacts", "Home")</li>
+        <li class="tab-title">@Html.ActionLink("Teams", "Teams", "Home")</li>
+        @if (User.Identity.Name == Model.Organization.Admin)
+        {
+            <li class="tab-title">@Html.ActionLink("Reports", "Reports", "Home")</li>
+        }
+        @if (User.Identity.Name != Model.Organization.Admin)
+        {
+            <li class="tab-title">@Html.ActionLink("Emergency Access", "EmergencyAccess", "Home")</li>
+        }
+        @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+        {
+            <li class="tab-title">@Html.ActionLink("Patients (Admin Access)", "AdminPatients", "Home")</li>
+        }
+        @if (User.Identity.Name == Model.Organization.Admin || Roles.IsUserInRole("EmergencyAccess"))
+        {
+            <li class="tab-title">@Html.ActionLink("Audits (Admin Access)", "AdminAudits", "Home")</li>
+        }
+        @if (User.Identity.Name == Model.Organization.Admin)
+        {
+            <li class="tab-title active"><a id="admin-tab" href="#admin">Admin</a></li>
+        }
+    </ul>
+    
+    <div class="tabs-content">
+        <div class="row">
+            <div class="small-6 columns">
+                <p>You have @Model.Organization.ReaminingUsers spots left.</p>
+            </div>
+            <div class="small-3 columns">
+                @if (ViewBag.message != null)
+                {
+                    <div data-alert="" class="alert-box success radius">
+                        @ViewBag.message
+                        <a href="#" class="close">&times;</a>
+                    </div>
+                }
+            </div>
+            <div class="small-3 columns">
+                <button data-tooltip="" aria-haspopup="true" class="button tiny radius right has-tip help-button" title="Click for help with this page."><i class="fi-info"></i></button>
+            </div>
+        </div>
+        <div class="content active" id="admin">
+
+            <ul class="tabs vertical" data-tab="">
+                <li class="tab-title @(ViewBag.tab == "organization" ? "active" : null)"><a href="#organization" data-toggle="tab">Organization</a></li>
+                <li class="tab-title @(ViewBag.tab == "add" ? "active" : null)"><a id="a_add_members" href="#add-members" data-toggle="tab">Add Members</a></li>
+                <li id="step3" class="tab-title @(ViewBag.tab == "delete" ? "active" : null)"><a href="#delete-members" data-toggle="tab">Delete Members</a></li>
+                <li id="step4" class="tab-title @(ViewBag.tab == "manage" ? "active" : null)"><a href="#manage-members" data-toggle="tab">Manage Members</a></li>
+                @if (User.Identity.Name == "jesseglascock@gmail.com")
+                {
+                    <li class="tab-title @(ViewBag.tab == "emailtest" ? "active" : null)"><a href="#test-email" data-toggle="tab">Test Email</a></li>
+                }
+            </ul>
+            <div class="tabs-content vertical">
+
+                <div class="content @(ViewBag.tab == "organization" ? "active" : null)" id="organization">
+                    @using (Html.BeginForm("UpdateOrganization", "Home", FormMethod.Post))
+                    {
+                        <fieldset>
+                            <legend>Organization</legend>
+                            <div class="row">
+                                <div class="small-6 columns">
+                                    <label for="org_name">
+                                        Name
+                                        <input id="org_name" name="org_name" type="text" value="@Model.Organization.Name" class="radius" />
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label for="org_phone">
+                                        Phone
+                                        <input id="org_phone" name="org_phone" type="text" class="radius" value="@Model.Organization.Phone" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-6 columns">
+                                    <label for="org_address1">
+                                        Address
+                                        <input id="org_address1" name="org_address1" type="text" class="radius" value="@Model.Organization.Address1" />
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label for="org_fax">
+                                        Fax
+                                        <input id="org_fax" name="org_fax" type="text" class="radius" value="@Model.Organization.Fax" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-6 columns">
+                                    <label for="org_address2">
+                                        Address
+                                            <input id="org_address2" name="org_address2" type="text" class="radius" value="@Model.Organization.Address2" />
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label for="org_website">
+                                        Website
+                                                <input id="org_website" name="org_website" type="text" class="radius" value="@Model.Organization.WebsiteUrl" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-6 columns">
+                                    <label for="org_city">
+                                        City
+                                        <input id="org_city" name="org_city" type="text" class="radius" value="@Model.Organization.City" />
+                                    </label>
+                                    <div class="row">
+                                        <div class="small-4 columns">
+                                            <label for="org_state">
+                                                State
+                                        <select id="org_state" name="org_state" class="radius" tabindex="6">
+                                            <option disabled="disabled" selected="selected"></option>
+                                            <option value="AL">AL</option>
+                                            <option value="AK">AK</option>
+                                            <option value="AZ">AZ</option>
+                                            <option value="AR">AR</option>
+                                            <option value="CA">CA</option>
+                                            <option value="CO">CO</option>
+                                            <option value="CT">CT</option>
+                                            <option value="DE">DE</option>
+                                            <option value="DC">DC</option>
+                                            <option value="FL">FL</option>
+                                            <option value="GA">GA</option>
+                                            <option value="HI">HI</option>
+                                            <option value="ID">ID</option>
+                                            <option value="IL">IL</option>
+                                            <option value="IN">IN</option>
+                                            <option value="IA">IA</option>
+                                            <option value="KS">KS</option>
+                                            <option value="KY">KY</option>
+                                            <option value="LA">LA</option>
+                                            <option value="ME">ME</option>
+                                            <option value="MD">MD</option>
+                                            <option value="MA">MA</option>
+                                            <option value="MI">MI</option>
+                                            <option value="MN">MN</option>
+                                            <option value="MS">MS</option>
+                                            <option value="MO">MO</option>
+                                            <option value="MT">MT</option>
+                                            <option value="NE">NE</option>
+                                            <option value="NV">NV</option>
+                                            <option value="NH">NH</option>
+                                            <option value="NJ">NJ</option>
+                                            <option value="NM">NM</option>
+                                            <option value="NY">NY</option>
+                                            <option value="NC">NC</option>
+                                            <option value="ND">ND</option>
+                                            <option value="OH">OH</option>
+                                            <option value="OK">OK</option>
+                                            <option value="OR">OR</option>
+                                            <option value="PA">PA</option>
+                                            <option value="RI">RI</option>
+                                            <option value="SC">SC</option>
+                                            <option value="SD">SD</option>
+                                            <option value="TN">TN</option>
+                                            <option value="TX">TX</option>
+                                            <option value="UT">UT</option>
+                                            <option value="VT">VT</option>
+                                            <option value="VA">VA</option>
+                                            <option value="WA">WA</option>
+                                            <option value="WV">WV</option>
+                                            <option value="WI">WI</option>
+                                            <option value="WY">WY</option>
+                                        </select>
+                                            </label>
+                                        </div>
+                                        <div class="small-8 columns">
+                                            <label for="org_zip">
+                                                Zip
+                                        <input id="org_zip" name="org_zip" type="text" class="radius" value="@Model.Organization.ZipCode" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label for="org_about">
+                                        About
+                                        <textarea id="org_about" name="org_about" rows="5" class="radius">@Model.Organization.About</textarea>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-6 columns">
+                                    <label for="org_facebookurl">
+                                        Facebook Url
+                                        <input id="org_facebook_url" name="org_facebook_url" type="text" class="radius" value="@Model.Organization.SocialLinks.FaceBookUrl" />
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label for="org_googleplus_url">
+                                        Google+ Url
+                                        <input id="org_googleplus_url" name="org_googleplus_url" type="text" class="radius" value="@Model.Organization.SocialLinks.GooglePlusUrl" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-6 columns">
+                                    <label for="org_linked_url">
+                                        Linked Url
+                                        <input id="org_linked_url" name="org_linked_url" type="text" class="radius" value="@Model.Organization.SocialLinks.LinkedInUrl" />
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label for="org_twitter_url">
+                                        Twitter Url
+                                        <input id="org_twitter_url" name="org_twitter_url" type="text" class="radius" value="@Model.Organization.SocialLinks.TwitterUrl" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <input id="hdn_orgid" name="hdn_orgid" type="hidden" value="@Model.Organization.Id" />
+                                    <button type="submit" class="button tiny radius right">Save</button>
+                                </div>
+                            </div>
+                        </fieldset>                        
+                    }
+                </div>
+
+                <div class="content @(ViewBag.tab == "add" ? "active" : null)" id="add-members">
+                    @if (Model.Organization.ReaminingUsers > 0)
+                    {
+                        using (Html.BeginForm("AddMember", "Home", FormMethod.Post, new { data_abide = "" }))
+                        {
+                        <fieldset id="step1">
+                            <legend>Add Member</legend>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="inline right" for="member_username">Username</label>
+                                </div>
+                                <div class="small-6 columns email-field end">
+                                    <input id="member_username" name="member_username" type="email" required="required" placeholder="(must be a valid email address)" class="radius" />
+                                    <small class="error">An email address is required.</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="inline right" for="member_username">Password</label>
+                                </div>
+                                <div class="small-6 columns password-field end">
+                                    <input id="member_password" name="member_password" type="password" required="required" placeholder="" pattern="[a-zA-Z]+" title="password" class="radius" />
+                                    <small class="error">Your password must match the requirements</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="inline right" for="member_password_dup">Password</label>
+                                </div>
+                                <div class="small-6 columns password-confirmation-field end">
+                                    <input id="member_password_dup" name="member_password_dup" type="password" required="required" placeholder="" pattern="[a-zA-Z]+" title="password" data-equalto="member_password" class="radius" />
+                                    <small class="error">The passwords do not match</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    &nbsp;
+                                </div>
+                                <div id="step2" class="small-6 columns end">
+                                    <label>Choose how you would like the keycode to be sent:</label>
+                                    <input type="radio" name="optionsSendType" value="email" id="rdoEmail" checked="checked"><label for="rdoEmail">Email</label>
+                                    <input type="radio" name="optionsSendType" value="sms" id="rdoSms"><label for="rdoSms">Text Message</label>
+                                </div>
+                            </div>
+                            <div class="row row_sms">
+                                <div class="small-2 columns">
+                                    <label class="inline right" for="member_password_dup">Phone</label>
+                                </div>
+                                <div class="small-6 columns end">
+                                    <input id="sms_area_code" name="sms_area_code" type="text" placeholder="555" class="numbersOnly" />
+                                    <input id="sms_first" name="sms_first" type="text" placeholder="555" class="numbersOnly" />
+                                    <input id="sms_last" name="sms_last" type="text" placeholder="5555" class="numbersOnly" />
+                                </div>
+                            </div>
+                            <div class="row row_email">
+                                <div class="small-2 columns">
+                                    &nbsp;
+                                </div>
+                                <div class="small-6 columns end">
+                                    <label>A message will be sent to the email account (username entered above) with a new Key Code.</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-8 columns end">
+                                    <input name="org_id" type="hidden" value="@Model.Organization.Id" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-8 columns end">
+                                    <button type="submit" class="button tiny radius right">Create</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                        }
+                    }
+                    else
+                    {
+                        <p>You have reached the maximum number of members for your account.  To add additional members upgrade your account or remove existing members.</p>
+                    }
+                </div>
+
+                <div class="content @(ViewBag.tab == "delete" ? "active" : null)" id="delete-members">
+                    @using (Html.BeginForm("DeleteMember", "Home", FormMethod.Post))
+                    {
+                        <fieldset>
+                            <legend>Delete User</legend>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="inline right" for="current_users">User</label>
+                                </div>
+                                <div class="small-6 columns end">
+                                    <select name="current_users">
+                                        <option value="null" disabled="disabled" selected="selected">Select One</option>
+                                        @foreach (bearhug.OrganizationServiceReference.OrganizationMember orgMember in Model.Organization.Members)
+                                        {
+                                            if (orgMember.UID != Model.Organization.Admin)
+                                            {
+                                                if (orgMember.FirstName.Length > 0 || orgMember.LastName.Length > 0)
+                                                {
+                                            <option value="@orgMember.UID">@orgMember.LastName, @orgMember.FirstName</option>
+                                                }
+                                                else
+                                                {
+                                            <option value="@orgMember.UID">@orgMember.UID</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-8 columns end">
+                                    <input name="org_id" type="hidden" value="@Model.Organization.Id" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-8 columns end">
+                                    <button type="submit" class="button tiny radius right">Delete</button>
+                                </div>
+                            </div>
+                        </fieldset>                
+                    }
+                </div>
+
+                <div class="content @(ViewBag.tab == "manage" ? "active" : null)" id="manage-members">
+                    @using (Html.BeginForm("ChangeUserRole", "Home", FormMethod.Post))
+                    {
+                        <fieldset>
+                            <legend>Change Organization Administrator</legend>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="inline right" for="current_users">User</label>
+                                </div>
+                                <div class="small-6 columns end">
+                                    <select name="current_users">
+                                        <option value="null" disabled="disabled" selected="selected">Select One</option>
+                                        @foreach (bearhug.OrganizationServiceReference.OrganizationMember orgMember in Model.Organization.Members)
+                                        {
+                                            if (orgMember.UID != Model.Organization.Admin)
+                                            {
+                                                if (orgMember.FirstName.Length > 0 || orgMember.LastName.Length > 0)
+                                                {
+                                            <option value="@orgMember.UID">@orgMember.LastName, @orgMember.FirstName</option>
+                                                }
+                                                else
+                                                {
+                                            <option value="@orgMember.UID">@orgMember.UID</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-8 columns end">
+                                    <input name="org_id" type="hidden" value="@Model.Organization.Id" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-8 columns">
+                                    <button type="submit" class="button tiny radius right">Change</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    }
+                </div>
+
+                <div class="content @(ViewBag.tab == "emailtest" ? "active" : null)" id="test-email">
+                    @Html.ActionLink("Test Email for Spam", "TestEmail", "Home", new { @class = "button tiny radius" })
+                </div>
+
+            </div>
+        </div>
+    </div>    
+    
+    <ol class="joyride-list" data-joyride="">
+        <li data-id="step1" data-text="Next" data-options="tip_location: top; prev_button: false; tip_animation:fade">
+            <p>To create a new user enter the necessary information here.</p>
+        </li>
+        <li data-id="step2" data-class="custom so-awesome" data-text="Next" data-prev-text="Prev" data-options="tip_location: top; tip_animation:fade">
+            <p>A six digit keycode is required to login along with the username and password.  Choose how you would like it to be sent.</p>
+        </li>
+        <li data-id="step3" data-button="Next" data-prev-text="Prev" data-options="tip_location:top; tip_animation:fade">
+            <p>Click here to delete members of your organization.</p>
+        </li>
+        <li data-id="step4" data-button="End" data-prev-text="Prev" data-options="tip_location:top; tip_animation:fade">
+            <p>Click here to change the administrator of your organization.</p>
+        </li>
+    </ol>
+}
+<input id="hdn_org_state" type="hidden" value="@Model.Organization.State" />
+
+<script src="~/Scripts/jquery/jquery.maskedinput.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-home').addClass('active');
+
+        if ($('#hdn_org_state').val() != null) {
+            if ($('#hdn_org_state').val().length > 0) {
+                $('#org_state option[value="' + $('#hdn_org_state').val() + '"]').attr('selected', 'selected');
+            }
+        }
+
+        $('.help-button').click(function (e) {
+            $('#a_add_members').click();
+            if ($('.tabs.vertical').length) {
+                if ($('.vertical-tab-cover').length) {
+                    $('.vertical-tab-cover').remove();
+                }
+                $('<div class="vertical-tab-cover"></div>').insertAfter('.tabs.vertical dd.active a, .tabs.vertical .tab-title.active a')
+                $('.vertical-tab-cover').css('left', String($('.tabs.vertical .tab-title').first().width() + 5) + 'px');
+                $('.vertical-tab-cover').css('top', String($('.tabs.vertical dd.active a, .tabs.vertical .tab-title.active a').position().top + 1) + 'px');
+            }
+            $(document).foundation({
+                joyride: {
+                    template: {
+                        button: '<a href="#" class="tiny radius button joyride-next-tip"></a>',
+                        prev_button: '<a href="#" class="tiny radius button joyride-prev-tip"></a>'
+                    }
+                }
+            }).foundation('joyride', 'start');
+        });
+
+        $('.numbersOnly').focus(function () {
+            $(this).select();
+        });
+
+        $("#sms_area_code").mask("999");
+        $("#sms_first").mask("999");
+        $("#sms_last").mask("9999");
+        $("#org_phone").mask("(999) 999-9999", { placeholder: " " });
+        $("#org_fax").mask("(999) 999-9999", { placeholder: " " });
+
+        $("input[name=optionsSendType]:radio").change(function () {
+            if ($(this).val() == 'email') {
+                $('.row_email').show();
+                $('.row_sms').hide();
+                $('#sms_area_code').val('');
+                $('#sms_first').val('');
+                $('#sms_last').val('');
+                $("#sms_area_code").removeAttr("required");
+                $("#sms_first").removeAttr("required");
+                $("#sms_last").removeAttr("required");
+            }
+            else if ($(this).val() == 'sms') {
+                $('.row_email').hide();
+                $('.row_sms').show();
+                $("#sms_area_code").attr("required", "required");
+                $("#sms_first").attr("required", "required");
+                $("#sms_last").attr("required", "required");
+            }
+        });
+    });
+</script>

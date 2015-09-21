@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "Contact Management";
+}
+
+<h4 class="subheader">Create Contact</h4>
+<ul class="tabs">
+    <li class="tab-title">@Html.ActionLink("Contact List", "Index", "Contacts")</li>    
+    <li class="tab-title">@Html.ActionLink("Organize Contacts", "Organize", "Contacts")</li>
+    <li class="tab-title active"><a href="#add-contact">Add Contact</a></li>
+    <li class="tab-title">@Html.ActionLink("Upload Contact List", "Upload", "Contacts")</li>
+</ul>
+<div class="tabs-content min-tabs-content">
+    <div class="content active" id="add-contact">
+
+        @using (Html.BeginForm("Add", "Contacts", FormMethod.Post, new { @data_abide = "" }))
+        {
+            <div class="row">
+                <div class="small-2 columns">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns name-field">
+                    <label>
+                        First Name <small>required</small>
+                        <input id="contact_first_name" name="contact_first_name" type="text" required="required" tabindex="1" class="radius" />                        
+                    </label>
+                    <small class="error">First Name is required.</small>
+                </div>
+                <div class="small-3 columns name-field">
+                    <label>
+                        Organization <small>required</small>
+                        <input id="contact_organization" name="contact_organization" type="text" required="required" tabindex="6" class="radius" />
+                    </label>
+                    <small class="error">Organization is required.</small>
+                </div>
+                <div class="small-3 columns end">
+                    <label>
+                        @ViewBag.message
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns name-field">
+                    <label>
+                        Last Name <small>required</small>
+                        <input id="contact_last_name" name="contact_last_name" type="text" required="required" tabindex="2" class="radius" />
+                    </label>
+                    <small class="error">Last Name is required.</small>
+                </div>
+                <div class="small-3 columns end">
+                    <label>
+                        Address
+                        <input id="contact_address_1" name="contact_address_1" type="text" tabindex="7" class="radius" />
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns">
+                    <label>
+                        Title
+                        <input id="contact_title" name="contact_title" type="text" tabindex="3" class="radius" />
+                    </label>
+                </div>
+                <div class="small-3 columns end">
+                    <label>
+                        Address
+                        <input id="contact_address_2" name="contact_address_2" type="text" tabindex="8" class="radius" />
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns">
+                    <label>
+                        Phone
+                        <input id="contact_phone" name="contact_phone" type="tel" tabindex="4" class="radius" />
+                    </label>
+                </div>
+                <div class="small-3 columns end">
+                    <label>
+                        City
+                        <input id="contact_city" name="contact_city" type="text" tabindex="9" class="radius" />
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns email-field">
+                    <label>
+                        Email <small>required</small>
+                        <input id="contact_email" name="contact_email" type="email" required="required" tabindex="5" class="radius" />
+                    </label>
+                    <small class="error">An email address is required.</small>
+                </div>
+                <div class="small-1 columns">
+                    <label>
+                        State
+                        <select id="contact_state" name="contact_state" tabindex="10">
+                            <option disabled="disabled" selected="selected"></option>
+                                <option value="AL">AL</option>
+                                <option value="AK">AK</option>
+                                <option value="AZ">AZ</option>
+                                <option value="AR">AR</option>
+                                <option value="CA">CA</option>
+                                <option value="CO">CO</option>
+                                <option value="CT">CT</option>
+                                <option value="DE">DE</option>
+                                <option value="DC">DC</option>
+                                <option value="FL">FL</option>
+                                <option value="GA">GA</option>
+                                <option value="HI">HI</option>
+                                <option value="ID">ID</option>
+                                <option value="IL">IL</option>
+                                <option value="IN">IN</option>
+                                <option value="IA">IA</option>
+                                <option value="KS">KS</option>
+                                <option value="KY">KY</option>
+                                <option value="LA">LA</option>
+                                <option value="ME">ME</option>
+                                <option value="MD">MD</option>
+                                <option value="MA">MA</option>
+                                <option value="MI">MI</option>
+                                <option value="MN">MN</option>
+                                <option value="MS">MS</option>
+                                <option value="MO">MO</option>
+                                <option value="MT">MT</option>
+                                <option value="NE">NE</option>
+                                <option value="NV">NV</option>
+                                <option value="NH">NH</option>
+                                <option value="NJ">NJ</option>
+                                <option value="NM">NM</option>
+                                <option value="NY">NY</option>
+                                <option value="NC">NC</option>
+                                <option value="ND">ND</option>
+                                <option value="OH">OH</option>
+                                <option value="OK">OK</option>
+                                <option value="OR">OR</option>
+                                <option value="PA">PA</option>
+                                <option value="RI">RI</option>
+                                <option value="SC">SC</option>
+                                <option value="SD">SD</option>
+                                <option value="TN">TN</option>
+                                <option value="TX">TX</option>
+                                <option value="UT">UT</option>
+                                <option value="VT">VT</option>
+                                <option value="VA">VA</option>
+                                <option value="WA">WA</option>
+                                <option value="WV">WV</option>
+                                <option value="WI">WI</option>
+                                <option value="WY">WY</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="small-2 columns end">
+                    <label>
+                        Zip Code
+                        <input id="contact_zip" name="contact_zip" type="text" tabindex="11" class="radius" />
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-8 columns">
+                    <button type="submit" class="button tiny radius right">Create</button>
+                </div>
+            </div>                        
+        }
+
+    </div>
+</div>
+
+<script src="~/Scripts/jquery/jquery.maskedinput.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-contacts').addClass('active');
+
+        $("#contact_phone").mask("(999) 999-9999", { placeholder: " " });
+    });
+</script>

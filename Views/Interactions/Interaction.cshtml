@@ -1,0 +1,552 @@
+﻿@model bearhug.Models.SingleInteractionConstruct
+@{
+    ViewBag.Title = "Interaction";
+}
+<link href="~/Content/select2/select2.css" rel="stylesheet" />
+
+<div class="list-container">
+    <div class="row list-section-subject-header-anchor"></div>
+    <div class="row list-section-subject-header">
+        <div class="small-9 columns">
+            <h4 class="subheader">@Model.Transaction.Subject</h4>
+        </div>
+        <div class="small-2 columns">
+            @if (Model.Transaction.UserId == User.Identity.Name)
+            {
+                <button data-dropdown="interaction-menu" aria-controls="drop1" aria-expanded="false" class="button tiny radius right dropdown">Menu</button><br>
+                <ul id="interaction-menu" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                    <li><a href="#" class="reply-opened-transaction">Add Correspondence</a></li>
+                    <li>@Html.ActionLink("Invite Contact(s)", "Invite", new { @transactionid = Model.Transaction.TransactionId })</li>
+                    @if (Model.Transaction.Patient.Id == null)
+                    {
+                        <li><a href="#" id="add-patient">Invite Patient</a></li>
+                    }
+                    <li><a href="#" id="close-transaction" data-tid="@Model.Transaction.TransactionId">Archive</a></li>
+                </ul>
+            }
+            else
+            {
+                <button class="button tiny radius right reply-opened-transaction">Add Correspondence</button>
+            }
+        </div>
+        <div class="small-1 columns">
+            <a class="right" href="@Url.Action("Index", "Interactions")"><i data-tooltip="" aria-haspopup="true" title="Close" class="fi-x has-tip tip-left"></i></a>
+        </div>
+    </div>
+    <div class="list-container-scroller">
+        @using (Html.BeginForm("Reply", "Interactions", FormMethod.Post, new { @id = "reply-message-form", @class = "form-horizontal", @enctype = "multipart/form-data" }))
+        {
+            <div class="add-files-message-container list-section">
+                <div class="row">
+                    <div class="small-7 columns">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-7 columns small-centered">
+                        <ul class="tabs" data-tab="">
+                            <li class="tab-title active"><a href="#newdocuments">Add New</a></li>
+                            @if (User.IsInRole("Members"))
+                            {
+                                <li class="tab-title"><a href="#currentdocuments">Add Current</a></li>
+                            }
+                        </ul>
+                        <div class="tabs-content">
+                            <div class="content active" id="newdocuments">
+                                <h5>Add New Documents</h5>
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <table id="new-documents-table" class="doclist">
+                                            <thead>
+                                                <tr>
+                                                    <td>
+                                                        <button type="button" id="btnAddDocument" class="button tiny radius">Add Document</button>
+                                                    </td>
+                                                    <td>
+                                                        <label id="interaction_fileupload_message" class="notification"></label>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (User.IsInRole("Members"))
+                            {
+                                <div class="content" id="currentdocuments">
+                                    <div class="row">
+                                        <div class="small-12 columns">
+                                            @if (Model.UserDocuments.UploadedDocuments.Count > 0)
+                                            {
+                                                <h5>Add Current Documents</h5>
+                                                <table id="current-documents-table" class="doclist">
+                                                    @for (int i = 0; i < Model.UserDocuments.UploadedDocuments.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <input type="hidden" value="@Model.UserDocuments.UploadedDocuments[i].Id" id="CurrentUserDocuments_@i+__Initializer" name="CurrentUserDocuments[@i].Initializer" />
+                                                                <label class="checkbox">
+                                                                    <input id="CurrentUserDocuments_@i+__Id" name="CurrentUserDocuments[@i].Id" type="checkbox" value="@Model.UserDocuments.UploadedDocuments[i].Id" />@Model.UserDocuments.UploadedDocuments[i].Name</label>
+                                                            </td>
+                                                            <td>
+                                                                @if (Model.UserDocuments.UploadedDocuments[i].FormFields != null)
+                                                                {
+                                                                    if (Model.UserDocuments.UploadedDocuments[i].FormFields.Count > 0)
+                                                                    {
+                                                                    <label class="checkbox">
+                                                                        <input id="CurrentUserDocuments_@i+__SignatureRequired" name="CurrentUserDocuments[@i].SignatureRequired" type="checkbox" class="signature-check" />Requires Signature?</label>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <label class="checkbox" style="display: none;">
+                                                                        <input id="CurrentUserDocuments_@i+__SignatureRequiredHidden" name="CurrentUserDocuments[@i].SignatureRequired" type="checkbox" />Requires Signature?</label>
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <label>No documents upload.  Click the 'Documents' menu above to learn about uploading.</label>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="small-12 columns">
+                                <button id="btn_close_upload_files" name="btn_close_upload_files" type="button" class="button tiny radius right">Finish</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="small-12 columns">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="reply-message-container list-section">
+                <div class="row">
+                    <div class="small-9 columns small-centered">
+                        <fieldset>
+                            <legend>Add Correspondence</legend>
+                            <input id="reply_hidden_tid" name="reply_hidden_tid" type="hidden" value="@Model.Transaction.TransactionId">
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="right inline" for="reply_transaction_to_emails">To</label>
+                                </div>
+                                <div class="small-7 columns end">
+                                    <select multiple="multiple" name="reply_transaction_to_emails" id="reply_transaction_to_emails" tabindex="-1" style="width: 100%;">
+                                        <option value="@Model.Transaction.UserId" selected="selected" data-locked="true">@Model.Transaction.UserIdName (Admin)</option>
+                                        @foreach (bearhug.InteractionsServiceReference.TransactionMember member in Model.Transaction.Members)
+                                        {
+                                            <option value="@member.UserId">@member.Name</option>
+                                        }
+                                        @foreach (bearhug.InteractionsServiceReference.TransactionNonMember nonmember in Model.Transaction.NonMembers)
+                                        {
+                                            <option value="nonmember_@nonmember.UserId">@nonmember.Name</option>
+                                        }
+                                        @if (Model.Transaction.Patient.Id != null)
+                                        {
+                                            <option class="patient-option" value="patient_@Model.Transaction.Patient.Id">@Model.Transaction.Patient.FirstName @Model.Transaction.Patient.LastName (Patient)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="right inline" for="reply_transaction_subject">Subject</label>
+                                </div>
+                                <div class="small-7 columns end">
+                                    <input id="reply_transaction_subject" name="reply_transaction_subject" type="text" value="@Model.Transaction.Subject" readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="right inline" for="reply_message_file">Files (optional)</label>
+                                </div>
+                                <div class="small-4 columns">
+                                    <button id="btn_open_upload_files" name="btn_open_upload_files" type="button" class="button tiny radius">Click here to add files</button>
+                                </div>
+                                <div class="small-3 columns end">
+                                    <label id="forwarded-files-message" class="inline">Forwarded files included</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    <label class="right inline" for="reply_transaction_body">Body</label>
+                                </div>
+                                <div class="small-7 columns end">
+                                    <textarea id="reply_transaction_body" name="reply_transaction_body"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-2 columns">
+                                    &nbsp;
+                                </div>
+                                <div class="small-1 columns">
+                                    <button id="close-reply-message" class="button tiny radius secondary" type="button">Cancel</button>
+                                </div>
+                                <div class="small-6 columns end">
+                                    <button class="button tiny radius right" type="submit">Send</button>
+                                    <input id="isForward" name="isForward" type="hidden" value="false" />
+                                    <input id="forward_comment_id" name="forward_comment_id" type="hidden" value="" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>        
+        }
+        @foreach (bearhug.InteractionsServiceReference.TransactionComment cmt in Model.Transaction.Comments)
+        {
+            <div class="list-section">
+                <div class="row snippet">
+                    <div class="small-3 columns">
+                        <label>@cmt.From</label>
+                    </div>
+                    <div class="small-5 columns">
+                        <label class="subtext">@cmt.Comment</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <label class="subtext right">@(cmt.DateTimeStamp.Date == DateTime.Today.Date ? cmt.DateTimeStamp.ToShortTimeString() : cmt.DateTimeStamp.ToShortDateString())</label>
+                    </div>
+                    <div class="small-1 columns">
+                        @if (cmt.Documents.Count > 0 || cmt.SignedDocuments.Count > 0)
+                        {
+                            <img src="~/Images/paperclip.png" alt="Attachment" height="20" width="20" class="right" />
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                    </div>
+                </div>
+                <div class="row full">
+                    <div class="small-12 columns">
+                        <div class="row">
+                            <div class="small-8 columns full-header">
+                                <label>From: @cmt.From</label>
+                                <label>To: @String.Join(", ", cmt.SentTo)</label>
+                            </div>
+                            <div class="small-4 columns full-header">
+                                @if (!cmt.Approved)
+                                {
+                                    <span class="label alert radius right">This comment requires your approval.</span>                              
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="small-12 columns">
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row msg-body">
+                            <div class="small-12 columns">
+                                @if (cmt.Comment.Length == 0)
+                                {
+                                    <label class="msg-text"><i>No message provided</i></label>
+                                }
+                                else
+                                {
+                                    <label class="msg-body-text">@MvcHtmlString.Create(Html.Encode(cmt.Comment).Replace(Environment.NewLine, "<br />"))</label>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="small-12 columns">
+                                <hr />
+                            </div>
+                        </div>
+                        <div class="row list-actions">
+                            <div class="small-2 columns">
+                                @if (cmt.SignedDocuments.Count == 0 || !cmt.Approved)
+                                {
+                                    <button data-dropdown="action-@cmt.Id" aria-controls="drop1" aria-expanded="false" class="button tiny radius dropdown">Action</button><br>
+                                    <ul id="action-@cmt.Id" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                        @if (cmt.SignedDocuments.Count == 0)
+                                        {
+                                            <li><a href="#" class="forward-comment" data-cid="@cmt.Id">Forward</a></li>
+                                        }
+                                        @if (!cmt.Approved)
+                                        {
+                                            <li><a href="#" class="approve-comment" data-trnsid="@Model.Transaction.TransactionId" data-cmtid="@cmt.Id">Approve</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                            <div class="small-10 columns">
+                                @if (cmt.Documents.Count > 0)
+                                {
+                                    foreach (bearhug.InteractionsServiceReference.TransactionDocument trnsDoc in cmt.Documents)
+                                    {
+                                    <a href="@Url.Action("getDocument", "Interactions", new { @tid = Model.Transaction.TransactionId, @cid = cmt.Id, @docid = trnsDoc.Id })" class="right" target="_blank">
+                                        <label class="download-label">@trnsDoc.DocumentName</label></a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        @if (cmt.SignedDocuments.Count > 0)
+                        {
+                            <div class="row">
+                                <div class="small-12 columns">
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row list-actions">
+                                <div class="small-12 columns">
+                                    <h5>Documents requiring a signature:</h5>
+                                    @foreach (bearhug.InteractionsServiceReference.TransactionSignedDocument signTrnsDoc in cmt.SignedDocuments)
+                                    {
+                                        <span><a href="@signTrnsDoc.Url" target="_blank">Sign Document</a></span><br />
+                                    }
+                                </div>
+                            </div>                            
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="approve-comment-model" class="reveal-modal medium" data-reveal="">
+    <a class="close-reveal-modal">&#215;</a>
+    <div class="row">
+        <div class="small-12 columns">
+            <h5>Approve?</h5>
+        </div>
+    </div>
+    @using (Html.BeginForm("Approve", "Interactions", FormMethod.Post, new { @id = "approve-comment-form" }))
+    {
+        <div class="row">
+            <div class="small-12 columns">
+                <p>Approving this comment will make it viewable to those members it is addressed to.  Do you wish to proceed?</p>
+                <input id="hdn_trnsid" name="hdn_trnsid" type="hidden" />
+                <input id="hdn_cmtid" name="hdn_cmtid" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <button id="cancel-approval-form" class="button tiny radius alert" aria-hidden="true" type="button">No</button>
+                <button id="btn-approve-comment" class="button tiny radius" type="submit">Yes</button>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script src="~/Scripts/select2/select2.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $('.top-bar-section ul li').removeClass('active');
+        $('#li-interactions').addClass('active');        
+
+        $("#reply_transaction_to_emails").select2();
+
+        $('#btn_open_upload_files').click(function (e) {
+            $('.add-files-message-container').slideDown('slow');
+            $('.reply-message-container').slideUp('slow');
+        });
+
+        $('#btn_close_upload_files').click(function (e) {
+            $('.add-files-message-container').slideUp('slow');
+            $('.reply-message-container').slideDown('slow');
+            var docCount = 0;
+            $('#new-documents-table tbody tr').each(function (i, tr) {
+                if ($(tr).find('input[type=file]').val()) {
+                    docCount++;
+                }
+            });
+            $('#current-documents-table tbody tr').each(function (i, tr) {
+                if ($(tr).find('input').eq(1).is(':checked')) {
+                    docCount++;
+                }
+            });
+            $('#patient-documents-table tbody tr').each(function (i, tr) {
+                if ($(tr).find('input').eq(1).is(':checked')) {
+                    docCount++;
+                }
+            });
+
+            if (docCount > 0) {
+                $('#btn_open_upload_files').text('Click here to add files (' + docCount.toString() + ' selected)');
+            }
+            else {
+                $('#btn_open_upload_files').text('Click here to add files');
+            }
+        });
+
+        $("#btnAddDocument").click(function (e) {
+            e.preventDefault();
+            var itemIndex = $('#new-documents-table tbody tr:last').data('idx') == undefined ? 0 : $('#new-documents-table tbody tr:last').data('idx') + 1;
+            $('#new-documents-table tbody').append(
+                $('<tr id="row_NewDocuments_' + itemIndex + '" class="form-horizontal" data-idx="' + itemIndex + '"></tr>').append(
+                    $('<td class="x"></td>').append(
+                        $('<a id="Remove_NewDocuments_' + itemIndex + '" class="btn" href="#"><i class="fi-x"></i></a>').click(function (e) {
+                            e.preventDefault();
+                            $(this).parents().eq(1).remove();
+                            getFileSizeTotal();
+                        })
+                    ),
+                    $('<td class="form-horizontal"></td>').append(
+                        $('<div class="row"></div>').append(
+                            $('<div class="small-12 columns"></div>').append(
+                                $('<div class="row collapse"></div>').append(
+                                    $('<div class="small-6 columns"><input class="uploaded_file_text" name="uploaded_file_text" disabled="disabled" type="text" /></div>'),
+                                    $('<div class="small-2 columns end"></div>').append(
+                                        $('<div class="fileUpload button radius postfix"></div>').append(
+                                            $('<span>Upload</span>'),
+                                            $('<input id="NewDocuments_' + itemIndex + '__UploadedFile" name="NewDocuments[' + itemIndex + '].UploadedFile" type="file" class="pdoc" />').change(function () {
+                                                if ($(this).val().length > 0) {
+                                                    $(this).parents().eq(1).prev().find('.uploaded_file_text').val($(this).prop('files')[0].name);
+                                                    getFileSizeTotal();
+                                                }
+                                                else {
+                                                    $(this).parents().eq(1).prev().find('.uploaded_file_text').val('');
+                                                    getFileSizeTotal();
+                                                }
+                                            })
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        });
+
+        function getFileSizeTotal() {
+            var fileSize = 0;
+            $('#new-documents-table').find('.pdoc').each(function () {
+                if (this.files.length > 0) {
+                    fileSize += this.files[0].size;
+                }
+            });
+            var mbsCurrent = (fileSize / 1048576).toFixed(2);
+            var mbsRemain = ((20971520 - (fileSize / 1048576)) / 1048576).toFixed(1);
+            if (fileSize == 0) {
+                $('#interaction_fileupload_message').text('');
+                $('#send_reply_transaction').removeAttr("disabled");
+                $('#btn_close_upload_files').removeAttr("disabled");
+            }
+            else if (fileSize >= 20971520) {
+                $('#interaction_fileupload_message').text(mbsCurrent + 'MB uploaded.  You have exceeded the maximum allowed.');
+                $('#send_reply_transaction').attr("disabled", "disabled");
+                $('#btn_close_upload_files').attr("disabled", "disabled");
+            }
+            else {
+                $('#interaction_fileupload_message').text(mbsCurrent + 'MB uploaded.  ' + mbsRemain + 'MB remaining.');
+                $('#send_reply_transaction').removeAttr("disabled");
+                $('#btn_close_upload_files').removeAttr("disabled");
+            }
+        }
+
+        $('.reply-opened-transaction').click(function (e) {
+            e.preventDefault();
+            if ($(this).parent().is('li')) {
+                Foundation.libs.dropdown.close($(this).parents().eq(1));
+            }            
+            $('.reply-message-container').slideDown('slow', function (e) {
+                $('.dropdown').hide();
+            });
+        });
+
+        $('.forward-comment').click(function (e) {
+            Foundation.libs.dropdown.close($(this).parents().eq(1));
+            $('#reply_transaction_subject').val('Forward: ' + $('#reply_transaction_subject').val());
+            var txt = $(this).parents().eq(4).find('.msg-body-text').text();
+            $('#reply_transaction_body').val('\n\n' + txt);
+            $('#isForward').val('true');
+            $('#forward_comment_id').val($(this).data('cid'));
+            $('#forwarded-files-message').show();
+            $('#reply-message-form legend').text('Forward Correspondance');
+            $bodyWrapper.scrollTop(0);
+            $('.reply-message-container').slideDown('slow', function (e) {
+                $('.dropdown').hide();
+            });
+        });
+
+        $('#close-reply-message').click(function (e) {
+            e.preventDefault();
+            $('.reply-message-container').slideUp('slow', function () {
+                $('.dropdown').show();
+                $('#reply-message-form legend').text('Add Correspondance');
+                $('#forwarded-files-message').hide();
+                $('#reply-message-form')[0].reset();
+                var data = [];
+                $("#reply_transaction_to_emails option").each(function (i, opt) {
+                    if ($(this).data('locked')) {
+                        data.push({
+                            id: $(this).val(),
+                            text: $(this).text(),
+                            locked: true
+                        });
+                    }
+                });
+                $("#reply_transaction_to_emails").select2("data", data);
+                $('#isForward').val('false');
+                $('#forward_comment_id').val('');
+            });
+        });
+
+        $('.approve-comment').click(function (e) {
+            e.preventDefault();
+            $('#hdn_trnsid').val($(this).data('trnsid'));
+            $('#hdn_cmtid').val($(this).data('cmtid'));
+            $('#approve-comment-model').foundation('reveal', 'open');
+        });
+
+        $(document).on('close', '#approve-comment-model', function (e) {
+            $('#approve-comment-form')[0].reset();
+            $('#hdn_trnsid').val('');
+            $('#hdn_cmtid').val('');
+        });
+
+        $('#cancel-approval-form').click(function (e) {
+            $('#approve-comment-model').foundation('reveal', 'close');
+        });
+
+        $('.snippet').click(listSectionClick);
+        $('.full-header').click(listSectionClick);
+
+        function listSectionClick(e) {
+            if ($(this).hasClass('full-header')) {
+                $(this).parents().eq(3).find('.snippet').toggle();
+                $(this).parents().eq(2).toggle();
+            }
+            else {
+                $(this).parent().find('.snippet').toggle();
+                $(this).parent().find('.full').toggle();
+            }
+        }
+
+        var $bodyWrapper = $('.body-wrapper'),
+            $listSectionHeader = $('.list-section-subject-header'),
+            $listSectionHeaderAnchor = $('.list-section-subject-header-anchor');
+
+        $bodyWrapper.scroll(function () {
+            var window_top = $bodyWrapper.scrollTop();
+            var div_top = $listSectionHeaderAnchor.offset().top;
+            var header_width = $listSectionHeader.width();
+            if (window_top > div_top) {
+                // Make the div sticky.
+                $listSectionHeader.addClass('sticky');
+                $listSectionHeader.width(header_width);
+                $listSectionHeaderAnchor.height($listSectionHeader.height());
+            }
+            else {
+                // Unstick the div.
+                $listSectionHeader.removeClass('sticky');
+                $listSectionHeaderAnchor.height(0);
+            }
+        });
+    });
+</script>

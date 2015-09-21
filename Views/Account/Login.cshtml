@@ -1,0 +1,58 @@
+﻿@model bearhug.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+
+<h4>Log in</h4>
+
+<div class="row">
+    <div class="small-4 columns">
+        @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+        {        
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <legend>Please provide a username and password</legend>
+                <div class="row">
+                    <div class="small-12 columns">
+                        <ul class="no-bullet">
+                            <li>
+                                @Html.LabelFor(m => m.UserName)
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "radius" })
+                                @Html.ValidationMessageFor(m => m.UserName)
+                            </li>
+                            <li>
+                                @Html.LabelFor(m => m.Password)
+                                @Html.PasswordFor(m => m.Password, new { @class = "radius" })
+                                @Html.ValidationMessageFor(m => m.Password)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-12 columns">
+                        <input type="submit" value="Log in" class="button tiny radius right" />
+                    </div>
+                </div>
+            </fieldset>                
+        }
+    </div>
+    <div class="small-8 columns">
+        <div class="login-side"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="small-6 columns">
+        @Html.ActionLink("Forgot your password?", "PasswordRetrieval", null, new { @type = "button", @class = "btn btn-link" })
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#login-form form').attr('autocomplete', 'off');
+    });
+
+</script>
